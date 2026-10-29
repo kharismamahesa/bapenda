@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crops Management - AppName</title>
+    <meta name="description" content="Crops management dashboard">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style type="text/tailwindcss">
+        @theme inline {
+    --color-primary: var(--primary);
+    --color-primary-hover: var(--primary-hover);
+    --color-foreground: var(--foreground);
+    --color-muted: var(--muted);
+    --color-border: var(--border);
+    --color-accent-lime: var(--accent-lime);
+    --color-accent-teal: var(--accent-teal);
+    --color-accent-peach: var(--accent-peach);
+    --color-success: var(--success);
+    --color-success-light: var(--success-light);
+    --color-success-dark: var(--success-dark);
+    --color-error: var(--error);
+    --color-error-light: var(--error-light);
+    --color-error-dark: var(--error-dark);
+    --color-warning: var(--warning);
+    --color-warning-light: var(--warning-light);
+    --color-warning-dark: var(--warning-dark);
+    --color-info: var(--info);
+    --color-info-light: var(--info-light);
+    --color-info-dark: var(--info-dark);
+    --color-alert: var(--alert);
+    --color-alert-light: var(--alert-light);
+    --color-alert-dark: var(--alert-dark);
+    --color-gray-50: var(--gray-50);
+    --color-gray-100: var(--gray-100);
+    --color-gray-200: var(--gray-200);
+    --color-gray-500: var(--gray-500);
+    --color-gray-600: var(--gray-600);
+    --color-gray-700: var(--gray-700);
+    --font-sans: var(--font-sans);
+    --radius-card: 20px;
+    --radius-button: 16px;
+    --radius-icon: 22px;
+  }
+  :root {
+    --primary: #EF3F09;
+    --primary-hover: #d63608;
+    --foreground: #0C1C3C;
+    --muted: #F7F7F7;
+    --border: #DCDEDD;
+    --accent-lime: #C5E151;
+    --accent-teal: #82D9D7;
+    --accent-peach: #FAAC7B;
+    --success: #22C55E;
+    --success-light: #DCFCE7;
+    --success-dark: #166534;
+    --error: #EF4444;
+    --error-light: #FEE2E2;
+    --error-dark: #991B1B;
+    --warning: #EAB308;
+    --warning-light: #FEF9C3;
+    --warning-dark: #854D0E;
+    --info: #3B82F6;
+    --info-light: #DBEAFE;
+    --info-dark: #1E40AF;
+    --alert: #F97316;
+    --alert-light: #FFEDD5;
+    --alert-dark: #9A3412;
+    --gray-50: #F9FAFB;
+    --gray-100: #F3F4F6;
+    --gray-200: #E5E7EB;
+    --gray-500: #6B7280;
+    --gray-600: #4B5563;
+    --gray-700: #374151;
+    --font-sans: 'Plus Jakarta Sans', sans-serif;
+  }
+  select {
+    @apply appearance-none bg-no-repeat cursor-pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-position: right 10px center;
+    padding-right: 40px;
+  }
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
+</head>
+
+<body class="font-sans bg-white min-h-screen overflow-x-hidden">
+
+    <!-- Mobile Overlay -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
+
+    <div class="flex min-h-screen">
+        <!-- SIDEBAR - BANDUNG THEME -->
+        <aside id="sidebar"
+            class="w-64 bg-muted fixed inset-y-0 left-0 flex flex-col z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
+            <!-- Logo Section -->
+            <div class="px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 bg-primary rounded-full flex items-center justify-center">
+                            <i data-lucide="sprout" class="w-7 h-7 text-white"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-foreground text-lg font-bold">AgriDash</h1>
+                            <p class="text-foreground text-xs font-normal">Farm Manager</p>
+                        </div>
+                    </div>
+                    <button onclick="toggleSidebar()" aria-label="Close sidebar"
+                        class="lg:hidden p-2 rounded-lg hover:bg-gray-200 cursor-pointer transition-all duration-200">
+                        <i data-lucide="x" class="w-5 h-5 text-gray-600"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Navigation Menu - BANDUNG STYLE -->
+            <nav class="flex-1 px-6 py-4 space-y-6 overflow-y-auto">
+                <!-- Section with header -->
+                <div>
+                    <h3 class="text-foreground text-xs font-semibold uppercase tracking-wider mb-3">Main</h3>
+                    <div class="space-y-1">
+                        <a href="#" class="group cursor-pointer">
+                            <div class="flex items-center gap-2.5 px-4 py-3 rounded-card hover:bg-gray-100">
+                                <i data-lucide="layout-dashboard"
+                                    class="w-5 h-5 text-gray-600 group-hover:text-primary"></i>
+                                <span class="text-foreground group-hover:text-primary">Dashboard</span>
+                            </div>
+                        </a>
+                        <a href="#" class="group cursor-pointer">
+                            <div class="flex items-center gap-2.5 px-4 py-3 rounded-card hover:bg-gray-100">
+                                <i data-lucide="users" class="w-5 h-5 text-gray-600 group-hover:text-primary"></i>
+                                <span class="text-foreground group-hover:text-primary">Farmers</span>
+                            </div>
+                        </a>
+                        <!-- ACTIVE: bg-[#276874] text-white -->
+                        <a href="#" class="cursor-pointer">
+                            <div class="flex items-center gap-2.5 px-4 py-3 rounded-card bg-[#276874] text-white">
+                                <i data-lucide="leaf" class="w-5 h-5"></i>
+                                <span>Crops</span>
+                            </div>
+                        </a>
+                        <a href="#" class="group cursor-pointer">
+                            <div class="flex items-center gap-2.5 px-4 py-3 rounded-card hover:bg-gray-100">
+                                <i data-lucide="tractor" class="w-5 h-5 text-gray-600 group-hover:text-primary"></i>
+                                <span class="text-foreground group-hover:text-primary">Equipment</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-foreground text-xs font-semibold uppercase tracking-wider mb-3">Finance</h3>
+                    <div class="space-y-1">
+                        <a href="#" class="group cursor-pointer">
+                            <div class="flex items-center gap-2.5 px-4 py-3 rounded-card hover:bg-gray-100">
+                                <i data-lucide="dollar-sign" class="w-5 h-5 text-gray-600 group-hover:text-primary"></i>
+                                <span class="text-foreground group-hover:text-primary">Revenue</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- User Profile at Bottom -->
+            <div class="px-6 pb-6 mt-auto">
+                <div class="flex items-center gap-3">
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&h=100&fit=crop"
+                        alt="Manager profile" class="w-12 h-12 rounded-full object-cover flex-shrink-0">
+                    <div class="min-w-0 flex-1">
+                        <p class="text-foreground text-base font-semibold truncate">Sarah Field</p>
+                        <p class="text-foreground text-sm font-normal truncate">manager@farm.com</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="flex-1 lg:ml-64 p-4 md:p-5 bg-white min-h-screen overflow-x-hidden">
+            <!-- Mobile Header -->
+            <div class="lg:hidden flex items-center justify-between mb-6 bg-muted rounded-card p-4">
+                <button onclick="toggleSidebar()" aria-label="Open menu"
+                    class="p-2 rounded-lg hover:bg-gray-200 cursor-pointer transition-all duration-200">
+                    <i data-lucide="menu" class="w-6 h-6 text-foreground"></i>
+                </button>
+                <h1 class="text-foreground text-lg font-bold">Crops</h1>
+                <div class="w-10"></div>
+            </div>
+
+            <!-- Page Header -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 md:mb-8">
+                <div>
+                    <h1 class="text-foreground text-2xl md:text-3xl font-bold mb-1">Crops Management</h1>
+                    <p class="text-gray-500 text-sm md:text-base">Monitor crop yields, growth stages, and seasonal
+                        trends</p>
+                </div>
+                <div class="grid grid-cols-2 gap-2 w-full md:w-auto md:flex md:items-center md:gap-3">
+                    <button
+                        class="flex items-center justify-center gap-2 px-4 py-2.5 border border-border rounded-button text-foreground font-medium hover:border-primary transition-all duration-200 cursor-pointer">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        <span>Export Report</span>
+                    </button>
+                    <button onclick="openAddModal()"
+                        class="flex items-center justify-center gap-2 px-4 py-2.5 bg-primary text-white rounded-button font-medium hover:bg-primary-hover transition-all duration-200 cursor-pointer">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        <span>Add Crop</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Cards Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6 md:mb-8">
+                <!-- Card 1 -->
+                <div class="bg-muted rounded-card pt-5 px-3 pb-3">
+                    <h3 class="text-foreground text-lg font-bold ml-3 mb-4">Total Harvest</h3>
+                    <div class="bg-white rounded-card p-5">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-foreground text-4xl font-extrabold mb-1">142<span
+                                        class="text-base font-normal text-gray-500 ml-1">Tons</span></p>
+                                <p class="text-green-600 text-sm font-medium">+8.2% this season</p>
+                            </div>
+                            <div class="w-16 h-16 bg-accent-lime rounded-icon flex items-center justify-center">
+                                <i data-lucide="wheat" class="w-7 h-7 text-foreground"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="bg-muted rounded-card pt-5 px-3 pb-3">
+                    <h3 class="text-foreground text-lg font-bold ml-3 mb-4">Avg Growth Rate</h3>
+                    <div class="bg-white rounded-card p-5">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-foreground text-4xl font-extrabold mb-1">92<span
+                                        class="text-base font-normal text-gray-500 ml-1">%</span></p>
+                                <p class="text-green-600 text-sm font-medium">+2.4% vs last year</p>
+                            </div>
+                            <div class="w-16 h-16 bg-accent-teal rounded-icon flex items-center justify-center">
+                                <i data-lucide="trending-up" class="w-7 h-7 text-foreground"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="bg-muted rounded-card pt-5 px-3 pb-3">
+                    <h3 class="text-foreground text-lg font-bold ml-3 mb-4">Active Fields</h3>
+                    <div class="bg-white rounded-card p-5">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-foreground text-4xl font-extrabold mb-1">28</p>
+                                <p class="text-blue-600 text-sm font-medium">4 Ready for harvest</p>
+                            </div>
+                            <div class="w-16 h-16 bg-accent-peach rounded-icon flex items-center justify-center">
+                                <i data-lucide="map" class="w-7 h-7 text-foreground"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 4 -->
+                <div class="bg-muted rounded-card pt-5 px-3 pb-3">
+                    <h3 class="text-foreground text-lg font-bold ml-3 mb-4">Critical Issues</h3>
+                    <div class="bg-white rounded-card p-5">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-foreground text-4xl font-extrabold mb-1">3</p>
+                                <p class="text-red-600 text-sm font-medium">Needs attention</p>
+                            </div>
+                            <div class="w-16 h-16 bg-accent-lime rounded-icon flex items-center justify-center">
+                                <i data-lucide="alert-circle" class="w-7 h-7 text-foreground"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <!-- Yield Trend Chart -->
+                <div class="bg-muted rounded-card pt-5 px-3 pb-3">
+                    <h3 class="text-foreground text-lg font-bold ml-3 mb-4">Yield Trends (Last 6 Months)</h3>
+                    <div class="bg-white rounded-card p-4 md:p-5">
+                        <div class="w-full h-64">
+                            <canvas id="yieldChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Growth Rate Chart -->
+                <div class="bg-muted rounded-card pt-5 px-3 pb-3">
+                    <h3 class="text-foreground text-lg font-bold ml-3 mb-4">Growth Rate by Crop Type</h3>
+                    <div class="bg-white rounded-card p-4 md:p-5">
+                        <div class="w-full h-64">
+                            <canvas id="growthChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seasonal Performance Chart (Full Width) -->
+            <div class="bg-muted rounded-card pt-5 px-3 pb-3 mb-8">
+                <h3 class="text-foreground text-lg font-bold ml-3 mb-4">Seasonal Performance Analysis</h3>
+                <div class="bg-white rounded-card p-4 md:p-5">
+                    <div class="w-full h-60">
+                        <canvas id="seasonalChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter & Search Section -->
+            <div class="bg-muted rounded-card p-4 mb-6">
+                <h3 class="text-foreground text-lg font-bold mb-4">Filter Crops</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <!-- Search -->
+                    <div class="lg:col-span-2 space-y-1">
+                        <label class="text-xs font-semibold text-gray-500 uppercase">Search</label>
+                        <div class="relative">
+                            <i data-lucide="search"
+                                class="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500"></i>
+                            <input type="text" id="searchInput" onkeyup="applyFilters()"
+                                placeholder="Search crop name, variety..."
+                                class="w-full pl-10 pr-4 py-3 bg-white border border-border rounded-button text-foreground placeholder:text-gray-500 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-all duration-200">
+                        </div>
+                    </div>
+
+                    <!-- Category Filter -->
+                    <div class="space-y-1">
+                        <label class="text-xs font-semibold text-gray-500 uppercase">Type</label>
+                        <select id="categoryFilter" onchange="applyFilters()"
+                            class="w-full px-4 py-3 bg-white border border-border rounded-button text-foreground focus:border-primary focus:outline-none transition-all duration-200">
+                            <option value="all">All Types</option>
+                            <option value="grain">Grains</option>
+                            <option value="vegetable">Vegetables</option>
+                            <option value="fruit">Fruits</option>
+                        </select>
+                    </div>
+
+                    <!-- Status Filter -->
+                    <div class="space-y-1">
+                        <label class="text-xs font-semibold text-gray-500 uppercase">Status</label>
+                        <select id="statusFilter" onchange="applyFilters()"
+                            class="w-full px-4 py-3 bg-white border border-border rounded-button text-foreground focus:border-primary focus:outline-none transition-all duration-200">
+                            <option value="all">All Statuses</option>
+                            <option value="growing">Growing</option>
+                            <option value="ready">Ready to Harvest</option>
+                            <option value="harvested">Harvested</option>
+                        </select>
+                    </div>
+
+                    <!-- Date Range (Visual) -->
+                    <div class="space-y-1">
+                        <label class="text-xs font-semibold text-gray-500 uppercase">Date Range</label>
+                        <div class="relative">
+                            <select
+                                class="w-full px-4 py-3 bg-white border border-border rounded-button text-foreground focus:border-primary focus:outline-none transition-all duration-200">
+                                <option>Last 30 Days</option>
+                                <option>This Season</option>
+                                <option>Last Year</option>
+                                <option>Custom Range</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Crops List / Table -->
+            <div class="bg-muted rounded-card pt-5 px-3 pb-3">
+                <div class="flex items-center justify-between mb-4 px-3">
+                    <h3 class="text-foreground text-lg font-bold">Crop List</h3>
+                    <div class="flex gap-2">
+                        <button onclick="resetFilters()"
+                            class="flex items-center gap-2 px-3 py-1.5 bg-white border border-border rounded-lg text-xs font-medium hover:border-primary cursor-pointer transition-all">
+                            <i data-lucide="refresh-cw" class="w-3 h-3"></i> Reset Filters
+                        </button>
+                    </div>
+                </div>
+                <div class="bg-white rounded-card overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="border-b border-gray-100 bg-gray-50/50">
+                                    <th class="text-left text-gray-500 text-sm font-medium px-6 py-4">Crop Name</th>
+                                    <th
+                                        class="text-left text-gray-500 text-sm font-medium px-6 py-4 hidden sm:table-cell">
+                                        Type</th>
+                                    <th
+                                        class="text-left text-gray-500 text-sm font-medium px-6 py-4 hidden md:table-cell">
+                                        Plant Date</th>
+                                    <th
+                                        class="text-left text-gray-500 text-sm font-medium px-6 py-4 hidden md:table-cell">
+                                        Est. Yield</th>
+                                    <th class="text-left text-gray-500 text-sm font-medium px-6 py-4">Status</th>
+                                    <th class="text-right text-gray-500 text-sm font-medium px-6 py-4">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cropsTableBody">
+                                <!-- Item 1 -->
+                                <tr data-item-id="1" data-status="growing" data-category="grain"
+                                    data-searchable="golden corn maize grain growing"
+                                    class="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <img src="https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=100&h=100&fit=crop"
+                                                alt="Corn" class="w-10 h-10 rounded-lg object-cover flex-shrink-0">
+                                            <div class="min-w-0">
+                                                <p class="text-foreground font-semibold truncate">Golden Corn</p>
+                                                <p class="text-gray-500 text-xs truncate">Field A-22</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 hidden sm:table-cell">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                            Grain
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 hidden md:table-cell">
+                                        <span class="text-gray-600 text-sm">Mar 15, 2023</span>
+                                    </td>
+                                    <td class="px-6 py-4 hidden md:table-cell">
+                                        <span class="text-gray-600 text-sm">450 Tons</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span
+                                            class="bg-info-light text-info-dark text-xs font-medium px-2.5 py-1 rounded-full">Growing</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <div class="flex items-center justify-end gap-2">
+                                            <button onclick="viewItem(1)"
+                                                class="p-2 hover:bg-gray-100 rounded-lg transition-all duration-200 cursor-pointer"
+                                                aria-label="View">
+                                                <i data-lucide="eye" class="w-4 h-4 text-gray-600"></i>
+                                            </button>
+                                            <button
+                                                class="p-2 hover:bg-gray-100 rounded-lg transition-all duration-200 cursor-pointer"
+                                                aria-label="Edit">
+                                                <i data-lucide="edit" class="w-4 h-4 text-gray-600"></i>
+                                            </button>
+                                            <button onclick="showDeleteModal(1)"
+                                                class="p-2 hover:bg-error-light rounded-lg transition-all duration-200 cursor-pointer"
+                                                aria-label="Delete">
+                                                <i data-lucide="trash-2" class="w-4 h-4 text-error"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- Item 2 -->
+                                <tr data-item-id="2" data-status="ready" data-category="vegetable"
+                                    data-searchable="organic tomatoes vegetable ready"
+                                    class="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=100&h=100&fit=crop"
+                                                alt="Tomatoes" class="w-10 h-10 rounded-lg object-cover flex-shrink-0">
+                                            <div class="min-w-0">
+                                                <p class="text-foreground font-semibold truncate">Organic Tomatoes</p>
+                                                <p class="text-gray-500 text-xs truncate">Greenhouse 3</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 hidden sm:table-cell">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            Vegetable
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 hidden md:table-cell">
+                                        <span class="text-gray-600 text-sm">May 02, 2023</span>
+                                    </td>
+                                    <td class="px-6 py-4 hidden md:table-cell">
+                                        <span class="text-gray-600 text-sm">85 Tons</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span
+                                            class="bg-success-light text-success-dark text-xs font-medium px-2.5 py-1 rounded-full">Ready</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <div class="flex items-center justify-end gap-2">
+                                            <button onclick="viewItem(2)"
+                                                class="p-2 hover:bg-gray-100 rounded-lg transition-all duration-200 cursor-pointer"
+                                                aria-label="View">
+                                                <i data-lucide="eye" class="w-4 h-4 text-gray-600"></i>
+                                            </button>
+                                            <button
+                                                class="p-2 hover:bg-gray-100 rounded-lg transition-all duration-200 cursor-pointer"
+                                                aria-label="Edit">
+                                                <i data-lucide="edit" class="w-4 h-4 text-gray-600"></i>
+                                            </button>
+                                            <button onclick="showDeleteModal(2)"
+                                                class="p-2 hover:bg-error-light rounded-lg transition-all duration-200 cursor-pointer"
+                                                aria-label="Delete">
+                                                <i data-lucide="trash-2" class="w-4 h-4 text-error"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- Item 3 -->
+                                <tr data-item-id="3" data-status="growing" data-category="grain"
+                                    data-searchable="premium wheat grain growing"
+                                    class="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <img src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=100&h=100&fit=crop"
+                                                alt="Wheat" class="w-10 h-10 rounded-lg object-cover flex-shrink-0">
+                                            <div class="min-w-0">
+                                                <p class="text-foreground font-semibold truncate">Premium Wheat</p>
+                                                <p class="text-gray-500 text-xs truncate">Field B-12</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 hidden sm:table-cell">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                            Grain
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 hidden md:table-cell">
+                                        <span class="text-gray-600 text-sm">Apr 10, 2023</span>
+                                    </td>
+                                    <td class="px-6 py-4 hidden md:table-cell">
+                                        <span class="text-gray-600 text-sm">320 Tons</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span
+                                            class="bg-info-light text-info-dark text-xs font-medium px-2.5 py-1 rounded-full">Growing</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <div class="flex items-center justify-end gap-2">
+                                            <button onclick="viewItem(3)"
+                                                class="p-2 hover:bg-gray-100 rounded-lg transition-all duration-200 cursor-pointer"
+                                                aria-label="View">
+                                                <i data-lucide="eye" class="w-4 h-4 text-gray-600"></i>
+                                            </button>
+                                            <button
+                                                class="p-2 hover:bg-gray-100 rounded-lg transition-all duration-200 cursor-pointer"
+                                                aria-label="Edit">
+                                                <i data-lucide="edit" class="w-4 h-4 text-gray-600"></i>
+                                            </button>
+                                            <button onclick="showDeleteModal(3)"
+                                                class="p-2 hover:bg-error-light rounded-lg transition-all duration-200 cursor-pointer"
+                                                aria-label="Delete">
+                                                <i data-lucide="trash-2" class="w-4 h-4 text-error"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- Item 4 -->
+                                <tr data-item-id="4" data-status="harvested" data-category="fruit"
+                                    data-searchable="sweet strawberries fruit harvested"
+                                    class="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <img src="https://images.unsplash.com/photo-1518635017498-87f514b751ba?w=100&h=100&fit=crop"
+                                                alt="Strawberries"
+                                                class="w-10 h-10 rounded-lg object-cover flex-shrink-0">
+                                            <div class="min-w-0">
+                                                <p class="text-foreground font-semibold truncate">Sweet Strawberries</p>
+                                                <p class="text-gray-500 text-xs truncate">Vertical Farm A</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 hidden sm:table-cell">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                            Fruit
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 hidden md:table-cell">
+                                        <span class="text-gray-600 text-sm">Feb 12, 2023</span>
+                                    </td>
+                                    <td class="px-6 py-4 hidden md:table-cell">
+                                        <span class="text-gray-600 text-sm">45 Tons</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span
+                                            class="bg-gray-200 text-gray-600 text-xs font-medium px-2.5 py-1 rounded-full">Harvested</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <div class="flex items-center justify-end gap-2">
+                                            <button onclick="viewItem(4)"
+                                                class="p-2 hover:bg-gray-100 rounded-lg transition-all duration-200 cursor-pointer"
+                                                aria-label="View">
+                                                <i data-lucide="eye" class="w-4 h-4 text-gray-600"></i>
+                                            </button>
+                                            <button
+                                                class="p-2 hover:bg-gray-100 rounded-lg transition-all duration-200 cursor-pointer"
+                                                aria-label="Edit">
+                                                <i data-lucide="edit" class="w-4 h-4 text-gray-600"></i>
+                                            </button>
+                                            <button onclick="showDeleteModal(4)"
+                                                class="p-2 hover:bg-error-light rounded-lg transition-all duration-200 cursor-pointer"
+                                                aria-label="Delete">
+                                                <i data-lucide="trash-2" class="w-4 h-4 text-error"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- Item 5 -->
+                                <tr data-item-id="5" data-status="growing" data-category="vegetable"
+                                    data-searchable="crisp lettuce vegetable growing"
+                                    class="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <img src="https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?w=100&h=100&fit=crop"
+                                                alt="Lettuce" class="w-10 h-10 rounded-lg object-cover flex-shrink-0">
+                                            <div class="min-w-0">
+                                                <p class="text-foreground font-semibold truncate">Crisp Lettuce</p>
+                                                <p class="text-gray-500 text-xs truncate">Hydroponic Unit 2</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 hidden sm:table-cell">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            Vegetable
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 hidden md:table-cell">
+                                        <span class="text-gray-600 text-sm">May 20, 2023</span>
+                                    </td>
+                                    <td class="px-6 py-4 hidden md:table-cell">
+                                        <span class="text-gray-600 text-sm">22 Tons</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span
+                                            class="bg-info-light text-info-dark text-xs font-medium px-2.5 py-1 rounded-full">Growing</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <div class="flex items-center justify-end gap-2">
+                                            <button onclick="viewItem(5)"
+                                                class="p-2 hover:bg-gray-100 rounded-lg transition-all duration-200 cursor-pointer"
+                                                aria-label="View">
+                                                <i data-lucide="eye" class="w-4 h-4 text-gray-600"></i>
+                                            </button>
+                                            <button
+                                                class="p-2 hover:bg-gray-100 rounded-lg transition-all duration-200 cursor-pointer"
+                                                aria-label="Edit">
+                                                <i data-lucide="edit" class="w-4 h-4 text-gray-600"></i>
+                                            </button>
+                                            <button onclick="showDeleteModal(5)"
+                                                class="p-2 hover:bg-error-light rounded-lg transition-all duration-200 cursor-pointer"
+                                                aria-label="Delete">
+                                                <i data-lucide="trash-2" class="w-4 h-4 text-error"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- No Results -->
+                    <div id="noResults" class="hidden text-center py-12">
+                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="search-x" class="w-8 h-8 text-gray-400"></i>
+                        </div>
+                        <h3 class="text-foreground text-lg font-bold mb-1">No crops found</h3>
+                        <p class="text-gray-500 text-sm">Try adjusting your search or filters.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Crop Modal -->
+    <div id="addModal" class="fixed inset-0 bg-black/50 z-[100] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-card p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-foreground text-xl font-bold">Add New Crop</h3>
+                <button onclick="closeModal('addModal')"
+                    class="p-2 hover:bg-gray-100 rounded-full transition-all duration-200 cursor-pointer">
+                    <i data-lucide="x" class="w-5 h-5 text-gray-600"></i>
+                </button>
+            </div>
+            <form onsubmit="addItem(event)">
+                <div class="space-y-4">
+                    <div class="space-y-2">
+                        <label class="block text-foreground text-sm font-medium">Crop Name</label>
+                        <input type="text" placeholder="e.g., Golden Corn"
+                            class="w-full px-4 py-3 border border-border rounded-button text-foreground placeholder:text-gray-500 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-all duration-200"
+                            required>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="block text-foreground text-sm font-medium">Type</label>
+                            <select
+                                class="w-full px-4 py-3 border border-border rounded-button text-foreground focus:border-primary focus:outline-none transition-all duration-200">
+                                <option value="grain">Grain</option>
+                                <option value="vegetable">Vegetable</option>
+                                <option value="fruit">Fruit</option>
+                            </select>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-foreground text-sm font-medium">Status</label>
+                            <select
+                                class="w-full px-4 py-3 border border-border rounded-button text-foreground focus:border-primary focus:outline-none transition-all duration-200">
+                                <option value="growing">Growing</option>
+                                <option value="ready">Ready</option>
+                                <option value="harvested">Harvested</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="block text-foreground text-sm font-medium">Planting Date</label>
+                        <input type="date"
+                            class="w-full px-4 py-3 border border-border rounded-button text-foreground placeholder:text-gray-500 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-all duration-200">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="block text-foreground text-sm font-medium">Est. Yield (Tons)</label>
+                        <input type="number" placeholder="0"
+                            class="w-full px-4 py-3 border border-border rounded-button text-foreground placeholder:text-gray-500 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-all duration-200">
+                    </div>
+                </div>
+                <div class="flex gap-3 pt-6">
+                    <button type="button" onclick="closeModal('addModal')"
+                        class="flex-1 px-4 py-2.5 border border-border rounded-button text-foreground font-medium hover:border-primary transition-all duration-200 cursor-pointer">Cancel</button>
+                    <button type="submit"
+                        class="flex-1 px-4 py-2.5 bg-primary text-white rounded-button font-medium hover:bg-primary-hover transition-all duration-200 cursor-pointer">Save
+                        Crop</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="fixed inset-0 bg-black/50 z-[100] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-card p-6 max-w-sm w-full text-center">
+            <div class="w-16 h-16 bg-error-light rounded-full flex items-center justify-center mx-auto mb-4">
+                <i data-lucide="trash-2" class="w-8 h-8 text-error"></i>
+            </div>
+            <h3 class="text-foreground text-xl font-bold mb-2">Delete Crop?</h3>
+            <p class="text-gray-500 text-sm mb-6">This will remove the crop record and all associated yield data. This
+                cannot be undone.</p>
+            <div class="flex gap-3">
+                <button onclick="closeModal('deleteModal')"
+                    class="flex-1 px-4 py-2.5 border border-border rounded-button text-foreground font-medium hover:border-primary cursor-pointer transition-all duration-200">Cancel</button>
+                <button onclick="confirmDelete()"
+                    class="flex-1 px-4 py-2.5 bg-error text-white rounded-button font-medium hover:bg-error-dark cursor-pointer transition-all duration-200">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Details Modal -->
+    <div id="viewModal" class="fixed inset-0 bg-black/50 z-[100] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-card p-6 max-w-md w-full">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-foreground text-xl font-bold">Crop Details</h3>
+                <button onclick="closeModal('viewModal')"
+                    class="p-2 hover:bg-gray-100 rounded-full transition-all duration-200 cursor-pointer">
+                    <i data-lucide="x" class="w-5 h-5 text-gray-600"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div class="flex items-center gap-4 p-4 bg-muted rounded-card">
+                    <img src="https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=100&h=100&fit=crop" alt="Corn"
+                        class="w-16 h-16 rounded-lg object-cover">
+                    <div>
+                        <h4 class="text-foreground font-bold text-lg">Golden Corn</h4>
+                        <p class="text-gray-500 text-sm">Field A-22 • Growing</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="p-3 border border-gray-100 rounded-lg">
+                        <p class="text-xs text-gray-500 uppercase font-semibold">Planted</p>
+                        <p class="text-foreground font-medium">Mar 15, 2023</p>
+                    </div>
+                    <div class="p-3 border border-gray-100 rounded-lg">
+                        <p class="text-xs text-gray-500 uppercase font-semibold">Est. Harvest</p>
+                        <p class="text-foreground font-medium">Sep 20, 2023</p>
+                    </div>
+                    <div class="p-3 border border-gray-100 rounded-lg">
+                        <p class="text-xs text-gray-500 uppercase font-semibold">Soil Health</p>
+                        <p class="text-green-600 font-medium">Good (pH 6.5)</p>
+                    </div>
+                    <div class="p-3 border border-gray-100 rounded-lg">
+                        <p class="text-xs text-gray-500 uppercase font-semibold">Irrigation</p>
+                        <p class="text-foreground font-medium">Auto-Drip</p>
+                    </div>
+                </div>
+                <button onclick="closeModal('viewModal')"
+                    class="w-full px-4 py-2.5 bg-primary text-white rounded-button font-medium hover:bg-primary-hover transition-all duration-200 cursor-pointer mt-2">
+                    Close Details
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Toast -->
+    <div id="toast" class="fixed top-4 right-4 z-[110] hidden transform transition-all duration-300">
+        <div class="bg-white rounded-card shadow-lg border border-border p-4 flex items-center gap-3">
+            <div id="toastIcon" class="w-10 h-10 rounded-full flex items-center justify-center"></div>
+            <p id="toastMessage" class="text-foreground font-medium"></p>
+            <button onclick="hideToast()" class="p-1 hover:bg-gray-100 rounded-full cursor-pointer">
+                <i data-lucide="x" class="w-4 h-4 text-gray-500"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let deleteId = null;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            lucide.createIcons();
+            initCharts();
+        });
+
+        // Chart Initialization
+        function initCharts() {
+            // Yield Trends Chart (Line)
+            const yieldCtx = document.getElementById('yieldChart').getContext('2d');
+            new Chart(yieldCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+                    datasets: [{
+                        label: 'Yield (Tons)',
+                        data: [45, 52, 48, 60, 55, 68],
+                        borderColor: '#EF3F09',
+                        backgroundColor: 'rgba(239, 63, 9, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#EF3F09',
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    animation: false,
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#F3F4F6' },
+                            ticks: { color: '#6B7280' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#6B7280' }
+                        }
+                    }
+                }
+            });
+
+            // Growth Rate Chart (Bar)
+            const growthCtx = document.getElementById('growthChart').getContext('2d');
+            new Chart(growthCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Corn', 'Wheat', 'Soy', 'Tomatoes', 'Lettuce'],
+                    datasets: [{
+                        label: 'Growth Rate (%)',
+                        data: [85, 92, 78, 95, 88],
+                        backgroundColor: [
+                            '#C5E151', // Lime
+                            '#82D9D7', // Teal
+                            '#FAAC7B', // Peach
+                            '#EF3F09', // Primary
+                            '#22C55E'  // Success
+                        ],
+                        borderRadius: 8,
+                        barThickness: 30
+                    }]
+                },
+                options: {
+                    animation: false,
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: { color: '#F3F4F6' },
+                            ticks: { callback: function (value) { return value + '%'; } }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // Seasonal Performance (Doughnut)
+            // Replaced with Bar for better visibility of trends over time or category comparison
+            // Actually, let's do a combo Line/Bar for Seasonal Performance showing multiple crops
+            const seasonalCtx = document.getElementById('seasonalChart').getContext('2d');
+            new Chart(seasonalCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Spring', 'Summer', 'Autumn', 'Winter'],
+                    datasets: [
+                        {
+                            label: 'Grains',
+                            data: [25, 60, 85, 15],
+                            backgroundColor: '#FAAC7B',
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'Vegetables',
+                            data: [40, 55, 30, 45],
+                            backgroundColor: '#82D9D7',
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    animation: false,
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#F3F4F6' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Sidebar Logic
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+            document.body.classList.toggle('overflow-hidden');
+        }
+
+        // Filter Logic
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            const categoryValue = document.getElementById('categoryFilter').value;
+            const statusValue = document.getElementById('statusFilter').value;
+
+            const items = document.querySelectorAll('tr[data-item-id]');
+            let visibleCount = 0;
+
+            items.forEach(item => {
+                const searchableText = item.dataset.searchable || '';
+                const itemCategory = item.dataset.category;
+                const itemStatus = item.dataset.status;
+
+                const matchesSearch = searchTerm === '' || searchableText.includes(searchTerm);
+                const matchesCategory = categoryValue === 'all' || itemCategory === categoryValue;
+                const matchesStatus = statusValue === 'all' || itemStatus === statusValue;
+
+                if (matchesSearch && matchesCategory && matchesStatus) {
+                    item.style.display = '';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            document.getElementById('noResults').classList.toggle('hidden', visibleCount > 0);
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('categoryFilter').value = 'all';
+            document.getElementById('statusFilter').value = 'all';
+            applyFilters();
+        }
+
+        // Modal & CRUD Logic
+        function openAddModal() {
+            document.getElementById('addModal').classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        function addItem(e) {
+            e.preventDefault();
+            closeModal('addModal');
+            showToast('Crop added successfully', 'success');
+        }
+
+        function showDeleteModal(id) {
+            deleteId = id;
+            document.getElementById('deleteModal').classList.remove('hidden');
+        }
+
+        function confirmDelete() {
+            if (deleteId) {
+                const item = document.querySelector(`tr[data-item-id="${deleteId}"]`);
+                if (item) item.remove();
+                closeModal('deleteModal');
+                showToast('Crop deleted successfully', 'success');
+                deleteId = null;
+
+                // Check if empty
+                const remaining = document.querySelectorAll('tr[data-item-id]');
+                if (remaining.length === 0) {
+                    document.getElementById('noResults').classList.remove('hidden');
+                }
+            }
+        }
+
+        function viewItem(id) {
+            document.getElementById('viewModal').classList.remove('hidden');
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastIcon = document.getElementById('toastIcon');
+            const toastMessage = document.getElementById('toastMessage');
+
+            toastMessage.textContent = message;
+
+            if (type === 'success') {
+                toastIcon.className = 'w-10 h-10 rounded-full flex items-center justify-center bg-success-light';
+                toastIcon.innerHTML = '<i data-lucide="check" class="w-5 h-5 text-success-dark"></i>';
+            } else {
+                toastIcon.className = 'w-10 h-10 rounded-full flex items-center justify-center bg-error-light';
+                toastIcon.innerHTML = '<i data-lucide="x" class="w-5 h-5 text-error-dark"></i>';
+            }
+
+            toast.classList.remove('hidden');
+            lucide.createIcons();
+
+            setTimeout(hideToast, 3000);
+        }
+
+        function hideToast() {
+            document.getElementById('toast').classList.add('hidden');
+        }
+    </script>
+</body>
+
+</html>
