@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use App\Models\TUser;
+use App\Models\User;
 use App\Models\KategoriBerita;
 use App\Models\Berita;
 use Illuminate\Http\UploadedFile;
@@ -15,9 +15,8 @@ class BeritaCrudTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = TUser::first() ?? TUser::create([
-            'nama' => 'Admin Test',
-            'username' => 'admintest',
+        $this->user = User::first() ?? User::create([
+            'name' => 'Admin Test',
             'email' => 'admin@test.com',
             'password' => bcrypt('password'),
             'role' => 'admin'
@@ -78,7 +77,7 @@ class BeritaCrudTest extends TestCase
         // 4. Delete
         $deleteRes = $this->actingAs($this->user)->deleteJson('/admin/kategori-berita/' . $id);
         $deleteRes->assertStatus(200);
-        $this->assertDatabaseMissing('t_berita_kategori', ['id_berita_kategori' => $id]);
+        $this->assertDatabaseMissing('berita_kategori', ['id_berita_kategori' => $id]);
     }
 
     public function test_berita_page_accessible(): void
@@ -155,7 +154,7 @@ class BeritaCrudTest extends TestCase
         // 4. Delete
         $deleteRes = $this->actingAs($this->user)->deleteJson('/admin/berita/' . $id);
         $deleteRes->assertStatus(200);
-        $this->assertDatabaseMissing('t_berita', ['id_berita' => $id]);
+        $this->assertDatabaseMissing('berita', ['id_berita' => $id]);
     }
 }
 

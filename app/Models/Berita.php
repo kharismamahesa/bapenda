@@ -9,7 +9,7 @@ class Berita extends Model
 {
     use HasFactory;
 
-    protected $table = 't_berita';
+    protected $table = 'berita';
     protected $primaryKey = 'id_berita';
     public $timestamps = false;
 
@@ -34,7 +34,7 @@ class Berita extends Model
 
     public function penulis()
     {
-        return $this->belongsTo(TUser::class, 'created_by', 'id');
+        return $this->belongsTo(User::class, 'created_by', 'id');
     }
 
     public function getThumbnailUrlAttribute()

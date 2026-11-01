@@ -1,0 +1,290 @@
+/* ==========================================================================
+   BAPENDA RIAU - OFFICIAL LOGIN PAGE STYLING
+   Color Theme: Primary Green (#16a34a) & Dark Gray (#1d1d1b)
+   Framework: Bootstrap 5 + Poppins Font
+   ========================================================================== */
+
+:root {
+    --primary-green: #16a34a;
+    --primary-green-dark: #15803d;
+    --primary-green-light: #dcfce7;
+    --dark-gray: #1d1d1b;
+    --body-bg: #f5f6f8;
+}
+
+/* Base */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    background-color: var(--body-bg);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Micro-interactions */
+a,
+button,
+input {
+    transition: color 150ms ease-out,
+        background-color 150ms ease-out,
+        border-color 150ms ease-out,
+        box-shadow 150ms ease-out,
+        transform 120ms ease-out;
+}
+
+/* Login Wrapper (Split Layout) */
+.login-wrapper {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* Sisi Kiri: Visual / Hero Besar */
+.side-visual {
+    flex: 1.35;
+    position: relative;
+    background-image: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1920&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    padding: 4.5rem;
+}
+
+/* Overlay Gradasi Hijau Bapenda ke Dark Gray */
+.side-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(22, 163, 74, 0.88), rgba(29, 29, 27, 0.94));
+    z-index: 1;
+}
+
+.visual-content {
+    position: relative;
+    z-index: 2;
+    color: white;
+    max-width: 620px;
+}
+
+.visual-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 1rem;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    backdrop-filter: blur(4px);
+}
+
+.visual-content h1 {
+    font-weight: 700;
+    font-size: 3.25rem;
+    margin-bottom: 1.25rem;
+    line-height: 1.2;
+}
+
+.visual-content p {
+    font-size: 1.1rem;
+    opacity: 0.92;
+    font-weight: 300;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+}
+
+.visual-highlights {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.visual-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    font-weight: 400;
+}
+
+.visual-item i {
+    color: #86efac;
+    font-size: 1.15rem;
+}
+
+/* Sisi Kanan: Form Login */
+.side-form {
+    flex: 1;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 2.5rem;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
+    z-index: 3;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 420px;
+}
+
+.login-header {
+    margin-bottom: 2.25rem;
+}
+
+.login-brand-logo {
+    width: 56px;
+    height: 56px;
+    background: var(--primary-green-light);
+    color: var(--primary-green);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.login-header h3 {
+    font-weight: 700;
+    font-size: 1.65rem;
+    color: var(--dark-gray);
+    margin-bottom: 0.4rem;
+}
+
+.login-header p {
+    color: #6b7280;
+    font-size: 0.9rem;
+    margin-bottom: 0;
+}
+
+/* Form Elements */
+.form-label {
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.input-group-custom {
+    position: relative;
+}
+
+.input-group-custom .input-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    font-size: 1.1rem;
+    z-index: 4;
+}
+
+.form-control-custom {
+    border-radius: 8px;
+    padding: 13px 15px 13px 44px;
+    border: 1px solid #e5e7eb;
+    background-color: #f9fafb;
+    font-size: 0.9rem;
+    width: 100%;
+    transition: all 0.2s;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.form-control-custom:focus {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.15);
+    background-color: #fff;
+}
+
+.toggle-password-btn {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 0;
+    z-index: 4;
+}
+
+.toggle-password-btn:hover {
+    color: var(--dark-gray);
+}
+
+/* Login Button */
+.btn-login {
+    width: 100%;
+    background-color: var(--primary-green);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-login:hover {
+    background-color: var(--primary-green-dark);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(22, 163, 74, 0.3);
+}
+
+.btn-login:active {
+    transform: scale(0.985);
+}
+
+.alert-error {
+    background-color: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+    padding: 0.85rem 1rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.footer-text {
+    margin-top: 2.5rem;
+    text-align: center;
+    color: #9ca3af;
+    font-size: 0.775rem;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .side-visual {
+        display: none;
+    }
+    .side-form {
+        padding: 2.5rem 1.5rem;
+    }
+    body {
+        overflow: auto;
+    }
+}
+

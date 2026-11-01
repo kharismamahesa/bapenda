@@ -16,7 +16,6 @@ class KategoriBeritaSeeder extends Seeder
             'Berita',
             'Pengumuman',
             'Artikel',
-            'Sosialisasi & Edukasi',
             'Pajak Daerah',
             'Pelayanan Publik',
         ];

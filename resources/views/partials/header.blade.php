@@ -1,24 +1,44 @@
-<!-- Mobile Top Navigation Header -->
-<div class="lg:hidden flex items-center justify-between mb-6 bg-muted rounded-card p-4">
-    <button onclick="toggleSidebar()" aria-label="Open menu"
-        class="p-2 rounded-lg hover:bg-gray-200 cursor-pointer transition-all duration-200">
-        <i data-lucide="menu" class="w-6 h-6 text-foreground"></i>
-    </button>
-    <div class="flex items-center gap-2">
-        <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-            <i data-lucide="building-2" class="w-4 h-4 text-white"></i>
+<!-- Top Navbar (App Bar) -->
+<header class="top-navbar">
+    <div class="d-flex align-items-center gap-2">
+        <button type="button" onclick="toggleSidebar()" class="btn btn-outline-custom d-lg-none px-2.5 py-1.5" aria-label="Buka Menu Navigasi">
+            <i class="bi bi-list fs-5"></i>
+        </button>
+        <div class="d-none d-sm-flex align-items-center gap-2 text-muted small">
+            <span class="badge bg-success-subtle text-success border border-success-subtle fw-medium px-2 py-1">
+                <i class="bi bi-shield-check"></i> Bapenda Riau
+            </span>
+            <i class="bi bi-chevron-right text-muted" style="font-size: 0.65rem;"></i>
+            <span class="text-dark fw-medium">@yield('title', 'Dashboard')</span>
         </div>
-        <h1 class="text-foreground text-lg font-bold">Bapenda</h1>
+        <span class="fw-bold text-dark d-sm-none fs-6">Bapenda Riau</span>
     </div>
-    <div class="w-10"></div>
-</div>
 
-<!-- Page Title Header (Desktop / Tablet) -->
-<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 md:mb-8">
-    <div>
-        <h1 class="text-foreground text-2xl md:text-3xl font-bold mb-1">@yield('page_title', 'Dashboard')</h1>
-        <p class="text-gray-500 text-sm md:text-base">@yield('page_subtitle', 'Selamat datang di Panel Administrasi Bapenda')</p>
+    <div class="d-flex align-items-center gap-2">
+        <span class="badge bg-white text-muted border px-2.5 py-1.5 fw-normal d-none d-md-inline-flex align-items-center gap-1.5">
+            <i class="bi bi-calendar3 text-success"></i>
+            <span>{{ \Carbon\Carbon::now()->isoFormat('D MMMM Y') }}</span>
+        </span>
+        <a href="{{ url('/') }}" target="_blank" class="btn btn-sm btn-outline-custom d-none d-sm-inline-flex align-items-center gap-1.5" title="Lihat Halaman Depan">
+            <i class="bi bi-box-arrow-up-right"></i>
+            <span>Portal Utama</span>
+        </a>
     </div>
-    @yield('page_actions')
-</div>
+</header>
 
+<!-- Page Header (Area Judul Halaman & Tombol Aksi) -->
+<div class="page-header mb-4">
+    <div class="row align-items-md-center g-3">
+        <div class="col-12 col-md">
+            <h1 class="page-title mb-1">@yield('page_title', 'Dashboard')</h1>
+            <p class="page-subtitle mb-0">@yield('page_subtitle', 'Sistem Manajemen Badan Pendapatan Daerah Provinsi Riau')</p>
+        </div>
+        @hasSection('page_actions')
+        <div class="col-12 col-md-auto">
+            <div class="page-actions">
+                @yield('page_actions')
+            </div>
+        </div>
+        @endif
+    </div>
+</div>

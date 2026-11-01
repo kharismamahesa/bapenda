@@ -68,15 +68,15 @@ class KategoriBeritaController extends Controller
             $data[] = [
                 'no' => $no++,
                 'id_berita_kategori' => $item->id_berita_kategori,
-                'berita_kategori' => e($item->berita_kategori),
-                'total_berita' => '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">' . $item->berita_count . ' Berita</span>',
+                'berita_kategori' => '<span class="fw-semibold text-dark">' . e($item->berita_kategori) . '</span>',
+                'total_berita' => '<span class="badge bg-success-subtle text-success-emphasis border border-success-subtle px-2.5 py-1">' . $item->berita_count . ' Berita</span>',
                 'aksi' => '
-                    <div class="flex items-center justify-end gap-2">
-                        <button type="button" class="btn-edit p-2 hover:bg-gray-100 text-gray-600 rounded-lg transition-colors cursor-pointer" data-id="' . $item->id_berita_kategori . '" title="Edit">
-                            <i data-lucide="edit-3" class="w-4 h-4"></i>
+                    <div class="btn-group btn-group-sm">
+                        <button type="button" class="btn btn-light border text-muted btn-edit" data-id="' . $item->id_berita_kategori . '" title="Edit Kategori">
+                            <i class="bi bi-pencil"></i>
                         </button>
-                        <button type="button" class="btn-delete p-2 hover:bg-red-50 text-error rounded-lg transition-colors cursor-pointer" data-id="' . $item->id_berita_kategori . '" title="Hapus">
-                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        <button type="button" class="btn btn-light border text-danger btn-delete" data-id="' . $item->id_berita_kategori . '" title="Hapus Kategori">
+                            <i class="bi bi-trash3"></i>
                         </button>
                     </div>
                 ',
@@ -97,7 +97,7 @@ class KategoriBeritaController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'berita_kategori' => 'required|string|max:200|unique:t_berita_kategori,berita_kategori',
+            'berita_kategori' => 'required|string|max:200|unique:berita_kategori,berita_kategori',
         ], [
             'berita_kategori.required' => 'Nama kategori wajib diisi.',
             'berita_kategori.max' => 'Nama kategori maksimal 200 karakter.',
@@ -158,7 +158,7 @@ class KategoriBeritaController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'berita_kategori' => 'required|string|max:200|unique:t_berita_kategori,berita_kategori,' . $id . ',id_berita_kategori',
+            'berita_kategori' => 'required|string|max:200|unique:berita_kategori,berita_kategori,' . $id . ',id_berita_kategori',
         ], [
             'berita_kategori.required' => 'Nama kategori wajib diisi.',
             'berita_kategori.max' => 'Nama kategori maksimal 200 karakter.',

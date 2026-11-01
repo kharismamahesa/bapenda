@@ -2,9 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PublicController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\BeritaController;
 use App\Http\Controllers\Admin\KategoriBeritaController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\HalamanKontenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,10 +15,12 @@ use App\Http\Controllers\Admin\KategoriBeritaController;
 |--------------------------------------------------------------------------
 */
 
-// Root redirect ke /admin
-Route::get('/', function () {
-    return redirect()->route('admin');
-});
+// Halaman Publik (Official Website)
+Route::get('/', [PublicController::class, 'beranda'])->name('beranda');
+Route::get('/profil/{slug}', [PublicController::class, 'halaman'])->name('profil.show');
+Route::get('/halaman/{slug}', [PublicController::class, 'halaman'])->name('halaman.show');
+Route::get('/berita', [PublicController::class, 'beritaIndex'])->name('berita.index');
+Route::get('/berita/{slug}', [PublicController::class, 'beritaShow'])->name('berita.show');
 
 // Auth Routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -41,4 +46,12 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // CRUD Berita
     Route::get('/berita/data', [BeritaController::class, 'data'])->name('berita.data');
     Route::resource('/berita', BeritaController::class)->except(['create', 'edit']);
+
+    // CRUD User
+    Route::get('/users/data', [UserController::class, 'data'])->name('users.data');
+    Route::resource('/users', UserController::class)->except(['create', 'edit']);
+
+    // CRUD Halaman Konten
+    Route::get('/halaman-konten/data', [HalamanKontenController::class, 'data'])->name('halaman-konten.data');
+    Route::resource('/halaman-konten', HalamanKontenController::class)->except(['create', 'edit']);
 });

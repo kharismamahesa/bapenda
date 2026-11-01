@@ -96,35 +96,35 @@ class BeritaController extends Controller
             $kategoriNama = $item->kategori ? e($item->kategori->berita_kategori) : '-';
             $tgl = $item->tanggal_berita ? date('d M Y, H:i', strtotime($item->tanggal_berita)) : '-';
             $statusBadge = $item->status == 1
-                ? '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Publish</span>'
-                : '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">Draft</span>';
+                ? '<span class="badge bg-success-subtle text-success-emphasis border border-success-subtle px-2.5 py-1">Publish</span>'
+                : '<span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2.5 py-1">Draft</span>';
 
             $data[] = [
                 'no' => $no++,
                 'id_berita' => $item->id_berita,
                 'judul' => '
-                    <div class="flex items-center gap-3">
-                        <img src="'.$item->thumbnail_url.'" alt="'.e($item->judul).'" class="w-12 h-12 rounded-lg object-cover flex-shrink-0 border border-gray-100" onerror="this.src=\'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=100&h=100&fit=crop\'">
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="'.$item->thumbnail_url.'" alt="'.e($item->judul).'" class="rounded-2 border flex-shrink-0" style="width: 44px; height: 44px; object-fit: cover;" onerror="this.src=\'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=100&h=100&fit=crop\'">
                         <div class="min-w-0">
-                            <p class="text-foreground font-semibold line-clamp-1" title="'.e($item->judul).'">'.e($item->judul).'</p>
-                            <p class="text-gray-500 text-xs">Slug: /'.e($item->url).'</p>
+                            <div class="fw-semibold text-dark text-truncate" style="max-width: 320px;" title="'.e($item->judul).'">'.e($item->judul).'</div>
+                            <small class="text-muted d-block text-truncate" style="font-size: 0.75rem;">/'.e($item->url).'</small>
                         </div>
                     </div>
                 ',
-                'kategori' => '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-100">'.$kategoriNama.'</span>',
-                'tanggal' => '<span class="text-xs text-gray-600">'.$tgl.'</span>',
-                'views' => '<span class="text-xs font-medium text-gray-700">'.number_format($item->counter ?? 0).'</span>',
+                'kategori' => '<span class="badge bg-success-subtle text-success-emphasis border border-success-subtle px-2.5 py-1">'.$kategoriNama.'</span>',
+                'tanggal' => '<span class="text-muted small">'.$tgl.'</span>',
+                'views' => '<span class="fw-semibold text-dark small">'.number_format($item->counter ?? 0).'</span>',
                 'status' => $statusBadge,
                 'aksi' => '
-                    <div class="flex items-center justify-end gap-1.5">
-                        <button type="button" class="btn-view p-2 hover:bg-gray-100 text-gray-600 rounded-lg transition-colors cursor-pointer" data-id="'.$item->id_berita.'" title="Lihat Detail">
-                            <i data-lucide="eye" class="w-4 h-4"></i>
+                    <div class="btn-group btn-group-sm">
+                        <button type="button" class="btn btn-light border text-muted btn-view" data-id="'.$item->id_berita.'" title="Lihat Detail">
+                            <i class="bi bi-eye"></i>
                         </button>
-                        <button type="button" class="btn-edit p-2 hover:bg-gray-100 text-gray-600 rounded-lg transition-colors cursor-pointer" data-id="'.$item->id_berita.'" title="Edit">
-                            <i data-lucide="edit-3" class="w-4 h-4"></i>
+                        <button type="button" class="btn btn-light border text-muted btn-edit" data-id="'.$item->id_berita.'" title="Edit">
+                            <i class="bi bi-pencil"></i>
                         </button>
-                        <button type="button" class="btn-delete p-2 hover:bg-red-50 text-error rounded-lg transition-colors cursor-pointer" data-id="'.$item->id_berita.'" title="Hapus">
-                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        <button type="button" class="btn btn-light border text-danger btn-delete" data-id="'.$item->id_berita.'" title="Hapus">
+                            <i class="bi bi-trash3"></i>
                         </button>
                     </div>
                 ',
@@ -146,7 +146,7 @@ class BeritaController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'judul' => 'required|string|max:250',
-            'id_berita_kategori' => 'required|exists:t_berita_kategori,id_berita_kategori',
+            'id_berita_kategori' => 'required|exists:berita_kategori,id_berita_kategori',
             'isi' => 'required|string',
             'status' => 'required|in:0,1',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
@@ -270,7 +270,7 @@ class BeritaController extends Controller
 
         $validator = Validator::make($request->all(), [
             'judul' => 'required|string|max:250',
-            'id_berita_kategori' => 'required|exists:t_berita_kategori,id_berita_kategori',
+            'id_berita_kategori' => 'required|exists:berita_kategori,id_berita_kategori',
             'isi' => 'required|string',
             'status' => 'required|in:0,1',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',

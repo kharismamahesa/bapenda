@@ -1,29 +1,34 @@
 /**
- * Dashboard Charts & Interactive Handlers
+ * Bapenda Riau - Dashboard Scripts (Green Theme)
  */
 let deleteId = null;
 
 document.addEventListener('DOMContentLoaded', function () {
-    initCharts();
+    initDashboardCharts();
 });
 
-function initCharts() {
+function initDashboardCharts() {
+    // 1. Line Chart: Tren Penerimaan PAD 6 Bulan Terakhir
     const yieldEl = document.getElementById('yieldChart');
     if (yieldEl) {
         const yieldCtx = yieldEl.getContext('2d');
         new Chart(yieldCtx, {
             type: 'line',
             data: {
-                labels: ['Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep'],
+                labels: ['Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt'],
                 datasets: [{
                     label: 'Realisasi (Miliar Rp)',
-                    data: [45, 52, 48, 60, 55, 68],
-                    borderColor: '#22C55E',
-                    backgroundColor: 'rgba(34, 197, 94, 0.15)',
+                    data: [45.2, 52.8, 48.5, 60.1, 55.4, 68.2],
+                    borderColor: '#16a34a',
+                    backgroundColor: 'rgba(22, 163, 74, 0.12)',
                     fill: true,
-                    tension: 0.4,
-                    pointBackgroundColor: '#22C55E',
-                    pointRadius: 4
+                    tension: 0.35,
+                    borderWidth: 2.5,
+                    pointBackgroundColor: '#16a34a',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
                 }]
             },
             options: {
@@ -31,42 +36,57 @@ function initCharts() {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { display: false }
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                return ' ' + context.parsed.y + ' Miliar Rp';
+                            }
+                        }
+                    }
                 },
                 scales: {
                     y: {
                         beginAtZero: true,
-                        grid: { color: '#F3F4F6' },
-                        ticks: { color: '#6B7280' }
+                        grid: { color: '#f3f4f6' },
+                        ticks: {
+                            color: '#6b7280',
+                            font: { family: 'Poppins', size: 11 },
+                            callback: function (val) { return val + ' M'; }
+                        }
                     },
                     x: {
                         grid: { display: false },
-                        ticks: { color: '#6B7280' }
+                        ticks: {
+                            color: '#6b7280',
+                            font: { family: 'Poppins', size: 11 }
+                        }
                     }
                 }
             }
         });
     }
 
+    // 2. Bar Chart: Capaian Target per Objek Pajak
     const growthEl = document.getElementById('growthChart');
     if (growthEl) {
         const growthCtx = growthEl.getContext('2d');
         new Chart(growthCtx, {
             type: 'bar',
             data: {
-                labels: ['PBB', 'BPHTB', 'Restoran', 'Hotel', 'Parkir'],
+                labels: ['PKB', 'BBNKB', 'PBBKB', 'PAP', 'P. Rokok'],
                 datasets: [{
-                    label: 'Pencapaian Target (%)',
-                    data: [85, 92, 78, 95, 88],
+                    label: 'Persentase Capaian (%)',
+                    data: [94.5, 88.2, 91.0, 78.4, 96.8],
                     backgroundColor: [
-                        '#C5E151',
-                        '#82D9D7',
-                        '#FAAC7B',
-                        '#16A34A',
-                        '#22C55E'
+                        '#16a34a',
+                        '#22c55e',
+                        '#15803d',
+                        '#4ade80',
+                        '#166534'
                     ],
-                    borderRadius: 8,
-                    barThickness: 30
+                    borderRadius: 6,
+                    barThickness: 28
                 }]
             },
             options: {
@@ -74,42 +94,62 @@ function initCharts() {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { display: false }
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                return ' Capaian: ' + context.parsed.y + '%';
+                            }
+                        }
+                    }
                 },
                 scales: {
                     y: {
                         beginAtZero: true,
                         max: 100,
-                        grid: { color: '#F3F4F6' },
-                        ticks: { callback: function (value) { return value + '%'; } }
+                        grid: { color: '#f3f4f6' },
+                        ticks: {
+                            color: '#6b7280',
+                            font: { family: 'Poppins', size: 11 },
+                            callback: function (val) { return val + '%'; }
+                        }
                     },
                     x: {
-                        grid: { display: false }
+                        grid: { display: false },
+                        ticks: {
+                            color: '#6b7280',
+                            font: { family: 'Poppins', size: 11 }
+                        }
                     }
                 }
             }
         });
     }
 
+    // 3. Multi-Bar Chart: Analisis Performa Triwulan
     const seasonalEl = document.getElementById('seasonalChart');
     if (seasonalEl) {
         const seasonalCtx = seasonalEl.getContext('2d');
         new Chart(seasonalCtx, {
             type: 'bar',
             data: {
-                labels: ['Triwulan I', 'Triwulan II', 'Triwulan III', 'Triwulan IV'],
+                labels: ['Triwulan I', 'Triwulan II', 'Triwulan III', 'Triwulan IV (Est)'],
                 datasets: [
                     {
-                        label: 'Pajak Daerah',
-                        data: [25, 60, 85, 45],
-                        backgroundColor: '#FAAC7B',
-                        borderRadius: 4
+                        label: 'Pajak Daerah (Miliar Rp)',
+                        data: [120, 145, 160, 175],
+                        backgroundColor: '#16a34a',
+                        borderRadius: 6,
+                        barPercentage: 0.7,
+                        categoryPercentage: 0.6
                     },
                     {
-                        label: 'Retribusi Daerah',
-                        data: [40, 55, 30, 40],
-                        backgroundColor: '#82D9D7',
-                        borderRadius: 4
+                        label: 'Retribusi Daerah (Miliar Rp)',
+                        data: [22, 28, 31, 35],
+                        backgroundColor: '#86efac',
+                        borderRadius: 6,
+                        barPercentage: 0.7,
+                        categoryPercentage: 0.6
                     }
                 ]
             },
@@ -118,15 +158,31 @@ function initCharts() {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { position: 'bottom' }
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: { family: 'Poppins', size: 12 },
+                            usePointStyle: true,
+                            boxWidth: 8
+                        }
+                    }
                 },
                 scales: {
                     y: {
                         beginAtZero: true,
-                        grid: { color: '#F3F4F6' }
+                        grid: { color: '#f3f4f6' },
+                        ticks: {
+                            color: '#6b7280',
+                            font: { family: 'Poppins', size: 11 },
+                            callback: function (val) { return val + ' M'; }
+                        }
                     },
                     x: {
-                        grid: { display: false }
+                        grid: { display: false },
+                        ticks: {
+                            color: '#6b7280',
+                            font: { family: 'Poppins', size: 11 }
+                        }
                     }
                 }
             }
@@ -134,39 +190,116 @@ function initCharts() {
     }
 }
 
-// Modal Handlers
+// Modal Handlers (Bootstrap 5)
 function openAddModal() {
-    openModal('addModal');
+    const modal = new bootstrap.Modal(document.getElementById('addModal'));
+    modal.show();
 }
 
 function addItem(e) {
     e.preventDefault();
-    closeModal('addModal');
-    showToast('Data berhasil ditambahkan', 'success');
+    const modalEl = document.getElementById('addModal');
+    const modal = bootstrap.Modal.getInstance(modalEl);
+    if (modal) modal.hide();
+
+    if (typeof Swal !== 'undefined') {
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'Data pendapatan baru berhasil ditambahkan.',
+            confirmButtonColor: '#16a34a'
+        });
+    } else {
+        alert('Data berhasil ditambahkan');
+    }
+    e.target.reset();
 }
 
 function showDeleteModal(id) {
     deleteId = id;
-    openModal('deleteModal');
+    const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    modal.show();
 }
 
 function confirmDelete() {
     if (deleteId) {
         const item = document.querySelector(`tr[data-item-id="${deleteId}"]`);
         if (item) item.remove();
-        closeModal('deleteModal');
-        showToast('Data berhasil dihapus', 'success');
+
+        const modalEl = document.getElementById('deleteModal');
+        const modal = bootstrap.Modal.getInstance(modalEl);
+        if (modal) modal.hide();
+
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                icon: 'success',
+                title: 'Terhapus!',
+                text: 'Data berhasil dihapus dari sistem.',
+                confirmButtonColor: '#16a34a',
+                timer: 1800,
+                showConfirmButton: false
+            });
+        }
+
         deleteId = null;
 
         const remaining = document.querySelectorAll('tr[data-item-id]');
-        if (remaining.length === 0) {
-            const noRes = document.getElementById('noResults');
-            if (noRes) noRes.classList.remove('hidden');
+        const noRes = document.getElementById('noResults');
+        if (remaining.length === 0 && noRes) {
+            noRes.classList.remove('d-none');
         }
     }
 }
 
 function viewItem(id) {
-    openModal('viewModal');
+    const modal = new bootstrap.Modal(document.getElementById('viewModal'));
+    modal.show();
 }
 
+// Filter and Search Logic
+function applyFilters() {
+    const searchVal = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
+    const catVal = document.getElementById('categoryFilter')?.value || 'all';
+    const statusVal = document.getElementById('statusFilter')?.value || 'all';
+
+    const rows = document.querySelectorAll('#cropsTableBody tr[data-item-id]');
+    let visibleCount = 0;
+
+    rows.forEach(row => {
+        const rowSearchable = (row.getAttribute('data-searchable') || '').toLowerCase();
+        const rowCategory = row.getAttribute('data-category') || '';
+        const rowStatus = row.getAttribute('data-status') || '';
+
+        const matchSearch = !searchVal || rowSearchable.includes(searchVal);
+        const matchCategory = (catVal === 'all') || (rowCategory === catVal);
+        const matchStatus = (statusVal === 'all') || (rowStatus === statusVal);
+
+        if (matchSearch && matchCategory && matchStatus) {
+            row.style.display = '';
+            visibleCount++;
+        } else {
+            row.style.display = 'none';
+        }
+    });
+
+    const noRes = document.getElementById('noResults');
+    if (noRes) {
+        if (visibleCount === 0) {
+            noRes.classList.remove('d-none');
+        } else {
+            noRes.classList.add('d-none');
+        }
+    }
+}
+
+function resetFilters() {
+    const searchInput = document.getElementById('searchInput');
+    const catFilter = document.getElementById('categoryFilter');
+    const statusFilter = document.getElementById('statusFilter');
+
+    if (searchInput) searchInput.value = '';
+    if (catFilter) catFilter.value = 'all';
+    if (statusFilter) statusFilter.value = 'all';
+
+    applyFilters();
+}

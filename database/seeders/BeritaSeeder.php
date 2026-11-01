@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Berita;
 use App\Models\KategoriBerita;
-use App\Models\TUser;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -15,7 +15,7 @@ class BeritaSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = TUser::first();
+        $user = User::first();
         $kategori = KategoriBerita::first();
 
         // Jika belum ada berita di database, tambahkan data contoh
@@ -51,3 +51,4 @@ class BeritaSeeder extends Seeder
         }
     }
 }
+

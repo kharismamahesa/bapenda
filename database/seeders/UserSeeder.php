@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
-use App\Models\TUser;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
@@ -13,15 +13,22 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        TUser::updateOrCreate(
-            ['username' => 'admin'],
+        User::updateOrCreate(
+            ['email' => 'admin@bapenda.go.id'],
             [
-                'nama' => 'Administrator Bapenda',
-                'email' => 'admin@bapenda.go.id',
-                'password' => Hash::make('password'),
+                'name' => 'Administrator Bapenda',
+                'password' => Hash::make('password123'),
+                'role' => 'superadmin',
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'operator@bapenda.go.id'],
+            [
+                'name' => 'Operator Konten & Layanan',
+                'password' => Hash::make('password123'),
                 'role' => 'admin',
             ]
         );
     }
 }
-

@@ -2,9 +2,8 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use App\Models\TUser;
+use App\Models\User;
 
 class AdminAuthTest extends TestCase
 {
@@ -19,26 +18,34 @@ class AdminAuthTest extends TestCase
         $response = $this->get('/login');
         $response->assertStatus(200);
         $response->assertSee('BAPENDA');
+        $response->assertSee('bapenda-login.css');
     }
 
     public function test_user_can_login_with_seeded_credentials(): void
     {
+        $user = User::where('email', 'admin@bapenda.go.id')->first();
+
         $response = $this->post('/login', [
             'username' => 'admin',
-            'password' => 'password',
+            'password' => 'password123',
         ]);
 
         $response->assertRedirect(route('admin.dashboard'));
-        $this->assertAuthenticatedAs(TUser::where('username', 'admin')->first());
+        $this->assertAuthenticatedAs($user);
     }
 
     public function test_authenticated_user_can_access_dashboard(): void
     {
-        $user = TUser::where('username', 'admin')->first();
+        $user = User::where('email', 'admin@bapenda.go.id')->first();
         $response = $this->actingAs($user)->get('/admin/dashboard');
 
         $response->assertStatus(200);
         $response->assertSee('Total Realisasi PAD');
+        $response->assertSee('bapenda-dashboard.css');
+        $response->assertSee('page-header');
+        $response->assertSee('page-title');
+        $response->assertSee('page-actions');
+        $response->assertSee('toggleSidebar()');
+        $response->assertSee('closeSidebar()');
     }
 }
-

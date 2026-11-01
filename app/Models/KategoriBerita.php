@@ -9,7 +9,7 @@ class KategoriBerita extends Model
 {
     use HasFactory;
 
-    protected $table = 't_berita_kategori';
+    protected $table = 'berita_kategori';
     protected $primaryKey = 'id_berita_kategori';
     public $timestamps = false;
 
