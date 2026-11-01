@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bapenda Provinsi Riau | Portal Pelayanan Pajak Daerah</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@700;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --green: #0B4D3C;
+            --green-dark: #07382C;
+            --green-light: #EAF3EF;
+            --gold: #E5A93B;
+            --red: #9B2226;
+            --text: #26352F;
+            --muted: #75827B;
+            --bg: #F8F9F6;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            background: #fff;
+            margin: 0;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Merriweather', serif;
+        }
+
+        /* TOPBAR */
+        .topbar {
+            background: var(--green-dark);
+            color: #fff;
+            font-size: 11px;
+            padding: 9px 0;
+        }
+
+        .topbar a {
+            color: #fff;
+        }
+
+        .topbar i {
+            color: var(--gold);
+            margin-right: 5px;
+        }
+
+        /* NAVBAR */
+        .main-navbar {
+            background: #fff;
+            padding: 15px 0;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, .04);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--green);
+        }
+
+        .brand-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            background: var(--green-light);
+            color: var(--green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 27px;
+        }
+
+        .brand strong {
+            display: block;
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        .brand small {
+            font-size: 10px;
+            letter-spacing: 1px;
+            color: var(--muted);
+        }
+
+        .nav-link {
+            color: #39483F !important;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 12px !important;
+        }
+
+        .nav-link:hover {
+            color: var(--green) !important;
+        }
+
+        .btn-gold {
+            background: var(--gold);
+            color: #26352F;
+            border: 0;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .btn-gold:hover {
+            background: #d39422;
+            color: #fff;
+        }
+
+        .btn-green {
+            background: var(--green);
+            color: white;
+            border: 0;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .btn-green:hover {
+            background: var(--green-dark);
+            color: white;
+        }
+
+        /* HERO */
+        .hero {
+            position: relative;
+            min-height: 650px;
+            padding: 100px 0 85px;
+            background:
+                linear-gradient(90deg,
+                    rgba(4, 35, 26, .94) 0%,
+                    rgba(4, 35, 26, .82) 48%,
+                    rgba(4, 35, 26, .48) 100%),
+                url('https://images.unsplash.com/photo-1449824913935-59a10b8d2000?q=85&w=2000') center/cover no-repeat;
+            color: white;
+            overflow: hidden;
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 35%;
+            height: 100%;
+            opacity: .06;
+            pointer-events: none;
+            background-image: repeating-linear-gradient(45deg,
+                    transparent,
+                    transparent 18px,
+                    #fff 19px,
+                    transparent 20px);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-label {
+            display: inline-block;
+            border: 1px solid rgba(229, 169, 59, .6);
+            color: var(--gold);
+            padding: 8px 15px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            margin-bottom: 25px;
+        }
+
+        .hero h1 {
+            font-size: clamp(34px, 5vw, 56px);
+            line-height: 1.35;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: var(--gold);
+        }
+
+        .hero-desc {
+            max-width: 580px;
+            color: rgba(255, 255, 255, .8);
+            font-size: 14px;
+            line-height: 1.9;
+            margin-bottom: 28px;
+        }
+
+        /* ALERT */
+        .program-alert {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(155, 34, 38, .95);
+            border-left: 4px solid var(--gold);
+            padding: 14px 18px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            max-width: 620px;
+        }
+
+        .program-alert i {
+            font-size: 23px;
+            color: #fff;
+        }
+
+        .program-alert strong {
+            display: block;
+            font-size: 12px;
+        }
+
+        .program-alert small {
+            display: block;
+            font-size: 10px;
+            color: rgba(255, 255, 255, .8);
+            margin-top: 4px;
+        }
+
+        /* TAX WIDGET */
+        .tax-widget {
+            background: white;
+            color: var(--text);
+            border-radius: 10px;
+            padding: 25px;
+            max-width: 630px;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, .2);
+        }
+
+        .tax-widget h5 {
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .tax-widget .subtitle {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .tax-tabs {
+            display: flex;
+            gap: 8px;
+            margin: 20px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .tax-tab {
+            border: 0;
+            background: transparent;
+            color: var(--muted);
+            padding: 10px 12px;
+            font-size: 11px;
+            font-weight: 700;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tax-tab.active {
+            color: var(--green);
+            border-bottom-color: var(--gold);
+        }
+
+        .plate-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr 1.5fr;
+            gap: 8px;
+        }
+
+        .plate-inputs input {
+            width: 100%;
+            min-width: 0;
+            border: 1px solid #DCE4DE;
+            border-radius: 5px;
+            padding: 13px 8px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 16px;
+            text-transform: uppercase;
+            outline: none;
+        }
+
+        .plate-inputs input:focus {
+            border-color: var(--green);
+        }
+
+        .plate-prefix {
+            background: var(--green-light);
+            color: var(--green);
+            border: 1px solid #DCE4DE;
+            border-radius: 5px;
+            font-weight: 800;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .tax-result {
+            background: var(--green-light);
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+            font-size: 12px;
+        }
+
+        .tax-result strong {
+            color: var(--green);
+        }
+
+        .tax-result .amount {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--green);
+        }
+
+        .quick-links {
+            margin-top: 15px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .quick-links a {
+            font-size: 10px;
+            color: var(--green);
+            font-weight: 700;
+        }
+
+        /* GENERAL SECTION */
+        .section {
+            padding: 85px 0;
+        }
+
+        .section-label {
+            color: var(--green);
+            font-size: 10px;
+            letter-spacing: 2px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-size: clamp(25px, 3vw, 35px);
+            color: var(--green-dark);
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .section-desc {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.9;
+        }
+
+        /* SERVICES */
+        .services-section {
+            background: var(--bg);
+        }
+
+        .service-card {
+            height: 100%;
+            background: white;
+            border: 1px solid #E8EDE9;
+            border-radius: 8px;
+            padding: 25px;
+            transition: .3s;
+        }
+
+        .service-card:hover {
+            border-color: var(--gold);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, .06);
+        }
+
+        .service-icon {
+            width: 53px;
+            height: 53px;
+            border-radius: 7px;
+            background: var(--green-light);
+            color: var(--green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .service-card h5 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            font-size: 15px;
+            color: var(--green-dark);
+        }
+
+        .service-card p {
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.8;
+            margin-top: 10px;
+        }
+
+        .service-card a {
+            color: var(--green);
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        /* SAMSAT FINDER */
+        .finder {
+            background: var(--green-dark);
+            color: white;
+            padding: 55px 0;
+        }
+
+        .finder h2 {
+            font-size: 28px;
+        }
+
+        .finder p {
+            font-size: 12px;
+            color: rgba(255, 255, 255, .7);
+        }
+
+        .finder .form-select {
+            border: 0;
+            border-radius: 5px;
+            padding: 14px;
+            font-size: 12px;
+        }
+
+        .samsat-card {
+            background: white;
+            color: var(--text);
+            border-radius: 8px;
+            padding: 22px;
+            height: 100%;
+        }
+
+        .samsat-card i {
+            font-size: 25px;
+            color: var(--green);
+        }
+
+        .samsat-card h6 {
+            font-weight: 800;
+            font-size: 14px;
+            margin: 15px 0 8px;
+        }
+
+        .samsat-card p {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .samsat-card a {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--green);
+        }
+
+        /* GUIDE */
+        .guide-section {
+            background: white;
+        }
+
+        .step {
+            display: flex;
+            gap: 18px;
+            padding: 20px 0;
+            border-bottom: 1px solid #EDF0ED;
+        }
+
+        .step-number {
+            width: 43px;
+            height: 43px;
+            flex-shrink: 0;
+            background: var(--green);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: 800;
+            font-size: 14px;
+        }
+
+        .step h6 {
+            font-size: 14px;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .step p {
+            font-size: 12px;
+            color: var(--muted);
+            margin: 0;
+            line-height: 1.7;
+        }
+
+        /* NON VEHICLE TAX */
+        .nonvehicle {
+            background: var(--bg);
+        }
+
+        .tax-card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            border-top: 3px solid var(--gold);
+            height: 100%;
+        }
+
+        .tax-card i {
+            color: var(--green);
+            font-size: 27px;
+        }
+
+        .tax-card h5 {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 800;
+            margin: 15px 0 8px;
+        }
+
+        .tax-card p {
+            font-size: 11px;
+            color: var(--muted);
+            line-height: 1.8;
+        }
+
+        /* PAD */
+        .pad-section {
+            background: var(--green);
+            color: white;
+        }
+
+        .pad-box {
+            background: rgba(255, 255, 255, .08);
+            border: 1px solid rgba(255, 255, 255, .15);
+            border-radius: 8px;
+            padding: 25px;
+            height: 100%;
+        }
+
+        .pad-box small {
+            color: rgba(255, 255, 255, .65);
+            font-size: 11px;
+        }
+
+        .pad-box h3 {
+            font-family: 'Inter', sans-serif;
+            color: var(--gold);
+            font-weight: 800;
+            margin: 12px 0;
+        }
+
+        .pad-note {
+            font-size: 10px;
+            color: rgba(255, 255, 255, .55);
+        }
+
+        /* NEWS */
+        .news-card {
+            background: white;
+            border: 1px solid #EAEFEA;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .news-image {
+            height: 205px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .news-body {
+            padding: 22px;
+        }
+
+        .news-body small {
+            font-size: 10px;
+            color: var(--green);
+            font-weight: 800;
+        }
+
+        .news-body h5 {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            line-height: 1.7;
+            font-weight: 800;
+            margin: 12px 0;
+        }
+
+        .news-body p {
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.8;
+        }
+
+        /* CTA */
+        .cta-section {
+            background: #F3F5EF;
+            padding: 65px 0;
+        }
+
+        .cta-box {
+            background: var(--green-dark);
+            color: white;
+            border-radius: 8px;
+            padding: 45px;
+            text-align: center;
+        }
+
+        .cta-box h2 {
+            font-size: 29px;
+        }
+
+        .cta-box p {
+            font-size: 12px;
+            color: rgba(255, 255, 255, .7);
+        }
+
+        /* FOOTER */
+        footer {
+            background: #092F25;
+            color: white;
+            padding: 60px 0 20px;
+        }
+
+        footer h6 {
+            font-size: 13px;
+            font-weight: 800;
+            margin-bottom: 18px;
+        }
+
+        footer p,
+        footer a {
+            font-size: 11px;
+            color: rgba(255, 255, 255, .65);
+            line-height: 2.1;
+        }
+
+        footer a:hover {
+            color: var(--gold);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, .12);
+            padding-top: 20px;
+            margin-top: 35px;
+            font-size: 10px;
+            color: rgba(255, 255, 255, .5);
+        }
+
+        /* RESPONSIVE */
+        @media(max-width:991px) {
+            .hero {
+                padding: 75px 0;
+            }
+
+            .navbar-collapse {
+                padding-top: 15px;
+            }
+        }
+
+        @media(max-width:576px) {
+            .hero {
+                padding: 55px 0;
+            }
+
+            .hero h1 {
+                font-size: 35px;
+            }
+
+            .tax-widget {
+                padding: 17px;
+            }
+
+            .plate-inputs input {
+                font-size: 14px;
+                padding: 12px 4px;
+            }
+
+            .section {
+                padding: 60px 0;
+            }
+
+            .cta-box {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+        <div class="container d-flex justify-content-between flex-wrap gap-2">
+            <div>
+                <i class="bi bi-geo-alt"></i>
+                Pemerintah Provinsi Riau
+                <span class="mx-2">|</span>
+                <i class="bi bi-clock"></i>
+                <span id="currentDate"></span>
+            </div>
+            <div>
+                <i class="bi bi-telephone"></i>
+                <a href="#">Call Center Bapenda</a>
+                <span class="mx-2">|</span>
+                <i class="bi bi-envelope"></i>
+                <a href="#">Kontak Kami</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg main-navbar">
+        <div class="container">
+
+            <a href="#beranda" class="brand">
+                <div class="brand-logo">
+                    <i class="bi bi-bank2"></i>
+                </div>
+                <div>
+                    <strong>BAPENDA RIAU</strong>
+                    <small>PROVINSI RIAU</small>
+                </div>
+            </a>
+
+            <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
+                <i class="bi bi-list fs-2"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarMenu">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item"><a class="nav-link" href="#beranda">Beranda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#layanan">Layanan</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#samsat">Lokasi Samsat</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#panduan">Panduan</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#informasi">Informasi</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#berita">Berita</a></li>
+                    <li class="nav-item ms-lg-2">
+                        <a href="#cek-pajak" class="btn-gold">
+                            Cek Pajak <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="beranda">
+        <div class="container hero-content">
+            <div class="row align-items-center">
+                <div class="col-lg-7">
+
+                    <div class="hero-label">
+                        BADAN PENDAPATAN DAERAH PROVINSI RIAU
+                    </div>
+
+                    <h1>
+                        Layanan Pajak Daerah
+                        <span>untuk Kemajuan Bumi Lancang Kuning</span>
+                    </h1>
+
+                    <p class="hero-desc">
+                        Bersama membangun Provinsi Riau melalui pelayanan
+                        perpajakan yang mudah, transparan, akuntabel,
+                        dan berbasis digital.
+                    </p>
+
+                    <!-- PROGRAM ALERT -->
+                    <div class="program-alert">
+                        <i class="bi bi-megaphone-fill"></i>
+                        <div>
+                            <strong>Informasi Program dan Insentif Pajak Daerah</strong>
+                            <small>
+                                Pantau pengumuman resmi Bapenda Riau untuk
+                                mengetahui program dan periode yang berlaku.
+                            </small>
+                        </div>
+                        <a href="#berita" class="text-white ms-auto">
+                            <i class="bi bi-arrow-up-right"></i>
+                        </a>
+                    </div>
+
+                    <!-- TAX WIDGET -->
+                    <div class="tax-widget" id="cek-pajak">
+
+                        <h5><i class="bi bi-car-front-fill text-success me-2"></i>
+                            Cek Informasi Pajak Kendaraan
+                        </h5>
+
+                        <div class="subtitle">
+                            Masukkan nomor polisi kendaraan Anda.
+                        </div>
+
+                        <div class="tax-tabs">
+                            <button class="tax-tab active" onclick="showTaxTab('pkb',this)">
+                                Cek PKB
+                            </button>
+                            <button class="tax-tab" onclick="showTaxTab('simapan',this)">
+                                SIMAPAN
+                            </button>
+                            <button class="tax-tab" onclick="showTaxTab('bbnkb',this)">
+                                Info BBNKB
+                            </button>
+                        </div>
+
+                        <div id="pkbPanel">
+
+                            <label class="form-label fw-bold small">
+                                Nomor Polisi Kendaraan
+                            </label>
+
+                            <div class="plate-inputs">
+
+                                <div class="plate-prefix">BM</div>
+
+                                <input type="text" id="plateNumber" placeholder="1234" maxlength="4"
+                                    inputmode="numeric">
+
+                                <input type="text" id="plateSeries" placeholder="ABC" maxlength="3">
+
+                            </div>
+
+                            <div class="text-danger small mt-2" id="plateError"></div>
+
+                            <button class="btn-green w-100 mt-3" onclick="checkVehicle()">
+                                <i class="bi bi-search me-2"></i>
+                                Cek Informasi Pajak
+                            </button>
+
+                            <div id="taxResult" class="tax-result d-none">
+                                <strong>Nomor kendaraan:</strong>
+                                <div id="resultPlate" class="mb-2"></div>
+                                <div class="text-muted small">
+                                    Simulasi tampilan. Hasil pajak sebenarnya
+                                    tersedia setelah API resmi diintegrasikan.
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div id="simapanPanel" class="d-none">
+                            <h6 class="fw-bold">SIMAPAN - Pajak Air Permukaan</h6>
+                            <p class="small text-muted">
+                                Portal pelayanan dan administrasi wajib pajak
+                                air permukaan.
+                            </p>
+                            <a href="#" class="btn-green d-inline-block">
+                                Masuk SIMAPAN <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+
+                        <div id="bbnkbPanel" class="d-none">
+                            <h6 class="fw-bold">Informasi BBNKB</h6>
+                            <p class="small text-muted">
+                                Informasi Bea Balik Nama Kendaraan Bermotor
+                                dan ketentuan administrasinya.
+                            </p>
+                            <a href="#informasi" class="btn-green d-inline-block">
+                                Pelajari Informasi <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+
+                        <div class="quick-links">
+                            <a href="#samsat"><i class="bi bi-geo-alt"></i> Cari Samsat</a>
+                            <a href="#panduan"><i class="bi bi-book"></i> Panduan Pembayaran</a>
+                            <a href="#layanan"><i class="bi bi-grid"></i> Semua Layanan</a>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SAMSAT SERVICES -->
+    <section class="section services-section" id="layanan">
+        <div class="container">
+
+            <div class="text-center mb-5">
+                <div class="section-label">PELAYANAN SAMSAT</div>
+                <h2 class="section-title">Berbagai Kemudahan Layanan Samsat</h2>
+                <p class="section-desc">
+                    Layanan pembayaran pajak kendaraan yang semakin dekat,
+                    cepat, dan mudah dijangkau masyarakat.
+                </p>
+            </div>
+
+            <div class="row g-4">
+
+                <div class="col-md-4">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="bi bi-truck"></i>
+                        </div>
+                        <h5>Samsat Tanjak</h5>
+                        <p>
+                            Layanan jemput bola untuk mendekatkan pelayanan
+                            pajak kendaraan kepada masyarakat.
+                        </p>
+                        <a href="#samsat">Lihat Informasi <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="bi bi-bus-front"></i>
+                        </div>
+                        <h5>Samsat Keliling</h5>
+                        <p>
+                            Layanan pembayaran pajak kendaraan melalui
+                            armada Samsat Keliling sesuai jadwal operasional.
+                        </p>
+                        <a href="#samsat">Lihat Jadwal <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="bi bi-car-front"></i>
+                        </div>
+                        <h5>Samsat Drive Thru</h5>
+                        <p>
+                            Layanan pembayaran pajak kendaraan dengan
+                            proses yang praktis tanpa harus turun dari kendaraan.
+                        </p>
+                        <a href="#samsat">Lihat Lokasi <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SAMSAT FINDER -->
+    <section class="finder" id="samsat">
+        <div class="container">
+
+            <div class="row align-items-center mb-4">
+                <div class="col-lg-7">
+                    <div class="section-label text-warning">LOKASI DAN JADWAL</div>
+                    <h2>Cari Layanan Samsat di Sekitar Anda</h2>
+                    <p>
+                        Pilih kabupaten/kota untuk mendapatkan informasi
+                        lokasi dan jadwal pelayanan Samsat.
+                    </p>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-5">
+                    <select class="form-select" id="district">
+                        <option value="">Pilih Kabupaten / Kota</option>
+                        <option>Pekanbaru</option>
+                        <option>Kampar</option>
+                        <option>Siak</option>
+                        <option>Pelalawan</option>
+                        <option>Indragiri Hulu</option>
+                        <option>Indragiri Hilir</option>
+                        <option>Bengkalis</option>
+                        <option>Rokan Hulu</option>
+                        <option>Rokan Hilir</option>
+                        <option>Kuantan Singingi</option>
+                        <option>Kepulauan Meranti</option>
+                        <option>Dumai</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <input type="date" class="form-control" id="serviceDate">
+                </div>
+
+                <div class="col-md-3">
+                    <button class="btn-gold w-100 h-100" onclick="searchSamsat()">
+                        <i class="bi bi-search me-2"></i> Cari Layanan
+                    </button>
+                </div>
+            </div>
+
+            <div id="samsatMessage" class="small text-warning mb-3"></div>
+
+            <div class="row g-3">
+
+                <div class="col-md-4">
+                    <div class="samsat-card">
+                        <i class="bi bi-truck"></i>
+                        <h6>Samsat Tanjak</h6>
+                        <p>Informasi titik pelayanan jemput bola.</p>
+                        <a href="#">Detail Layanan →</a>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="samsat-card">
+                        <i class="bi bi-bus-front"></i>
+                        <h6>Samsat Keliling</h6>
+                        <p>Informasi jadwal dan lokasi armada.</p>
+                        <a href="#">Detail Jadwal →</a>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="samsat-card">
+                        <i class="bi bi-geo-alt"></i>
+                        <h6>Samsat Drive Thru</h6>
+                        <p>Informasi titik pelayanan Drive Thru.</p>
+                        <a href="#">Lihat Lokasi →</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- PAYMENT GUIDE -->
+    <section class="section guide-section" id="panduan">
+        <div class="container">
+
+            <div class="row align-items-center g-5">
+
+                <div class="col-lg-5">
+                    <div class="section-label">PANDUAN PELAYANAN</div>
+                    <h2 class="section-title">
+                        Bayar Pajak Kendaraan Lebih Mudah
+                    </h2>
+                    <p class="section-desc">
+                        Ikuti tahapan pelayanan untuk mendapatkan pengalaman
+                        pembayaran pajak kendaraan yang lebih mudah dan terarah.
+                    </p>
+
+                    <a href="#" class="btn-green mt-3 d-inline-block">
+                        Ambil Antrean Online <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="col-lg-7">
+
+                    <div class="step">
+                        <div class="step-number">01</div>
+                        <div>
+                            <h6>Cek Informasi Pajak</h6>
+                            <p>
+                                Periksa informasi kewajiban pajak kendaraan
+                                melalui layanan informasi resmi.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">02</div>
+                        <div>
+                            <h6>Ambil Nomor Antrean Online</h6>
+                            <p>
+                                Pilih lokasi dan jadwal pelayanan sesuai
+                                kebutuhan Anda.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">03</div>
+                        <div>
+                            <h6>Lakukan Pembayaran</h6>
+                            <p>
+                                Lakukan pembayaran melalui kanal pembayaran
+                                resmi yang tersedia.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">04</div>
+                        <div>
+                            <h6>Pengesahan dan Dokumen</h6>
+                            <p>
+                                Selesaikan proses pengesahan dan terima
+                                dokumen sesuai jenis layanan.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- NON VEHICLE TAX -->
+    <section class="section nonvehicle" id="pajak-daerah">
+        <div class="container">
+
+            <div class="text-center mb-5">
+                <div class="section-label">PAJAK DAERAH LAINNYA</div>
+                <h2 class="section-title">Layanan Pajak Non-Kendaraan</h2>
+                <p class="section-desc">
+                    Informasi dan layanan administrasi pajak daerah
+                    selain pajak kendaraan bermotor.
+                </p>
+            </div>
+
+            <div class="row g-4">
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="tax-card">
+                        <i class="bi bi-water"></i>
+                        <h5>Pajak Air Permukaan</h5>
+                        <p>
+                            Informasi dan administrasi wajib pajak
+                            air permukaan melalui SIMAPAN.
+                        </p>
+                        <a href="#" class="btn-green d-inline-block">SIMAPAN →</a>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="tax-card">
+                        <i class="bi bi-fuel-pump"></i>
+                        <h5>PBB-KB</h5>
+                        <p>
+                            Informasi Pajak Bahan Bakar Kendaraan Bermotor
+                            untuk wajib pajak terkait.
+                        </p>
+                        <a href="#" class="service-link">Informasi →</a>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="tax-card">
+                        <i class="bi bi-receipt"></i>
+                        <h5>Pajak Rokok</h5>
+                        <p>
+                            Informasi kebijakan dan ketentuan
+                            pajak rokok sesuai peraturan.
+                        </p>
+                        <a href="#" class="service-link">Informasi →</a>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="tax-card">
+                        <i class="bi bi-truck-front"></i>
+                        <h5>Pajak Alat Berat</h5>
+                        <p>
+                            Informasi administrasi dan ketentuan
+                            pajak alat berat.
+                        </p>
+                        <a href="#" class="service-link">Informasi →</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- PAD TRANSPARENCY -->
+    <section class="section pad-section" id="informasi">
+        <div class="container">
+
+            <div class="row align-items-center mb-4">
+                <div class="col-lg-8">
+                    <div class="section-label text-warning">TRANSPARANSI PENDAPATAN</div>
+                    <h2 class="section-title text-white">
+                        Informasi Pendapatan Asli Daerah
+                    </h2>
+                    <p class="text-white-50 small">
+                        Informasi perkembangan dan capaian pendapatan
+                        daerah Provinsi Riau.
+                    </p>
+                </div>
+            </div>
+
+            <div class="row g-3">
+
+                <div class="col-md-4">
+                    <div class="pad-box">
+                        <small>Target PAD</small>
+                        <h3>Data Belum Tersedia</h3>
+                        <div class="pad-note">Menunggu integrasi data resmi</div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="pad-box">
+                        <small>Realisasi PAD</small>
+                        <h3>Data Belum Tersedia</h3>
+                        <div class="pad-note">Menunggu integrasi data resmi</div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="pad-box">
+                        <small>Persentase Capaian</small>
+                        <h3>-- %</h3>
+                        <div class="pad-note">Data capaian akan diperbarui berkala</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="pad-note mt-4">
+                Sumber data: Sistem informasi resmi Bapenda Provinsi Riau.
+            </div>
+
+        </div>
+    </section>
+
+    <!-- NEWS -->
+    <section class="section" id="berita">
+        <div class="container">
+
+            <div class="d-flex justify-content-between align-items-end mb-5 flex-wrap gap-3">
+                <div>
+                    <div class="section-label">PUBLIKASI DAN INFORMASI</div>
+                    <h2 class="section-title mb-0">Berita & Kegiatan Bapenda</h2>
+                    <p class="section-desc mt-2">
+                        Informasi kegiatan, kebijakan, dan pengumuman terbaru.
+                    </p>
+                </div>
+                <a href="#" class="service-link">Semua Berita →</a>
+            </div>
+
+            <div class="row g-4">
+
+                <div class="col-md-4">
+                    <div class="news-card">
+                        <div class="news-image"
+                            style="background-image:url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?q=85&w=800')">
+                        </div>
+                        <div class="news-body">
+                            <small>KEGIATAN</small>
+                            <h5>Kegiatan dan Koordinasi Pendapatan Daerah</h5>
+                            <p>Informasi kegiatan resmi Badan Pendapatan Daerah Provinsi Riau.</p>
+                            <a href="#" class="service-link">Baca Selengkapnya →</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="news-card">
+                        <div class="news-image"
+                            style="background-image:url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=85&w=800')">
+                        </div>
+                        <div class="news-body">
+                            <small>PENGUMUMAN</small>
+                            <h5>Informasi Program dan Kebijakan Pajak Daerah</h5>
+                            <p>Informasi kebijakan dan pengumuman pelayanan pajak daerah.</p>
+                            <a href="#" class="service-link">Baca Selengkapnya →</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="news-card">
+                        <div class="news-image"
+                            style="background-image:url('https://images.unsplash.com/photo-1497366754035-f200968a6e72?q=85&w=800')">
+                        </div>
+                        <div class="news-body">
+                            <small>PUBLIKASI</small>
+                            <h5>Publikasi dan Transparansi Informasi Publik</h5>
+                            <p>Dokumen dan informasi publik yang dapat diakses masyarakat.</p>
+                            <a href="#" class="service-link">Baca Selengkapnya →</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-box">
+                <div class="section-label text-warning">PELAYANAN PUBLIK</div>
+                <h2>Kontribusi Pajak, Kemajuan Riau</h2>
+                <p>
+                    Mari bersama mendukung pembangunan Provinsi Riau
+                    melalui kepatuhan dan pelayanan pajak daerah.
+                </p>
+                <a href="#cek-pajak" class="btn-gold">
+                    Cek Pajak Kendaraan <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+
+            <div class="row g-4">
+
+                <div class="col-lg-4">
+                    <div class="brand text-white mb-3">
+                        <div class="brand-logo">
+                            <i class="bi bi-bank2"></i>
+                        </div>
+                        <div>
+                            <strong class="text-white">BAPENDA RIAU</strong>
+                            <small class="text-white-50">PROVINSI RIAU</small>
+                        </div>
+                    </div>
+                    <p>
+                        Badan Pendapatan Daerah Provinsi Riau.
+                        Mewujudkan tata kelola pendapatan daerah yang
+                        optimal, transparan, dan akuntabel.
+                    </p>
+                </div>
+
+                <div class="col-6 col-lg-2">
+                    <h6>Profil</h6>
+                    <p>
+                        <a href="#">Tentang Kami</a><br>
+                        <a href="#">Struktur Organisasi</a><br>
+                        <a href="#">Visi dan Misi</a><br>
+                        <a href="#">UPT Bapenda</a>
+                    </p>
+                </div>
+
+                <div class="col-6 col-lg-3">
+                    <h6>Layanan</h6>
+                    <p>
+                        <a href="#cek-pajak">Cek Pajak Kendaraan</a><br>
+                        <a href="#samsat">Samsat Tanjak</a><br>
+                        <a href="#samsat">Samsat Keliling</a><br>
+                        <a href="#pajak-daerah">Pajak Daerah</a>
+                    </p>
+                </div>
+
+                <div class="col-lg-3">
+                    <h6>Informasi dan Pengaduan</h6>
+                    <p>
+                        <a href="#">Kontak Kami</a><br>
+                        <a href="#">SP4N LAPOR!</a><br>
+                        <a href="#">PPID</a><br>
+                        <a href="#">Regulasi</a>
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="footer-bottom text-center">
+                © 2026 Badan Pendapatan Daerah Provinsi Riau.
+                Seluruh Hak Cipta Dilindungi.
+            </div>
+
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Tanggal
+        const now = new Date();
+
+        document.getElementById('currentDate').textContent =
+            new Intl.DateTimeFormat('id-ID', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            }).format(now);
+
+
+        // Tab widget
+        function showTaxTab(tab, button) {
+
+            document.querySelectorAll('.tax-tab').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            button.classList.add('active');
+
+            document.getElementById('pkbPanel').classList.toggle('d-none', tab !== 'pkb');
+            document.getElementById('simapanPanel').classList.toggle('d-none', tab !== 'simapan');
+            document.getElementById('bbnkbPanel').classList.toggle('d-none', tab !== 'bbnkb');
+        }
+
+
+        // Input plat
+        const plateNumber = document.getElementById('plateNumber');
+        const plateSeries = document.getElementById('plateSeries');
+
+        plateNumber.addEventListener('input', function () {
+            this.value = this.value.replace(/\D/g, '').slice(0, 4);
+        });
+
+        plateSeries.addEventListener('input', function () {
+            this.value = this.value.replace(/[^a-zA-Z]/g, '').toUpperCase().slice(0, 3);
+        });
+
+
+        // Validasi plat BM
+        function checkVehicle() {
+
+            const number = plateNumber.value.trim();
+            const series = plateSeries.value.trim();
+            const error = document.getElementById('plateError');
+            const result = document.getElementById('taxResult');
+
+            error.textContent = '';
+            result.classList.add('d-none');
+
+            if (!/^[1-9][0-9]{0,3}$/.test(number)) {
+                error.textContent = 'Nomor kendaraan harus terdiri dari 1-4 angka.';
+                plateNumber.focus();
+                return;
+            }
+
+            if (!/^[A-Z]{1,3}$/.test(series)) {
+                error.textContent = 'Kode seri kendaraan harus terdiri dari 1-3 huruf.';
+                plateSeries.focus();
+                return;
+            }
+
+            document.getElementById('resultPlate').textContent =
+                'BM ' + number + ' ' + series;
+
+            result.classList.remove('d-none');
+
+            // TODO:
+            // Integrasikan dengan API resmi pengecekan pajak kendaraan.
+            // Jangan menampilkan hasil simulasi sebagai tagihan pajak sebenarnya.
+        }
+
+
+        // Finder Samsat
+        function searchSamsat() {
+
+            const district = document.getElementById('district').value;
+            const date = document.getElementById('serviceDate').value;
+            const message = document.getElementById('samsatMessage');
+
+            if (!district) {
+                message.textContent = 'Silakan pilih kabupaten/kota terlebih dahulu.';
+                return;
+            }
+
+            if (!date) {
+                message.textContent = 'Silakan pilih tanggal layanan.';
+                return;
+            }
+
+            message.textContent =
+                'Pencarian layanan ' + district + ' tanggal ' + date +
+                '. Hubungkan fitur ini dengan database jadwal Samsat untuk menampilkan hasil.';
+
+            // TODO:
+            // Ambil jadwal Samsat dari API berdasarkan kabupaten dan tanggal.
+        }
+
+
+        // Mobile navbar
+        document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
+            link.addEventListener('click', function () {
+                const menu = document.getElementById('navbarMenu');
+
+                if (menu.classList.contains('show')) {
+                    bootstrap.Collapse.getOrCreateInstance(menu).hide();
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

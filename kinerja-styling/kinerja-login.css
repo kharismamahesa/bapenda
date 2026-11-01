@@ -1,0 +1,165 @@
+/* ============================================
+   KINERJA LOGIN PAGE - Custom Styling
+   Sumber: resources/views/admin/kinerja/login.blade.php
+   ============================================ */
+
+/* --- CSS Variables (Design Tokens) --- */
+:root {
+    --primary-teal: #49c5b6;
+    --dark-gray: #1d1d1b;
+    --body-bg: #f5f6f8;
+}
+
+/* --- Base --- */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    background-color: var(--body-bg);
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* --- Login Wrapper (Split Layout) --- */
+.login-wrapper {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
+/* --- Sisi Kiri: Gambar / Visual Besar --- */
+.side-visual {
+    flex: 1.5;
+    position: relative;
+    /* Ganti URL gambar sesuai kebutuhan */
+    background-image: url('/scott-graham-5fNmWej4tAA-unsplash.jpeg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    padding: 4rem;
+}
+
+/* Overlay Gradasi (Teal ke Dark) */
+.side-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(73, 197, 182, 0.8), rgba(29, 29, 27, 0.9));
+    z-index: 1;
+}
+
+.visual-content {
+    position: relative;
+    z-index: 2;
+    color: white;
+    max-width: 600px;
+}
+
+.visual-content h1 {
+    font-weight: 700;
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.visual-content p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    font-weight: 300;
+}
+
+/* --- Sisi Kanan: Form Login --- */
+.side-form {
+    flex: 1;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
+    z-index: 3;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-header {
+    margin-bottom: 2.5rem;
+}
+
+.login-header h3 {
+    font-weight: 700;
+    color: var(--dark-gray);
+    margin-bottom: 0.5rem;
+}
+
+.login-header p {
+    color: #6b7280;
+    font-size: 0.9rem;
+}
+
+/* --- Form Elements --- */
+.form-label {
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    border-radius: 8px;
+    padding: 14px 15px;
+    border: 1px solid #e5e7eb;
+    background-color: #f9fafb;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.form-control:focus {
+    border-color: var(--primary-teal);
+    box-shadow: 0 0 0 4px rgba(73, 197, 182, 0.1);
+    background-color: #fff;
+}
+
+/* --- Login Button --- */
+.btn-login {
+    background-color: var(--primary-teal);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 14px;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    transition: all 0.3s;
+}
+
+.btn-login:hover {
+    background-color: #3ba396;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(73, 197, 182, 0.3);
+}
+
+/* --- Footer --- */
+.footer-text {
+    margin-top: 3rem;
+    text-align: center;
+    color: #9ca3af;
+    font-size: 0.75rem;
+}
+
+/* --- Responsive: Sembunyikan visual di Mobile --- */
+@media (max-width: 992px) {
+    .side-visual {
+        display: none;
+    }
+
+    body {
+        overflow: auto;
+    }
+}
+

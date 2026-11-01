@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bapenda Provinsi Riau | Badan Pendapatan Daerah</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #168447;
+            --primary-dark: #075c32;
+            --accent: #fdb90c;
+            --dark: #153126;
+            --light: #f6f9f6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #26372e;
+            background: #fff;
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 700px;
+            height: 100vh;
+            max-height: 850px;
+            position: relative;
+            background:
+                linear-gradient(90deg,
+                    rgba(3, 35, 22, .85),
+                    rgba(3, 35, 22, .45),
+                    rgba(3, 35, 22, .2)),
+                linear-gradient(0deg,
+                    rgba(0, 0, 0, .35),
+                    transparent 50%),
+                url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=85&w=2000') center/cover no-repeat;
+            color: white;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 25px 0;
+            transition: .3s;
+        }
+
+        .navbar.scrolled {
+            position: fixed;
+            top: 0;
+            padding: 12px 0;
+            background: rgba(6, 48, 30, .96);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, .1);
+        }
+
+        .navbar-brand {
+            color: white !important;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 17px;
+            line-height: 1.3;
+        }
+
+        .brand-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: white;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+        }
+
+        .brand-text small {
+            display: block;
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            opacity: .8;
+        }
+
+        .navbar-nav {
+            gap: 5px;
+        }
+
+        .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, .85);
+            font-size: 13px;
+            font-weight: 600;
+            padding: 10px 14px !important;
+            transition: .3s;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            color: var(--accent);
+        }
+
+        .btn-cta {
+            background: var(--accent);
+            color: #26351e;
+            padding: 13px 23px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 800;
+            border: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: .3s;
+        }
+
+        .btn-cta:hover {
+            background: #fff;
+            color: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+
+        /* HERO CONTENT */
+        .hero-content {
+            height: 100%;
+            min-height: 700px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 15px 80px;
+        }
+
+        .hero-content .inner {
+            max-width: 900px;
+        }
+
+        .hero-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 18px;
+            border: 1px solid rgba(255, 255, 255, .4);
+            background: rgba(255, 255, 255, .1);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 25px;
+        }
+
+        .hero-label span {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        .hero h1 {
+            font-size: clamp(38px, 6vw, 68px);
+            line-height: 1.15;
+            font-weight: 800;
+            letter-spacing: -2px;
+            margin-bottom: 25px;
+        }
+
+        .hero h1 span {
+            color: var(--accent);
+        }
+
+        .hero-description {
+            max-width: 650px;
+            margin: 0 auto 35px;
+            font-size: 15px;
+            line-height: 1.9;
+            color: rgba(255, 255, 255, .85);
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .btn-outline-light-custom {
+            padding: 13px 23px;
+            border: 1px solid rgba(255, 255, 255, .6);
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            transition: .3s;
+        }
+
+        .btn-outline-light-custom:hover {
+            background: white;
+            color: var(--primary-dark);
+        }
+
+        .hero-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 0;
+            background: rgba(0, 0, 0, .15);
+            border-top: 1px solid rgba(255, 255, 255, .15);
+        }
+
+        .hero-bottom-item {
+            font-size: 12px;
+            color: rgba(255, 255, 255, .85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .hero-bottom-item i {
+            color: var(--accent);
+            font-size: 18px;
+        }
+
+        /* GENERAL */
+        .section {
+            padding: 90px 0;
+        }
+
+        .section-label {
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 13px;
+        }
+
+        .section-title {
+            color: var(--dark);
+            font-size: clamp(27px, 4vw, 38px);
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 15px;
+        }
+
+        .section-description {
+            color: #77847b;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        /* SERVICES */
+        .services-section {
+            background: var(--light);
+        }
+
+        .service-card {
+            background: white;
+            border: 1px solid #edf1ed;
+            border-radius: 14px;
+            padding: 30px 25px;
+            height: 100%;
+            transition: .3s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, .07);
+            border-color: #cce7d4;
+        }
+
+        .service-icon {
+            width: 55px;
+            height: 55px;
+            background: #e8f6ed;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 13px;
+            font-size: 25px;
+            margin-bottom: 22px;
+        }
+
+        .service-card h5 {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 12px;
+        }
+
+        .service-card p {
+            color: #829087;
+            font-size: 13px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .service-link {
+            color: var(--primary);
+            font-size: 13px;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .service-link:hover {
+            color: var(--primary-dark);
+        }
+
+        /* ABOUT */
+        .about-image {
+            min-height: 420px;
+            height: 100%;
+            border-radius: 18px;
+            background:
+                linear-gradient(0deg, rgba(0, 50, 25, .1), transparent),
+                url('https://images.unsplash.com/photo-1497366754035-f200968a6e72?q=85&w=1000') center/cover;
+        }
+
+        .about-content {
+            padding: 30px 20px 30px 35px;
+        }
+
+        .about-point {
+            display: flex;
+            gap: 14px;
+            margin-top: 25px;
+        }
+
+        .about-point i {
+            color: var(--primary);
+            font-size: 22px;
+        }
+
+        .about-point h6 {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--dark);
+        }
+
+        .about-point p {
+            font-size: 12px;
+            color: #829087;
+            margin: 0;
+        }
+
+        /* STATS */
+        .stats-section {
+            background: var(--primary-dark);
+            color: white;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .stat-item h2 {
+            font-size: 38px;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .stat-item p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, .75);
+            margin: 0;
+        }
+
+        /* NEWS */
+        .news-card {
+            background: white;
+            border: 1px solid #edf1ed;
+            border-radius: 14px;
+            overflow: hidden;
+            height: 100%;
+            transition: .3s;
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, .07);
+        }
+
+        .news-image {
+            height: 210px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .news-body {
+            padding: 23px;
+        }
+
+        .news-date {
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .news-body h5 {
+            font-size: 15px;
+            font-weight: 800;
+            line-height: 1.6;
+            color: var(--dark);
+        }
+
+        .news-body p {
+            font-size: 12px;
+            color: #829087;
+            line-height: 1.8;
+        }
+
+        /* CTA */
+        .cta-section {
+            padding: 70px 0;
+            background: #edf7ef;
+        }
+
+        .cta-box {
+            background: var(--primary);
+            border-radius: 18px;
+            padding: 55px 40px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-box h2 {
+            font-weight: 800;
+            font-size: 30px;
+        }
+
+        .cta-box p {
+            color: rgba(255, 255, 255, .8);
+            font-size: 13px;
+            margin: 15px 0 25px;
+        }
+
+        /* FOOTER */
+        footer {
+            background: #10291d;
+            color: white;
+            padding: 65px 0 25px;
+        }
+
+        footer h6 {
+            font-size: 14px;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        footer p,
+        footer a {
+            font-size: 12px;
+            color: rgba(255, 255, 255, .65);
+            line-height: 2;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, .12);
+            padding-top: 20px;
+            margin-top: 45px;
+            font-size: 11px;
+            color: rgba(255, 255, 255, .5);
+        }
+
+        /* MOBILE */
+        @media (max-width: 991px) {
+            .navbar {
+                background: rgba(6, 48, 30, .97);
+                padding: 15px 0;
+            }
+
+            .navbar-collapse {
+                padding: 20px 0 10px;
+            }
+
+            .navbar-nav {
+                gap: 5px;
+            }
+
+            .navbar-nav .nav-link {
+                padding: 10px 5px !important;
+            }
+
+            .navbar .btn-cta {
+                margin-top: 10px;
+            }
+
+            .hero,
+            .hero-content {
+                min-height: 680px;
+            }
+
+            .hero h1 {
+                letter-spacing: -1px;
+            }
+
+            .hero-bottom {
+                display: none;
+            }
+
+            .about-content {
+                padding: 35px 5px 0;
+            }
+        }
+
+        @media (max-width: 576px) {
+
+            .hero,
+            .hero-content {
+                min-height: 680px;
+            }
+
+            .hero-description {
+                font-size: 13px;
+            }
+
+            .section {
+                padding: 65px 0;
+            }
+
+            .cta-box {
+                padding: 35px 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HERO -->
+    <section class="hero" id="beranda">
+
+        <!-- NAVBAR -->
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+
+                <a class="navbar-brand" href="#beranda">
+                    <div class="brand-logo">
+                        <i class="bi bi-bank2"></i>
+                    </div>
+                    <div class="brand-text">
+                        BAPENDA RIAU
+                        <small>PROVINSI RIAU</small>
+                    </div>
+                </a>
+
+                <button class="navbar-toggler text-white border-0" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#mainNavbar">
+                    <i class="bi bi-list fs-2"></i>
+                </button>
+
+                <div class="collapse navbar-collapse" id="mainNavbar">
+
+                    <ul class="navbar-nav ms-auto align-items-lg-center">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#beranda">Beranda</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#profil">Profil</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#layanan">Layanan</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#informasi">Informasi</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#berita">Berita</a>
+                        </li>
+
+                        <li class="nav-item ms-lg-3">
+                            <a href="#layanan" class="btn-cta">
+                                Layanan Publik
+                                <i class="bi bi-arrow-up-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+
+        <!-- HERO CONTENT -->
+        <div class="hero-content">
+            <div class="inner">
+
+                <div class="hero-label">
+                    <span></span>
+                    BADAN PENDAPATAN DAERAH PROVINSI RIAU
+                </div>
+
+                <h1>
+                    Bersama Membangun
+                    <span>Riau Lebih Maju</span>
+                </h1>
+
+                <p class="hero-description">
+                    Mewujudkan tata kelola pendapatan daerah yang optimal,
+                    transparan, dan akuntabel untuk mendukung pembangunan
+                    serta kesejahteraan masyarakat Provinsi Riau.
+                </p>
+
+                <div class="hero-buttons">
+                    <a href="#layanan" class="btn-cta">
+                        Jelajahi Layanan
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                    <a href="#profil" class="btn-outline-light-custom">
+                        Tentang Bapenda
+                        <i class="bi bi-arrow-up-right ms-2"></i>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- HERO BOTTOM -->
+        <div class="hero-bottom">
+            <div class="container">
+                <div class="row gy-3">
+
+                    <div class="col-md-4">
+                        <div class="hero-bottom-item">
+                            <i class="bi bi-geo-alt"></i>
+                            Provinsi Riau, Indonesia
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="hero-bottom-item">
+                            <i class="bi bi-shield-check"></i>
+                            Pelayanan Publik Transparan
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="hero-bottom-item">
+                            <i class="bi bi-building-check"></i>
+                            Mendukung Pembangunan Daerah
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- LAYANAN -->
+    <section class="section services-section" id="layanan">
+        <div class="container">
+
+            <div class="text-center mb-5">
+                <div class="section-label">LAYANAN PUBLIK</div>
+
+                <h2 class="section-title">
+                    Akses Layanan Bapenda
+                </h2>
+
+                <p class="section-description">
+                    Berbagai layanan informasi dan administrasi pendapatan
+                    daerah yang mudah diakses oleh masyarakat.
+                </p>
+            </div>
+
+            <div class="row g-4">
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="bi bi-car-front"></i>
+                        </div>
+
+                        <h5>Informasi Pajak Kendaraan</h5>
+
+                        <p>
+                            Akses informasi dan pengecekan pajak kendaraan
+                            bermotor secara mudah dan praktis.
+                        </p>
+
+                        <a href="#" class="service-link">
+                            Selengkapnya <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="bi bi-calendar-check"></i>
+                        </div>
+
+                        <h5>Antrian Online</h5>
+
+                        <p>
+                            Kemudahan mendapatkan layanan Samsat melalui
+                            sistem pendaftaran antrian online.
+                        </p>
+
+                        <a href="#" class="service-link">
+                            Selengkapnya <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="bi bi-file-earmark-text"></i>
+                        </div>
+
+                        <h5>Informasi Regulasi</h5>
+
+                        <p>
+                            Akses berbagai peraturan dan kebijakan
+                            terkait pendapatan daerah Provinsi Riau.
+                        </p>
+
+                        <a href="#" class="service-link">
+                            Selengkapnya <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="bi bi-headset"></i>
+                        </div>
+
+                        <h5>Pengaduan Masyarakat</h5>
+
+                        <p>
+                            Sampaikan pertanyaan, aspirasi, dan pengaduan
+                            terkait pelayanan pendapatan daerah.
+                        </p>
+
+                        <a href="#" class="service-link">
+                            Selengkapnya <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- PROFIL -->
+    <section class="section" id="profil">
+        <div class="container">
+
+            <div class="row align-items-center g-4">
+
+                <div class="col-lg-6">
+                    <div class="about-image"></div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="about-content">
+
+                        <div class="section-label">TENTANG KAMI</div>
+
+                        <h2 class="section-title">
+                            Mengoptimalkan Pendapatan,
+                            Membangun Masa Depan Riau
+                        </h2>
+
+                        <p class="section-description">
+                            Badan Pendapatan Daerah Provinsi Riau merupakan
+                            perangkat daerah yang melaksanakan fungsi
+                            penunjang urusan pemerintahan di bidang
+                            pendapatan daerah.
+                        </p>
+
+                        <div class="about-point">
+                            <i class="bi bi-check-circle-fill"></i>
+                            <div>
+                                <h6>Pelayanan Berkualitas</h6>
+                                <p>
+                                    Memberikan pelayanan yang profesional,
+                                    efektif, dan mudah diakses.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="about-point">
+                            <i class="bi bi-check-circle-fill"></i>
+                            <div>
+                                <h6>Transparansi dan Akuntabilitas</h6>
+                                <p>
+                                    Mendorong tata kelola pendapatan daerah
+                                    yang transparan dan bertanggung jawab.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="about-point">
+                            <i class="bi bi-check-circle-fill"></i>
+                            <div>
+                                <h6>Transformasi Digital</h6>
+                                <p>
+                                    Mengembangkan inovasi teknologi untuk
+                                    meningkatkan kualitas pelayanan publik.
+                                </p>
+                            </div>
+                        </div>
+
+                        <a href="#" class="btn-cta mt-4">
+                            Selengkapnya Tentang Kami
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- STATISTIK -->
+    <section class="stats-section section" id="informasi">
+        <div class="container">
+
+            <div class="text-center mb-5">
+                <div class="section-label text-warning">
+                    PENDAPATAN DAERAH
+                </div>
+
+                <h2 class="section-title text-white">
+                    Bersama Membangun Provinsi Riau
+                </h2>
+
+                <p class="text-white-50 small">
+                    Kontribusi pendapatan daerah untuk pembangunan dan
+                    pelayanan masyarakat.
+                </p>
+            </div>
+
+            <div class="row">
+
+                <div class="col-6 col-lg-3">
+                    <div class="stat-item">
+                        <h2><i class="bi bi-building"></i></h2>
+                        <p>Pelayanan Publik</p>
+                    </div>
+                </div>
+
+                <div class="col-6 col-lg-3">
+                    <div class="stat-item">
+                        <h2><i class="bi bi-people"></i></h2>
+                        <p>Pelayanan Masyarakat</p>
+                    </div>
+                </div>
+
+                <div class="col-6 col-lg-3">
+                    <div class="stat-item">
+                        <h2><i class="bi bi-graph-up-arrow"></i></h2>
+                        <p>Optimalisasi Pendapatan</p>
+                    </div>
+                </div>
+
+                <div class="col-6 col-lg-3">
+                    <div class="stat-item">
+                        <h2><i class="bi bi-globe-asia-australia"></i></h2>
+                        <p>Digitalisasi Layanan</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- BERITA -->
+    <section class="section" id="berita">
+        <div class="container">
+
+            <div class="d-flex justify-content-between align-items-end mb-5 flex-wrap gap-3">
+
+                <div>
+                    <div class="section-label">INFORMASI TERKINI</div>
+
+                    <h2 class="section-title mb-0">
+                        Berita & Kegiatan
+                    </h2>
+
+                    <p class="section-description mt-2 mb-0">
+                        Informasi terbaru seputar kegiatan dan kebijakan Bapenda Riau.
+                    </p>
+                </div>
+
+                <a href="#" class="service-link">
+                    Lihat Semua Berita
+                    <i class="bi bi-arrow-right"></i>
+                </a>
+
+            </div>
+
+            <div class="row g-4">
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="news-card">
+
+                        <div class="news-image"
+                            style="background-image:url('https://images.unsplash.com/photo-1497366811353-6870744d04b2?q=85&w=800')">
+                        </div>
+
+                        <div class="news-body">
+                            <div class="news-date">
+                                <i class="bi bi-calendar3"></i>
+                                INFORMASI BAPENDA
+                            </div>
+
+                            <h5>
+                                Informasi dan Kebijakan Pendapatan Daerah
+                            </h5>
+
+                            <p>
+                                Dapatkan informasi terbaru mengenai
+                                kebijakan dan pengelolaan pendapatan daerah.
+                            </p>
+
+                            <a href="#" class="service-link">
+                                Baca Selengkapnya →
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="news-card">
+
+                        <div class="news-image"
+                            style="background-image:url('https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=85&w=800')">
+                        </div>
+
+                        <div class="news-body">
+                            <div class="news-date">
+                                <i class="bi bi-calendar3"></i>
+                                KEGIATAN
+                            </div>
+
+                            <h5>
+                                Kegiatan dan Koordinasi Bapenda Provinsi Riau
+                            </h5>
+
+                            <p>
+                                Berbagai kegiatan dalam rangka meningkatkan
+                                koordinasi dan pelayanan pendapatan daerah.
+                            </p>
+
+                            <a href="#" class="service-link">
+                                Baca Selengkapnya →
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="news-card">
+
+                        <div class="news-image"
+                            style="background-image:url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=85&w=800')">
+                        </div>
+
+                        <div class="news-body">
+                            <div class="news-date">
+                                <i class="bi bi-calendar3"></i>
+                                PUBLIKASI
+                            </div>
+
+                            <h5>
+                                Publikasi dan Informasi Pelayanan Publik
+                            </h5>
+
+                            <p>
+                                Informasi publik, publikasi, serta berbagai
+                                dokumen yang dapat diakses masyarakat.
+                            </p>
+
+                            <a href="#" class="service-link">
+                                Baca Selengkapnya →
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="container">
+
+            <div class="cta-box text-center">
+
+                <h2>
+                    Mari Berkontribusi untuk Riau
+                </h2>
+
+                <p>
+                    Pajak daerah merupakan salah satu kontribusi penting
+                    dalam mendukung pembangunan dan kemajuan Provinsi Riau.
+                </p>
+
+                <a href="#layanan" class="btn-cta">
+                    Akses Layanan Sekarang
+                    <i class="bi bi-arrow-right"></i>
+                </a>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+
+            <div class="row g-4">
+
+                <div class="col-lg-4">
+
+                    <div class="navbar-brand mb-3">
+                        <div class="brand-logo">
+                            <i class="bi bi-bank2"></i>
+                        </div>
+
+                        <div class="brand-text">
+                            BAPENDA RIAU
+                            <small>PROVINSI RIAU</small>
+                        </div>
+                    </div>
+
+                    <p>
+                        Badan Pendapatan Daerah Provinsi Riau.
+                        Bersama mewujudkan pengelolaan pendapatan daerah
+                        yang optimal dan berkelanjutan.
+                    </p>
+
+                </div>
+
+                <div class="col-6 col-lg-2">
+                    <h6>Menu Utama</h6>
+                    <p>
+                        <a href="#beranda">Beranda</a><br>
+                        <a href="#profil">Profil</a><br>
+                        <a href="#layanan">Layanan</a><br>
+                        <a href="#berita">Berita</a>
+                    </p>
+                </div>
+
+                <div class="col-6 col-lg-3">
+                    <h6>Layanan</h6>
+                    <p>
+                        <a href="#">Informasi Pajak</a><br>
+                        <a href="#">Antrian Online</a><br>
+                        <a href="#">Informasi Regulasi</a><br>
+                        <a href="#">Pengaduan</a>
+                    </p>
+                </div>
+
+                <div class="col-lg-3">
+                    <h6>Hubungi Kami</h6>
+
+                    <p>
+                        <i class="bi bi-geo-alt me-2"></i>
+                        Pekanbaru, Provinsi Riau
+                    </p>
+
+                    <p>
+                        <i class="bi bi-envelope me-2"></i>
+                        Email resmi Bapenda Riau
+                    </p>
+
+                    <p>
+                        <i class="bi bi-globe me-2"></i>
+                        bapenda.riau.go.id
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="footer-bottom text-center">
+                © 2026 Badan Pendapatan Daerah Provinsi Riau.
+                Seluruh Hak Cipta Dilindungi.
+            </div>
+
+        </div>
+    </footer>
+
+
+    <!-- BOOTSTRAP JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function () {
+            const navbar = document.querySelector('.navbar');
+
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Close mobile navbar after clicking menu
+        document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                const navbar = document.querySelector('.navbar-collapse');
+
+                if (navbar.classList.contains('show')) {
+                    bootstrap.Collapse.getOrCreateInstance(navbar).hide();
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>
