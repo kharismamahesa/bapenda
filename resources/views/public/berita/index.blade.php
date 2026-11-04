@@ -24,7 +24,10 @@
                 <div class="berita-list-card">
                     <div class="row g-0">
                         <div class="col-md-4">
-                            <div class="berita-list-image" style="background-image:url('{{ $item->gambar_url }}')"></div>
+                            <div class="berita-list-image">
+                                <img src="{{ $item->gambar_url }}" alt="{{ $item->judul }}" loading="lazy" decoding="async"
+                                    onerror="this.onerror=null;this.src='{{ asset('images/no-image.svg') }}';">
+                            </div>
                         </div>
                         <div class="col-md-8">
                             <div class="berita-list-body">

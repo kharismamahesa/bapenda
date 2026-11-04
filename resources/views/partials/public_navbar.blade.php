@@ -2,13 +2,13 @@
 <nav class="navbar navbar-expand-lg">
     <div class="container">
 
-        <a class="navbar-brand" href="{{ route('beranda') }}">
-            <div class="brand-logo">
-                <i class="bi bi-bank2"></i>
-            </div>
+        <a class="navbar-brand" href="{{ route('beranda') }}" aria-label="BAPENDA RIAU">
+            <img src="{{ asset('images/icon.png') }}" alt="Logo BAPENDA RIAU" class="brand-logo-img">
             <div class="brand-text">
-                BAPENDA
-                <small>PROVINSI RIAU</small>
+                <div class="brand-title">
+                    BAPENDA
+                </div>
+                <small class="brand-subtitle brand-badge">PROVINSI RIAU</small>
             </div>
         </a>
 
@@ -32,7 +32,7 @@
                 @endphp
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle {{ in_array($currentProfil, $profilSlugs, true) ? 'active' : '' }}" href="#" role="button" data-bs-toggle="dropdown">
+                    <a class="nav-link dropdown-toggle {{ in_array($currentProfil, $profilSlugs, true) ? 'active' : '' }}" href="#" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside">
                         Profil
                     </a>
                     <ul class="dropdown-menu">
@@ -72,8 +72,8 @@
                 </li>
 
                 <li class="nav-item ms-lg-3">
-                    <a href="{{ route('beranda') }}#layanan" class="btn-cta">
-                        Layanan Publik
+                    <a href="{{ route('pajak-kendaraan.index') }}" class="btn-cta">
+                        Pajak Kendaraan
                         <i class="bi bi-arrow-up-right"></i>
                     </a>
                 </li>

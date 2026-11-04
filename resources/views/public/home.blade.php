@@ -107,7 +107,7 @@
                             bermotor secara mudah dan praktis.
                         </p>
 
-                        <a href="#" class="service-link">
+                        <a href="{{ route('pajak-kendaraan.index') }}" class="service-link">
                             Selengkapnya <i class="bi bi-arrow-right"></i>
                         </a>
                     </div>
@@ -333,8 +333,9 @@
                     <div class="col-md-6 col-lg-4">
                         <div class="news-card">
 
-                            <div class="news-image"
-                                style="background-image:url('{{ $item->gambar_url }}')">
+                            <div class="news-image">
+                                <img src="{{ $item->gambar_url }}" alt="{{ $item->judul }}" loading="lazy" decoding="async"
+                                    onerror="this.onerror=null;this.src='{{ asset('images/no-image.svg') }}';">
                             </div>
 
                             <div class="news-body">

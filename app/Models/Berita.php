@@ -39,18 +39,39 @@ class Berita extends Model
 
     public function getThumbnailUrlAttribute()
     {
-        if ($this->thumbnail && file_exists(public_path('uploads/berita/' . $this->thumbnail))) {
-            return asset('uploads/berita/' . $this->thumbnail);
-        }
-        return 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=300&h=200&fit=crop';
+        return $this->resolveImageUrl($this->thumbnail);
     }
 
     public function getGambarUrlAttribute()
     {
-        if ($this->gambar && file_exists(public_path('uploads/berita/' . $this->gambar))) {
-            return asset('uploads/berita/' . $this->gambar);
+        return $this->resolveImageUrl($this->gambar);
+    }
+
+    protected function resolveImageUrl($file)
+    {
+        $placeholder = asset('images/no-image.svg');
+
+        if (! $file) {
+            return $placeholder;
         }
-        return 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=800&h=500&fit=crop';
+
+        if (preg_match('/^https?:\/\//i', $file)) {
+            return $file;
+        }
+
+        $relative = ltrim($file, '/');
+        $candidates = array_unique([
+            $relative,
+            'uploads/berita/' . $relative,
+        ]);
+
+        foreach ($candidates as $path) {
+            if (file_exists(public_path($path))) {
+                return asset($path);
+            }
+        }
+
+        return $placeholder;
     }
 
     public function getStatusBadgeAttribute()

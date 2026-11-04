@@ -7,6 +7,19 @@ use App\Models\User;
 
 class AdminAuthTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        if (!User::where('email', 'admin@bapenda.go.id')->exists()) {
+            User::create([
+                'name' => 'Administrator Bapenda',
+                'email' => 'admin@bapenda.go.id',
+                'password' => bcrypt('password123'),
+                'role' => 'superadmin',
+            ]);
+        }
+    }
+
     public function test_admin_redirects_to_login_for_guests(): void
     {
         $response = $this->get('/admin');

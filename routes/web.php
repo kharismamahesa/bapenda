@@ -21,6 +21,8 @@ Route::get('/profil/{slug}', [PublicController::class, 'halaman'])->name('profil
 Route::get('/halaman/{slug}', [PublicController::class, 'halaman'])->name('halaman.show');
 Route::get('/berita', [PublicController::class, 'beritaIndex'])->name('berita.index');
 Route::get('/berita/{slug}', [PublicController::class, 'beritaShow'])->name('berita.show');
+Route::get('/informasi-pajak-kendaraan', [PublicController::class, 'pajakKendaraan'])->name('pajak-kendaraan.index');
+Route::get('/api/informasi-pajak-kendaraan', [PublicController::class, 'pajakKendaraanApi'])->middleware('throttle:10,1')->name('pajak-kendaraan.api');
 
 // Auth Routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');

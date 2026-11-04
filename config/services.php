@@ -31,4 +31,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'bapenda' => [
+        'info_pajak_url' => env('BAPENDA_INFO_PAJAK_URL', 'https://apps1.bapenda.riau.go.id/apiv2/infopajak'),
+        'info_pajak_key' => env('BAPENDA_INFO_PAJAK_KEY'),
+    ],
+
 ];

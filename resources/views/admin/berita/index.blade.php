@@ -92,9 +92,9 @@
                         <div class="invalid-feedback d-block" id="err-judul"></div>
                     </div>
 
-                    <!-- Kategori & Status -->
+                    <!-- Kategori, Status & Tanggal -->
                     <div class="row g-3 mb-3">
-                        <div class="col-12 col-md-6">
+                        <div class="col-12 col-md-4">
                             <label class="form-label fw-semibold small text-muted" for="id_berita_kategori">
                                 Kategori Berita <span class="text-danger">*</span>
                             </label>
@@ -107,7 +107,7 @@
                             <div class="invalid-feedback d-block" id="err-id_berita_kategori"></div>
                         </div>
 
-                        <div class="col-12 col-md-6">
+                        <div class="col-12 col-md-4">
                             <label class="form-label fw-semibold small text-muted" for="status">
                                 Status Publikasi <span class="text-danger">*</span>
                             </label>
@@ -116,6 +116,14 @@
                                 <option value="0">Draft (Simpan Sementara)</option>
                             </select>
                             <div class="invalid-feedback d-block" id="err-status"></div>
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <label class="form-label fw-semibold small text-muted" for="tanggal_berita">
+                                Tanggal Berita <span class="text-danger">*</span>
+                            </label>
+                            <input type="datetime-local" id="tanggal_berita" name="tanggal_berita" class="form-control" required>
+                            <div class="invalid-feedback d-block" id="err-tanggal_berita"></div>
                         </div>
                     </div>
 
@@ -171,7 +179,8 @@
             </div>
 
             <div class="modal-body">
-                <img id="view-gambar" src="" alt="Thumbnail" class="w-100 rounded-3 mb-3 border" style="max-height: 320px; object-fit: cover;">
+                <img id="view-gambar" src="" alt="Thumbnail" class="w-100 rounded-3 mb-3 border" style="max-height: 320px; object-fit: cover;" loading="lazy" decoding="async"
+                    onerror="this.onerror=null;this.src='{{ asset('images/no-image.svg') }}';">
                 <div class="mb-3">
                     <div class="d-flex align-items-center gap-2 mb-2">
                         <span id="view-kategori" class="badge bg-success-subtle text-success border border-success-subtle"></span>
@@ -217,6 +226,25 @@ $(document).ready(function () {
             ['view', ['undo', 'redo']]
         ],
         callbacks: {
+            onInit: function(layoutInfo) {
+                layoutInfo.editable.on('paste', function(e) {
+                    const clipboard = (e.originalEvent || e).clipboardData;
+                    if (!clipboard) return;
+
+                    const text = clipboard.getData('text/plain');
+                    if (!text) return;
+
+                    e.preventDefault();
+
+                    const safeText = text
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;')
+                        .replace(/\r\n|\r|\n/g, '<br>');
+
+                    document.execCommand('insertHTML', false, safeText);
+                });
+            },
             onChange: function(contents, $editable) {
                 if ($('#isi').summernote('isEmpty') === false) {
                     $('.note-editor').removeClass('is-invalid');
@@ -302,10 +330,18 @@ $(document).ready(function () {
         }
     });
 
+    // Nilai default tanggal berita (waktu lokal) untuk input datetime-local
+    function nowLocalValue() {
+        const now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        return now.toISOString().slice(0, 16);
+    }
+
     // Reset Form Modal
     function resetForm() {
         $('#form-berita')[0].reset();
         $('#berita-id').val('');
+        $('#tanggal_berita').val(nowLocalValue());
         $('#isi').summernote('reset');
         $('.invalid-feedback').text('');
         $('#form-berita input, #form-berita select, .note-editor').removeClass('is-invalid');
@@ -353,7 +389,12 @@ $(document).ready(function () {
             contentType: false,
             success: function (res) {
                 beritaModal.hide();
-                table.ajax.reload(null, false);
+                if (isEdit) {
+                    table.ajax.reload(null, false);
+                } else {
+                    // Berita baru selalu berada di urutan teratas
+                    table.page(0).draw(false);
+                }
                 Swal.fire({
                     icon: 'success',
                     title: 'Berhasil!',
@@ -410,6 +451,7 @@ $(document).ready(function () {
                     $('#judul').val(data.judul);
                     $('#id_berita_kategori').val(data.id_berita_kategori);
                     $('#status').val(data.status);
+                    $('#tanggal_berita').val(data.tanggal_berita_raw);
                     
                     $('#isi').summernote('code', data.isi || '');
 

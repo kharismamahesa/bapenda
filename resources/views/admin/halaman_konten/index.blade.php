@@ -171,10 +171,29 @@ $(document).ready(function () {
             ['style', ['bold', 'italic', 'underline', 'clear']],
             ['font', ['strikethrough']],
             ['para', ['ul', 'ol', 'paragraph']],
-            ['insert', ['link', 'table']],
+            ['insert', ['link']],
             ['view', ['undo', 'redo', 'codeview']]
         ],
         callbacks: {
+            onInit: function(layoutInfo) {
+                layoutInfo.editable.on('paste', function(e) {
+                    const clipboard = (e.originalEvent || e).clipboardData;
+                    if (!clipboard) return;
+
+                    const text = clipboard.getData('text/plain');
+                    if (!text) return;
+
+                    e.preventDefault();
+
+                    const safeText = text
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;')
+                        .replace(/\r\n|\r|\n/g, '<br>');
+
+                    document.execCommand('insertHTML', false, safeText);
+                });
+            },
             onChange: function(contents, $editable) {
                 if ($('#isi').summernote('isEmpty') === false) {
                     $('.note-editor').removeClass('is-invalid');

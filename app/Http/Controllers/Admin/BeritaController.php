@@ -77,6 +77,11 @@ class BeritaController extends Controller
             // Jika user memilih kolom tertentu (selain kolom No)
             if ($orderColumnIndex > 0 && isset($columns[$orderColumnIndex])) {
                 $query->orderBy($columns[$orderColumnIndex], $orderDir);
+
+                // Urutan tanggal selalu diikuti id terbaru sebagai penentu
+                if ($columns[$orderColumnIndex] === 'tanggal_berita') {
+                    $query->orderBy('id_berita', 'desc');
+                }
             } else {
                 $query->orderBy('tanggal_berita', 'desc')->orderBy('id_berita', 'desc');
             }
@@ -149,6 +154,7 @@ class BeritaController extends Controller
             'id_berita_kategori' => 'required|exists:berita_kategori,id_berita_kategori',
             'isi' => 'required|string',
             'status' => 'required|in:0,1',
+            'tanggal_berita' => 'nullable|date',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ], [
             'judul.required' => 'Judul berita wajib diisi.',
@@ -157,6 +163,7 @@ class BeritaController extends Controller
             'id_berita_kategori.exists' => 'Kategori berita tidak valid.',
             'isi.required' => 'Konten/isi berita wajib diisi.',
             'status.required' => 'Status berita wajib ditentukan.',
+            'tanggal_berita.date' => 'Tanggal berita tidak valid.',
             'gambar.image' => 'File harus berupa gambar.',
             'gambar.mimes' => 'Format gambar harus jpeg, png, jpg, atau webp.',
             'gambar.max' => 'Ukuran gambar maksimal 2MB.',
@@ -207,7 +214,9 @@ class BeritaController extends Controller
             'isi' => $request->isi,
             'thumbnail' => $thumbnailName,
             'gambar' => $gambarName,
-            'tanggal_berita' => now(),
+            'tanggal_berita' => $request->filled('tanggal_berita')
+                ? date('Y-m-d H:i:s', strtotime($request->tanggal_berita))
+                : now(),
             'counter' => 0,
             'url' => $slug,
             'status' => (int) $request->status,
@@ -247,6 +256,7 @@ class BeritaController extends Controller
                 'status' => (string) $berita->status,
                 'url' => $berita->url,
                 'tanggal_berita' => $berita->tanggal_berita ? date('d F Y, H:i', strtotime($berita->tanggal_berita)) : '-',
+                'tanggal_berita_raw' => $berita->tanggal_berita ? date('Y-m-d\TH:i', strtotime($berita->tanggal_berita)) : '',
                 'counter' => $berita->counter ?? 0,
                 'gambar_url' => $berita->gambar_url,
                 'thumbnail_url' => $berita->thumbnail_url,
@@ -273,6 +283,7 @@ class BeritaController extends Controller
             'id_berita_kategori' => 'required|exists:berita_kategori,id_berita_kategori',
             'isi' => 'required|string',
             'status' => 'required|in:0,1',
+            'tanggal_berita' => 'nullable|date',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ], [
             'judul.required' => 'Judul berita wajib diisi.',
@@ -281,6 +292,7 @@ class BeritaController extends Controller
             'id_berita_kategori.exists' => 'Kategori berita tidak valid.',
             'isi.required' => 'Konten/isi berita wajib diisi.',
             'status.required' => 'Status berita wajib ditentukan.',
+            'tanggal_berita.date' => 'Tanggal berita tidak valid.',
             'gambar.image' => 'File harus berupa gambar.',
             'gambar.mimes' => 'Format gambar harus jpeg, png, jpg, atau webp.',
             'gambar.max' => 'Ukuran gambar maksimal 2MB.',
@@ -343,6 +355,9 @@ class BeritaController extends Controller
             'gambar' => $gambarName,
             'url' => $slug,
             'status' => (int) $request->status,
+            'tanggal_berita' => $request->filled('tanggal_berita')
+                ? date('Y-m-d H:i:s', strtotime($request->tanggal_berita))
+                : $berita->tanggal_berita,
         ]);
 
         return response()->json([

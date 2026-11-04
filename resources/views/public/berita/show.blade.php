@@ -12,7 +12,7 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('beranda') }}">Beranda</a></li>
                     <li class="breadcrumb-item"><a href="{{ route('berita.index') }}">Berita</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ \Illuminate\Support\Str::limit($berita->judul, 40) }}</li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ $berita->judul }}</li>
                 </ol>
             </nav>
         </div>
@@ -31,7 +31,8 @@
                         </div>
 
                         @if($berita->gambar)
-                            <img src="{{ $berita->gambar_url }}" alt="{{ $berita->judul }}" class="img-fluid rounded-4 mb-4">
+                            <img src="{{ $berita->gambar_url }}" alt="{{ $berita->judul }}" class="img-fluid rounded-4 mb-4" loading="lazy" decoding="async"
+                                onerror="this.onerror=null;this.src='{{ asset('images/no-image.svg') }}';">
                         @endif
 
                         <div class="content-body">
