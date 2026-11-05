@@ -57,7 +57,7 @@ class PublicController extends Controller
     public function pengaduan()
     {
         $kantorPelayanan = DB::table('wilayah_samsat')
-            ->select('KodeWilayah', 'NamaWilayah', 'Status')
+            ->select('KodeWilayah', 'NamaUPTUP', 'Status')
             ->orderBy('NamaWilayah')
             ->get();
 
@@ -109,7 +109,7 @@ class PublicController extends Controller
         }
 
         $fileName = basename(str_replace('\\', '/', $regulasi->file));
-        $path = public_path('uploads/regulasi/'.$fileName);
+        $path = public_path('uploads/regulasi/' . $fileName);
 
         if (! file_exists($path)) {
             $fallbackPath = public_path(ltrim(str_replace('\\', '/', $regulasi->file), '/'));
@@ -126,7 +126,7 @@ class PublicController extends Controller
         $downloadName = Str::slug($regulasi->regulasi ?: 'regulasi');
 
         if ($extension !== '') {
-            $downloadName .= '.'.$extension;
+            $downloadName .= '.' . $extension;
         }
 
         return response()->download($path, $downloadName);
@@ -455,18 +455,34 @@ class PublicController extends Controller
         }
 
         $months = [
-            'januari' => '01', 'jan' => '01',
-            'februari' => '02', 'feb' => '02',
-            'maret' => '03', 'mar' => '03',
-            'april' => '04', 'apr' => '04',
-            'mei' => '05', 'may' => '05',
-            'juni' => '06', 'jun' => '06',
-            'juli' => '07', 'jul' => '07',
-            'agustus' => '08', 'agu' => '08', 'agt' => '08', 'aug' => '08',
-            'september' => '09', 'sep' => '09',
-            'oktober' => '10', 'okt' => '10', 'oct' => '10',
-            'november' => '11', 'nov' => '11',
-            'desember' => '12', 'des' => '12', 'dec' => '12',
+            'januari' => '01',
+            'jan' => '01',
+            'februari' => '02',
+            'feb' => '02',
+            'maret' => '03',
+            'mar' => '03',
+            'april' => '04',
+            'apr' => '04',
+            'mei' => '05',
+            'may' => '05',
+            'juni' => '06',
+            'jun' => '06',
+            'juli' => '07',
+            'jul' => '07',
+            'agustus' => '08',
+            'agu' => '08',
+            'agt' => '08',
+            'aug' => '08',
+            'september' => '09',
+            'sep' => '09',
+            'oktober' => '10',
+            'okt' => '10',
+            'oct' => '10',
+            'november' => '11',
+            'nov' => '11',
+            'desember' => '12',
+            'des' => '12',
+            'dec' => '12',
         ];
 
         $clean = preg_replace('/[,\.]/', ' ', strtolower($val));
@@ -479,22 +495,26 @@ class PublicController extends Controller
         if (preg_match('/^(\d{1,2})-(\d{1,2})-(\d{4})$/', $clean, $m)) {
             try {
                 return Carbon::createFromDate((int) $m[3], (int) $m[2], (int) $m[1])->startOfDay();
-            } catch (Throwable $e) {}
+            } catch (Throwable $e) {
+            }
         }
 
         if (preg_match('/^(\d{4})-(\d{1,2})-(\d{1,2})$/', $clean, $m)) {
             try {
                 return Carbon::createFromDate((int) $m[1], (int) $m[2], (int) $m[3])->startOfDay();
-            } catch (Throwable $e) {}
+            } catch (Throwable $e) {
+            }
         }
 
         try {
             return Carbon::parse($clean)->startOfDay();
-        } catch (Throwable $e) {}
+        } catch (Throwable $e) {
+        }
 
         try {
             return Carbon::parse($val)->startOfDay();
-        } catch (Throwable $e) {}
+        } catch (Throwable $e) {
+        }
 
         return null;
     }

@@ -12,7 +12,7 @@
                     </div>
 
                     <div class="brand-text">
-                        BAPENDA RIAU
+                        BAPENDA
                         <small>PROVINSI RIAU</small>
                     </div>
                 </div>
@@ -55,7 +55,7 @@
 
                 <p>
                     <i class="bi bi-envelope me-2"></i>
-                    Email resmi Bapenda Riau
+                    bapenda@riau.go.id
                 </p>
 
                 <p>

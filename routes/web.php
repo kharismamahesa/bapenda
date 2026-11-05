@@ -20,7 +20,7 @@ use App\Http\Controllers\Admin\KategoriRegulasiController;
 // Halaman Publik (Official Website)
 Route::get('/', [PublicController::class, 'beranda'])->name('beranda');
 Route::get('/profil/{slug}', [PublicController::class, 'halaman'])->name('profil.show');
-Route::get('/halaman/{slug}', [PublicController::class, 'halaman'])->name('halaman.show');
+Route::get('/layanan/{slug}', [PublicController::class, 'halaman'])->name('halaman.show');
 Route::get('/berita', [PublicController::class, 'beritaIndex'])->name('berita.index');
 Route::get('/berita/{slug}', [PublicController::class, 'beritaShow'])->name('berita.show');
 Route::get('/pengaduan', [PublicController::class, 'pengaduan'])->name('pengaduan.index');

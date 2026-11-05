@@ -30,13 +30,15 @@
                         <form>
                             <div class="mb-3">
                                 <label for="id_uptup" class="form-label fw-semibold">Kantor Pelayanan</label>
-                                <select id="id_uptup" name="id_uptup" class="form-select" required>
+                                <select id="id_uptup" name="id_uptup" class="form-select" data-searchable-select
+                                    data-search-placeholder="Cari nama kantor pelayanan..." required>
                                     <option value="">Pilih kantor pelayanan</option>
+                                    <option value="10000">BAPENDA PROVINSI RIAU</option>
                                     @foreach ($kantorPelayanan as $kantor)
                                         @php
                                             $status = trim((string) $kantor->Status);
-                                            $namaWilayah = trim((string) $kantor->NamaWilayah);
-                                            $label = $status !== '' ? $status.' '.$namaWilayah : $namaWilayah;
+                                            $namaWilayah = trim((string) $kantor->NamaUPTUP);
+                                            $label = $status !== '' ? $status . ' ' . $namaWilayah : $namaWilayah;
                                         @endphp
                                         <option value="{{ $kantor->KodeWilayah }}">{{ $label }}</option>
                                     @endforeach
@@ -45,17 +47,20 @@
 
                             <div class="mb-3">
                                 <label for="nama" class="form-label fw-semibold">Nama</label>
-                                <input type="text" id="nama" name="nama" class="form-control" placeholder="Masukkan nama Anda">
+                                <input type="text" id="nama" name="nama" class="form-control"
+                                    placeholder="Masukkan nama Anda">
                             </div>
 
                             <div class="mb-3">
                                 <label for="email" class="form-label fw-semibold">Email</label>
-                                <input type="email" id="email" name="email" class="form-control" placeholder="nama@email.com">
+                                <input type="email" id="email" name="email" class="form-control"
+                                    placeholder="nama@email.com">
                             </div>
 
                             <div class="mb-3">
                                 <label for="no_hp" class="form-label fw-semibold">Nomor HP</label>
-                                <input type="tel" id="no_hp" name="no_hp" class="form-control" placeholder="Contoh: 081234567890">
+                                <input type="tel" id="no_hp" name="no_hp" class="form-control"
+                                    placeholder="Contoh: 081234567890">
                             </div>
 
                             <div class="mb-4">
@@ -78,3 +83,7 @@
         </div>
     </section>
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('js/searchable-select.js') }}" defer></script>
+@endpush
