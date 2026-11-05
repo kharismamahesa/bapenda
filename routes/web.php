@@ -8,6 +8,8 @@ use App\Http\Controllers\Admin\BeritaController;
 use App\Http\Controllers\Admin\KategoriBeritaController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\HalamanKontenController;
+use App\Http\Controllers\Admin\RegulasiController;
+use App\Http\Controllers\Admin\KategoriRegulasiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +23,9 @@ Route::get('/profil/{slug}', [PublicController::class, 'halaman'])->name('profil
 Route::get('/halaman/{slug}', [PublicController::class, 'halaman'])->name('halaman.show');
 Route::get('/berita', [PublicController::class, 'beritaIndex'])->name('berita.index');
 Route::get('/berita/{slug}', [PublicController::class, 'beritaShow'])->name('berita.show');
+Route::get('/pengaduan', [PublicController::class, 'pengaduan'])->name('pengaduan.index');
+Route::get('/regulasi', [PublicController::class, 'regulasiIndex'])->name('regulasi.index');
+Route::get('/regulasi/{id}/download', [PublicController::class, 'regulasiDownload'])->name('regulasi.download');
 Route::get('/informasi-pajak-kendaraan', [PublicController::class, 'pajakKendaraan'])->name('pajak-kendaraan.index');
 Route::get('/api/informasi-pajak-kendaraan', [PublicController::class, 'pajakKendaraanApi'])->middleware('throttle:10,1')->name('pajak-kendaraan.api');
 
@@ -56,4 +61,12 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // CRUD Halaman Konten
     Route::get('/halaman-konten/data', [HalamanKontenController::class, 'data'])->name('halaman-konten.data');
     Route::resource('/halaman-konten', HalamanKontenController::class)->except(['create', 'edit']);
+
+    // CRUD Kategori Regulasi
+    Route::get('/kategori-regulasi/data', [KategoriRegulasiController::class, 'data'])->name('kategori-regulasi.data');
+    Route::resource('/kategori-regulasi', KategoriRegulasiController::class)->except(['create', 'edit']);
+
+    // CRUD Regulasi
+    Route::get('/regulasi/data', [RegulasiController::class, 'data'])->name('regulasi.data');
+    Route::resource('/regulasi', RegulasiController::class)->except(['create', 'edit']);
 });

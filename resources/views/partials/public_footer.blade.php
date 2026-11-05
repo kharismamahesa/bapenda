@@ -40,8 +40,8 @@
                 <p>
                     <a href="#">Informasi Pajak</a><br>
                     <a href="#">Antrian Online</a><br>
-                    <a href="#">Informasi Regulasi</a><br>
-                    <a href="#">Pengaduan</a>
+                    <a href="{{ route('regulasi.index') }}">Informasi Regulasi</a><br>
+                    <a href="{{ route('pengaduan.index') }}">Pengaduan</a>
                 </p>
             </div>
 

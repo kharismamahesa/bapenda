@@ -45,6 +45,18 @@
                 <span>Halaman Konten</span>
             </a>
         </li>
+        <li class="nav-item">
+            <a href="{{ route('admin.regulasi.index') }}" class="nav-link {{ request()->routeIs('admin.regulasi.*') ? 'active' : '' }}">
+                <i class="bi bi-file-earmark-pdf"></i>
+                <span>Regulasi</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ route('admin.kategori-regulasi.index') }}" class="nav-link {{ request()->routeIs('admin.kategori-regulasi.*') ? 'active' : '' }}">
+                <i class="bi bi-tags"></i>
+                <span>Kategori Regulasi</span>
+            </a>
+        </li>
 
         <li class="sidebar-section-title">Pengaturan Sistem</li>
         <li class="nav-item">

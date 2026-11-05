@@ -4,10 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Berita;
 use App\Models\HalamanKonten;
+use App\Models\Regulasi;
+use App\Models\RegulasiKategori;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Throwable;
 
 class PublicController extends Controller
@@ -48,6 +52,84 @@ class PublicController extends Controller
     public function pajakKendaraan()
     {
         return view('public.pajak-kendaraan');
+    }
+
+    public function pengaduan()
+    {
+        $kantorPelayanan = DB::table('wilayah_samsat')
+            ->select('KodeWilayah', 'NamaWilayah', 'Status')
+            ->orderBy('NamaWilayah')
+            ->get();
+
+        return view('public.pengaduan.index', compact('kantorPelayanan'));
+    }
+
+    public function regulasiIndex(Request $request)
+    {
+        $search = trim((string) $request->query('q'));
+        $kategoriFilter = $request->query('kategori');
+
+        $kategoriList = RegulasiKategori::withCount('regulasi')
+            ->orderBy('regulasi_kategori', 'asc')
+            ->get();
+
+        $query = Regulasi::with('kategori');
+
+        if ($search !== '') {
+            $query->where(function ($q) use ($search) {
+                $q->where('regulasi', 'like', "%{$search}%")
+                    ->orWhere('keterangan', 'like', "%{$search}%");
+            });
+        }
+
+        if (is_numeric($kategoriFilter)) {
+            $query->where('id_regulasi_kategori', (int) $kategoriFilter);
+        }
+
+        $regulasi = $query->orderByDesc('created_datetime')
+            ->orderByDesc('id_regulasi')
+            ->paginate(10)
+            ->withQueryString();
+
+        $activeKategori = is_numeric($kategoriFilter) ? $kategoriList->firstWhere('id_regulasi_kategori', (int) $kategoriFilter) : null;
+
+        return view('public.regulasi.index', compact('regulasi', 'kategoriList', 'search', 'activeKategori'));
+    }
+
+    public function regulasiDownload($id)
+    {
+        $regulasi = Regulasi::findOrFail($id);
+
+        if (! $regulasi->file) {
+            abort(404, 'File regulasi tidak tersedia.');
+        }
+
+        if (preg_match('/^https?:\/\//i', $regulasi->file)) {
+            return redirect()->away($regulasi->file);
+        }
+
+        $fileName = basename(str_replace('\\', '/', $regulasi->file));
+        $path = public_path('uploads/regulasi/'.$fileName);
+
+        if (! file_exists($path)) {
+            $fallbackPath = public_path(ltrim(str_replace('\\', '/', $regulasi->file), '/'));
+
+            if (file_exists($fallbackPath)) {
+                $path = $fallbackPath;
+                $fileName = basename($fallbackPath);
+            } else {
+                abort(404, 'File regulasi tidak ditemukan.');
+            }
+        }
+
+        $extension = pathinfo($fileName, PATHINFO_EXTENSION);
+        $downloadName = Str::slug($regulasi->regulasi ?: 'regulasi');
+
+        if ($extension !== '') {
+            $downloadName .= '.'.$extension;
+        }
+
+        return response()->download($path, $downloadName);
     }
 
     public function pajakKendaraanApi(Request $request)

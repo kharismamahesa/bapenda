@@ -145,7 +145,7 @@
                             terkait pendapatan daerah Provinsi Riau.
                         </p>
 
-                        <a href="#" class="service-link">
+                        <a href="{{ route('regulasi.index') }}" class="service-link">
                             Selengkapnya <i class="bi bi-arrow-right"></i>
                         </a>
                     </div>
@@ -164,7 +164,7 @@
                             terkait pelayanan pendapatan daerah.
                         </p>
 
-                        <a href="#" class="service-link">
+                        <a href="{{ route('pengaduan.index') }}" class="service-link">
                             Selengkapnya <i class="bi bi-arrow-right"></i>
                         </a>
                     </div>

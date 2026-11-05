@@ -60,7 +60,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('beranda') }}#layanan">Layanan</a>
+                    <a class="nav-link {{ request()->routeIs('regulasi.*') ? 'active' : '' }}" href="{{ route('regulasi.index') }}">Regulasi</a>
                 </li>
 
                 <li class="nav-item">
