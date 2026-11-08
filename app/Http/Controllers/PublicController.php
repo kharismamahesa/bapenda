@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Berita;
 use App\Models\HalamanKonten;
+use App\Models\Pengaduan as PengaduanMasyarakat;
 use App\Models\Regulasi;
 use App\Models\RegulasiKategori;
+use App\Models\Slider;
+use App\Models\Survei;
+use App\Models\Video;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Throwable;
@@ -26,14 +33,33 @@ class PublicController extends Controller
             ->get();
 
         $profil = HalamanKonten::where('slug', 'profil')->first();
+        $sliders = Schema::hasTable('slider')
+            ? Slider::where('status', true)->orderBy('urutan')->orderBy('id')->get()
+            : collect();
+        $videos = collect();
+        if (Schema::hasTable('video')) {
+            foreach (Video::orderByDesc('id')->cursor() as $video) {
+                $video->embed_url = Video::normalizeYoutubeUrl((string) $video->video);
+                if ($video->embed_url !== null) {
+                    $videos->push($video);
+                }
 
-        return view('public.home', compact('berita', 'profil'));
+                if ($videos->count() === 3) {
+                    break;
+                }
+            }
+        }
+
+        return view('public.home', compact('berita', 'profil', 'sliders', 'videos'));
     }
 
     public function halaman($slug)
     {
         $halaman = HalamanKonten::where('slug', $slug)->firstOrFail();
-        $halamanList = HalamanKonten::orderBy('id')->get();
+        $halamanList = HalamanKonten::where('menu_parent', $halaman->menu_parent)
+            ->orderBy('urutan')
+            ->orderBy('judul')
+            ->get();
 
         return view('public.halaman', compact('halaman', 'halamanList'));
     }
@@ -49,9 +75,150 @@ class PublicController extends Controller
         return view('public.berita.index', compact('berita'));
     }
 
+    public function videoIndex()
+    {
+        if (Schema::hasTable('video')) {
+            $videos = Video::orderByDesc('id')
+                ->paginate(9)
+                ->through(function (Video $video) {
+                    $video->embed_url = Video::normalizeYoutubeUrl((string) $video->video);
+
+                    return $video;
+                });
+            $videos->setCollection(
+                $videos->getCollection()
+                    ->filter(fn (Video $video) => $video->embed_url !== null)
+                    ->values()
+            );
+        } else {
+            $videos = new LengthAwarePaginator([], 0, 9, 1, [
+                'path' => route('video.index'),
+            ]);
+        }
+
+        return view('public.video.index', compact('videos'));
+    }
+
     public function pajakKendaraan()
     {
         return view('public.pajak-kendaraan');
+    }
+
+    public function survei()
+    {
+        $kantorPelayanan = DB::table('wilayah_samsat')
+            ->select('KodeWilayah', 'NamaUPTUP', 'Status')
+            ->orderBy('NamaWilayah')
+            ->get();
+
+        return view('public.survei.index', compact('kantorPelayanan'));
+    }
+
+    public function storeSurvei(Request $request)
+    {
+        if ($request->filled('website_url')) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Terima kasih telah berpartisipasi! Jawaban survei Anda berhasil tersimpan. Masukan Anda sangat berarti untuk membantu kami meningkatkan kualitas pelayanan Bapenda Riau.',
+            ], 201);
+        }
+
+        $email = $request->input('email');
+        if (is_string($email)) {
+            $request->merge(['email' => Str::lower(trim($email)) ?: null]);
+        }
+
+        $questionFields = [
+            'tanya1', 'tanya2', 'tanya3', 'tanya4', 'tanya5', 'tanya6', 'tanya7', 'tanya8', 'tanya9',
+            'tanya21', 'tanya22', 'tanya23', 'tanya24', 'tanya25',
+        ];
+        $rules = [
+            'id_uptup' => [
+                'required',
+                'string',
+                'max:10',
+                function ($attribute, $value, $fail) {
+                    if ($value !== '10000' && ! DB::table('wilayah_samsat')->where('KodeWilayah', $value)->exists()) {
+                        $fail('Kantor pelayanan yang dipilih tidak tersedia.');
+                    }
+                },
+            ],
+            'nama' => ['nullable', 'string', 'max:100'],
+            'no_hp' => ['nullable', 'string', 'max:30'],
+            'email' => ['nullable', 'email:rfc', 'max:255'],
+            'alamat' => ['nullable', 'string', 'max:20000'],
+            'jenis_kelamin' => ['required', 'in:L,P'],
+            'usia' => ['required', 'integer', 'min:1', 'max:999'],
+            'pendidikan' => ['required', 'in:SD,SLTP/SMP,SLTA/SMA,D1/D2/D3,S1,S2/S3'],
+            'pekerjaan' => ['required', 'in:PNS/TNI/POLRI,PEGAWAI SWASTA,WIRASWASTA,MAHASISWA,LAINNYA'],
+        ];
+        foreach ($questionFields as $field) {
+            $rules[$field] = ['required', 'integer', 'between:1,4'];
+        }
+
+        $validated = $request->validate($rules, [
+            'id_uptup.required' => 'Silakan pilih kantor pelayanan.',
+            'id_uptup.string' => 'Kantor pelayanan tidak valid.',
+            'jenis_kelamin.required' => 'Silakan pilih jenis kelamin.',
+            'jenis_kelamin.in' => 'Pilihan jenis kelamin tidak valid.',
+            'usia.required' => 'Usia wajib diisi.',
+            'usia.integer' => 'Usia harus berupa angka.',
+            'usia.min' => 'Usia harus lebih dari 0.',
+            'usia.max' => 'Usia tidak valid.',
+            'pendidikan.required' => 'Silakan pilih pendidikan terakhir.',
+            'pendidikan.in' => 'Pilihan pendidikan tidak valid.',
+            'pekerjaan.required' => 'Silakan pilih pekerjaan.',
+            'pekerjaan.in' => 'Pilihan pekerjaan tidak valid.',
+            'email.email' => 'Masukkan alamat email yang valid, contoh nama@email.com.',
+            'email.max' => 'Email maksimal 255 karakter.',
+            'tanya1.required' => 'Pertanyaan SKM 1 wajib dijawab.',
+            'tanya2.required' => 'Pertanyaan SKM 2 wajib dijawab.',
+            'tanya3.required' => 'Pertanyaan SKM 3 wajib dijawab.',
+            'tanya4.required' => 'Pertanyaan SKM 4 wajib dijawab.',
+            'tanya5.required' => 'Pertanyaan SKM 5 wajib dijawab.',
+            'tanya6.required' => 'Pertanyaan SKM 6 wajib dijawab.',
+            'tanya7.required' => 'Pertanyaan SKM 7 wajib dijawab.',
+            'tanya8.required' => 'Pertanyaan SKM 8 wajib dijawab.',
+            'tanya9.required' => 'Pertanyaan SKM 9 wajib dijawab.',
+            'tanya21.required' => 'Pertanyaan SAK 1 wajib dijawab.',
+            'tanya22.required' => 'Pertanyaan SAK 2 wajib dijawab.',
+            'tanya23.required' => 'Pertanyaan SAK 3 wajib dijawab.',
+            'tanya24.required' => 'Pertanyaan SAK 4 wajib dijawab.',
+            'tanya25.required' => 'Pertanyaan SAK 5 wajib dijawab.',
+            '*.integer' => 'Data wajib survei tidak valid.',
+            '*.between' => 'Jawaban survei harus dipilih dari nilai yang tersedia.',
+        ]);
+
+        $isSuspectedDuplicate = false;
+        if (! empty($validated['email'])) {
+            $duplicateQuery = DB::table('survei')
+                ->where('id_uptup', $validated['id_uptup'])
+                ->whereRaw('LOWER(TRIM(email)) = ?', [$validated['email']])
+                ->where('created_date', '>=', now()->subMinutes(10));
+
+            foreach (['nama', 'no_hp', 'jenis_kelamin', 'usia', 'pendidikan', 'pekerjaan', 'alamat'] as $field) {
+                $duplicateQuery->where($field, $validated[$field] ?? null);
+            }
+
+            foreach ($questionFields as $field) {
+                $duplicateQuery->where($field, $validated[$field]);
+            }
+
+            $isSuspectedDuplicate = $duplicateQuery->exists();
+        }
+
+        $survei = Survei::create(array_merge($validated, [
+            'created_date' => now(),
+            'app' => 'website-public',
+            'spam_flagged_at' => $isSuspectedDuplicate ? now() : null,
+            'spam_reason' => $isSuspectedDuplicate ? 'duplikasi_email_jawaban_10_menit' : null,
+        ]));
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Terima kasih telah berpartisipasi! Jawaban survei Anda berhasil tersimpan. Masukan Anda sangat berarti untuk membantu kami meningkatkan kualitas pelayanan Bapenda Riau.',
+            'id' => $survei->id_survei,
+        ], 201);
     }
 
     public function pengaduan()
@@ -62,6 +229,96 @@ class PublicController extends Controller
             ->get();
 
         return view('public.pengaduan.index', compact('kantorPelayanan'));
+    }
+
+    public function submitPengaduan(Request $request)
+    {
+        if ($request->filled('website_url')) {
+            return redirect()->route('pengaduan.index')
+                ->with('success', 'Pengaduan berhasil dikirim.');
+        }
+
+        $email = $request->input('email');
+        if (is_string($email)) {
+            $request->merge(['email' => Str::lower(trim($email))]);
+        }
+
+        $validated = $request->validate([
+            'id_uptup' => [
+                'required',
+                'integer',
+                function ($attribute, $value, $fail) {
+                    if ((int) $value !== PengaduanMasyarakat::BAPENDA_ID
+                        && ! DB::table('wilayah_samsat')->where('KodeWilayah', $value)->exists()) {
+                        $fail('Kantor pelayanan yang dipilih tidak tersedia.');
+                    }
+                },
+            ],
+            'nama' => ['required', 'string', 'max:256'],
+            'email' => ['required', 'email:rfc', 'max:256'],
+            'no_hp' => ['nullable', 'string', 'max:15'],
+            'aduan' => ['required', 'string', 'max:60000'],
+        ], [
+            'id_uptup.required' => 'Pilih kantor pelayanan tujuan.',
+            'nama.required' => 'Nama wajib diisi.',
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Masukkan alamat email yang valid, contoh nama@email.com.',
+            'email.max' => 'Email maksimal 256 karakter.',
+            'aduan.required' => 'Isi pengaduan wajib diisi.',
+        ]);
+
+        $normalizedAduan = Str::squish(Str::lower($validated['aduan']));
+        $recentSimilarComplaints = PengaduanMasyarakat::query()
+            ->where('email', $validated['email'])
+            ->where('id_uptup', $validated['id_uptup'])
+            ->where('created_datetime', '>=', now()->subMinutes(10))
+            ->pluck('aduan');
+
+        if ($recentSimilarComplaints->contains(
+            fn (string $aduan) => Str::squish(Str::lower($aduan)) === $normalizedAduan
+        )) {
+            return back()
+                ->withInput()
+                ->withErrors(['aduan' => 'Pengaduan dengan isi yang sama baru saja dikirim. Silakan tunggu sebelum mengirim kembali.']);
+        }
+
+        $duplicateKey = 'public-complaint:'.hash(
+            'sha256',
+            $validated['email']."\0".$validated['id_uptup']."\0".$normalizedAduan
+        );
+
+        if (! Cache::add($duplicateKey, true, now()->addMinutes(10))) {
+            return back()
+                ->withInput()
+                ->withErrors(['aduan' => 'Pengaduan dengan isi yang sama baru saja dikirim. Silakan tunggu sebelum mengirim kembali.']);
+        }
+
+        $createdAt = now();
+        try {
+            $pengaduan = DB::transaction(function () use ($validated, $createdAt) {
+                $pengaduan = PengaduanMasyarakat::create([
+                    'nama' => $validated['nama'],
+                    'email' => $validated['email'],
+                    'no_hp' => $validated['no_hp'] ?? null,
+                    'aduan' => $validated['aduan'],
+                    'id_uptup' => $validated['id_uptup'],
+                    'created_datetime' => $createdAt,
+                    'updated_datetime' => $createdAt,
+                    'status' => 0,
+                ]);
+
+                $pengaduan->kode = 'P-'.$createdAt->format('Ymd').'-'.str_pad((string) $pengaduan->id, 7, '0', STR_PAD_LEFT);
+                $pengaduan->save();
+
+                return $pengaduan;
+            });
+        } catch (Throwable $exception) {
+            Cache::forget($duplicateKey);
+            throw $exception;
+        }
+
+        return redirect()->route('pengaduan.index')
+            ->with('success', 'Pengaduan berhasil dikirim. Simpan kode pengaduan Anda: '.$pengaduan->kode);
     }
 
     public function regulasiIndex(Request $request)
@@ -109,7 +366,7 @@ class PublicController extends Controller
         }
 
         $fileName = basename(str_replace('\\', '/', $regulasi->file));
-        $path = public_path('uploads/regulasi/' . $fileName);
+        $path = public_path('uploads/regulasi/'.$fileName);
 
         if (! file_exists($path)) {
             $fallbackPath = public_path(ltrim(str_replace('\\', '/', $regulasi->file), '/'));
@@ -126,7 +383,7 @@ class PublicController extends Controller
         $downloadName = Str::slug($regulasi->regulasi ?: 'regulasi');
 
         if ($extension !== '') {
-            $downloadName .= '.' . $extension;
+            $downloadName .= '.'.$extension;
         }
 
         return response()->download($path, $downloadName);
@@ -169,7 +426,7 @@ class PublicController extends Controller
         $nc = '';
 
         if ($nopol !== '') {
-            if (!preg_match('/^([A-Z]{1,2})\s*(\d{1,4})\s*([A-Z]{0,3})$/', $nopol, $matches)) {
+            if (! preg_match('/^([A-Z]{1,2})\s*(\d{1,4})\s*([A-Z]{0,3})$/', $nopol, $matches)) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Format nomor polisi tidak valid. Contoh: BM 1234 XY.',
@@ -215,7 +472,7 @@ class PublicController extends Controller
 
         $payload = $response->json();
 
-        if (!is_array($payload)) {
+        if (! is_array($payload)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Respons layanan informasi pajak tidak valid.',
@@ -231,11 +488,11 @@ class PublicController extends Controller
         }
 
         $statusOk = $status !== false
-            && !(is_numeric($status) && (int) $status >= 400);
+            && ! (is_numeric($status) && (int) $status >= 400);
 
         $hasData = is_array($rawData) && $rawData !== [];
 
-        if (!$response->successful() || !$hasData || !$statusOk) {
+        if (! $response->successful() || ! $hasData || ! $statusOk) {
             $upstreamStatus = (int) $response->status();
             $code = ($upstreamStatus === 404 || (string) $status === '404') ? 404 : 502;
 
@@ -434,7 +691,7 @@ class PublicController extends Controller
                 [$integer, $decimal] = $parts;
 
                 if ($integer !== '' && $integer !== '0' && strlen($decimal) === 3) {
-                    $value = $integer . $decimal;
+                    $value = $integer.$decimal;
                 }
             }
         }
@@ -487,7 +744,7 @@ class PublicController extends Controller
 
         $clean = preg_replace('/[,\.]/', ' ', strtolower($val));
         foreach ($months as $name => $num) {
-            $clean = preg_replace('/\b' . $name . '\b/', $num, $clean);
+            $clean = preg_replace('/\b'.$name.'\b/', $num, $clean);
         }
         $clean = preg_replace('/\s+/', '-', trim($clean));
         $clean = str_replace('/', '-', $clean);
@@ -549,6 +806,7 @@ class PublicController extends Controller
 
         if ($date === null) {
             $val = trim((string) $value);
+
             return [
                 'full' => $val,
                 'formatted' => $val,
@@ -562,7 +820,7 @@ class PublicController extends Controller
 
         if ($date->equalTo($today)) {
             return [
-                'full' => $formatted . ' (Hari ini)',
+                'full' => $formatted.' (Hari ini)',
                 'formatted' => $formatted,
                 'estimasi' => 'Hari ini (Jatuh tempo)',
                 'status' => 'today',
@@ -574,9 +832,15 @@ class PublicController extends Controller
         $totalDays = (int) $today->diffInDays($date);
 
         $parts = [];
-        if ($diff->y > 0) $parts[] = $diff->y . ' tahun';
-        if ($diff->m > 0) $parts[] = $diff->m . ' bulan';
-        if ($diff->d > 0) $parts[] = $diff->d . ' hari';
+        if ($diff->y > 0) {
+            $parts[] = $diff->y.' tahun';
+        }
+        if ($diff->m > 0) {
+            $parts[] = $diff->m.' bulan';
+        }
+        if ($diff->d > 0) {
+            $parts[] = $diff->d.' hari';
+        }
 
         if (empty($parts)) {
             $parts[] = '0 hari';
@@ -586,6 +850,7 @@ class PublicController extends Controller
 
         if ($isPast) {
             $estimasi = "Lewat {$duration} ({$totalDays} hari lalu)";
+
             return [
                 'full' => "{$formatted} ({$estimasi})",
                 'formatted' => $formatted,
@@ -595,6 +860,7 @@ class PublicController extends Controller
         }
 
         $estimasi = "Sisa {$duration} ({$totalDays} hari lagi)";
+
         return [
             'full' => "{$formatted} ({$estimasi})",
             'formatted' => $formatted,

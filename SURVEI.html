@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+	<title>Survei - Portal Pelayanan Badan Pendapatan Daerah Provinsi Riau</title>
+	<meta name="robots" content="noindex, nofollow">
+	<meta content="" name="description">
+	<meta content="" name="Portal Pelayanan Bapenda Riau">
+	<link href="https://bapenda.riau.go.id/assets/bapenda_fav.ico" rel="icon">
+	<link href="https://bapenda.riau.go.id/assets/flexstart/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Monomaniac+One&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+
+	<link href="https://bapenda.riau.go.id/assets/flexstart/assets/vendor/aos/aos.css" rel="stylesheet">
+	<link href="https://bapenda.riau.go.id/assets/flexstart/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://bapenda.riau.go.id/assets/flexstart/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+	<link href="https://bapenda.riau.go.id/assets/flexstart/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+	<link href="https://bapenda.riau.go.id/assets/flexstart/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+	<link href="https://bapenda.riau.go.id/assets/flexstart/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+	<link href="https://bapenda.riau.go.id/assets/flexstart/assets/css/style.css" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" rel="stylesheet" />
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+	<link href="https://bapenda.riau.go.id/assets/flexstart/assets/css/select2-bootstrap4.min.css" rel="stylesheet">
+	<link href="https://bapenda.riau.go.id/assets/flexstart/assets/css/sweetalert2.min.css" rel="stylesheet">
+
+	<style>
+
+	</style>
+
+</head>
+
+<body>
+
+	<header id="header" class="header fixed-top">
+		<div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+			<a href="https://bapenda.riau.go.id/pelayanan" class="logo d-flex align-items-center" style="height: ;">
+				<img src="https://bapenda.riau.go.id/assets/logo_bapenda_v2.png" alt="">
+			</a>
+			<nav id="navbar" class="navbar">
+				<ul>
+					<li class="dropdown text-success"><a href="#"><span class="text-success">Survei</span> <i class="bi bi-chevron-down"></i></a>
+						<ul>
+							<li><a href="https://bapenda.riau.go.id/pelayanan/survei" class="text-success">Survei</a></li>
+							<li><a href="https://bapenda.riau.go.id/pelayanan/nilaiindeks" class="text-success">Nilai Indeks</a></li>
+						</ul>
+					</li>
+					<li><a class="nav-link text-success" href="https://bapenda.riau.go.id/pelayanan/pengaduan">Pengaduan</a></li>
+					<li><a class="nav-link text-success" href="https://bapenda.riau.go.id/pelayanan/wbs">WBS</a></li>
+					<li>
+						<a class="getstarted scrollto" href="https://api.whatsapp.com/send/?phone=6289509064349&text=Hai&type=phone_number&app_absent=0" target="_blank">
+							Hubungi Kami
+						</a>
+					</li>
+				</ul>
+				<i class="bi bi-list mobile-nav-toggle"></i>
+			</nav>
+		</div>
+	</header><section class="breadcrumbs">
+    <div class="container">
+        <h2>Survei Kepuasan Masyarakat</h2>
+    </div>
+</section>
+
+<main id="main">
+
+    <section id="contact" class="contact">
+
+        <div class="container" data-aos="fade-up">
+
+            <div>
+                <header class="section-header info-box">
+                    <br>
+                    <h3>
+                        UPT PENGELOLAAN PENDAPATAN PEKANBARU KOTA, KELAS A                        <input type="text" name="uptup" id="uptup" value="1" class="form-control" readonly hidden>
+                    </h3>
+                </header>
+            </div>
+
+            <div class="php-email-form" id="data_pribadi">
+                <h3>DATA WAJIB PAJAK</h3>
+                <div class="row gy-4 mt-1">
+
+                    <div class="col-md-6">
+                        <label class="small text-success">Nama Wajib Pajak <code class="small">*optional</code></label>
+                        <input type="text" class="form-control" id="nama" name="nama" placeholder="Alvin Novryan">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="small text-success">Nomor HP / Whatsapp <code class="small">*optional</code></label>
+                        <input type="text" class="form-control" id="nohp" name="nohp" placeholder="081234567890">
+
+                    </div>
+                    <div class="col-md-6">
+                        <label class="small text-success">Email <code class="small">*optional</code></label>
+                        <input type="text" class="form-control" id="email" name="email" placeholder="alvin@gmail.com">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="small text-success">Usia</label>
+                        <input type="number" class="form-control" id="usia" name="usia" placeholder="40">
+                    </div>
+                    <div class="col-md-12">
+                        <label class="small text-success">Alamat Wajib Pajak <code class="small">*optional</code></label>
+                        <textarea class="form-control" id="alamat" name="alamat" rows="3" placeholder="Jl. Sigunggung" required></textarea>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="small text-success">Jenis Kelamin</label>
+                        <div class="col">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input bg-success" type="radio" name="jenis_kelamin" id="inlineRadio1" value="L" style="margin-right: 10px;">
+                                <label class="form-check-label" for="inlineRadio1"> <i class="bi bi-gender-male"></i> Laki - Laki</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input bg-success" type="radio" name="jenis_kelamin" id="inlineRadio2" value="P" style="margin-right: 10px;">
+                                <label class="form-check-label" for="inlineRadio2"> <i class="bi bi-gender-female"></i> Perempuan</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="small text-success">Pendidikan Terakhir</label>
+                        <div class="col">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input bg-success" type="radio" name="pendidikan_terakhir" id="inlineRadio1" value="SD" style="margin-right: 10px;">
+                                <label class="form-check-label" for="inlineRadio1"> SD</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input bg-success" type="radio" name="pendidikan_terakhir" id="inlineRadio2" value="SLTP/SMP" style="margin-right: 10px;">
+                                <label class="form-check-label" for="inlineRadio2"> SLTP/SMP</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input bg-success" type="radio" name="pendidikan_terakhir" id="inlineRadio3" value="SLTA/SMA" style="margin-right: 10px;">
+                                <label class="form-check-label" for="inlineRadio3"> SLTA/SMA</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input bg-success" type="radio" name="pendidikan_terakhir" id="inlineRadio4" value="D1/D2/D3" style="margin-right: 10px;">
+                                <label class="form-check-label" for="inlineRadio4"> D1/D2/D3</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input bg-success" type="radio" name="pendidikan_terakhir" id="inlineRadio5" value="S1" style="margin-right: 10px;">
+                                <label class="form-check-label" for="inlineRadio5"> S1</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input bg-success" type="radio" name="pendidikan_terakhir" id="inlineRadio6" value="S2/S3" style="margin-right: 10px;">
+                                <label class="form-check-label" for="inlineRadio6"> S2/S3</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="small text-success">Pekerjaan</label>
+                        <div class="col">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input bg-success" type="radio" name="pekerjaan" id="inlineRadio1" value="PNS/TNI/POLRI" style="margin-right: 10px;">
+                                <label class="form-check-label" for="inlineRadio1"> PNS/TNI/POLRI</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input bg-success" type="radio" name="pekerjaan" id="inlineRadio2" value="PEGAWAI SWASTA" style="margin-right: 10px;">
+                                <label class="form-check-label" for="inlineRadio2"> PEGAWAI SWASTA</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input bg-success" type="radio" name="pekerjaan" id="inlineRadio2" value="WIRASWASTA" style="margin-right: 10px;">
+                                <label class="form-check-label" for="inlineRadio2"> WIRASWASTA</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input bg-success" type="radio" name="pekerjaan" id="inlineRadio2" value="MAHASISWA" style="margin-right: 10px;">
+                                <label class="form-check-label" for="inlineRadio2"> MAHASISWA</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input bg-success" type="radio" name="pekerjaan" id="inlineRadio2" value="LAINNYA" style="margin-right: 10px;">
+                                <label class="form-check-label" for="inlineRadio2"> LAINNYA</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <button type="button" id="btnmulaisurvei" class="btn btn-success rounded-0">MULAI SURVEI <i class="bi bi-arrow-right"></i> </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- TANYA SATU -->
+            <div class="row php-email-form" id="tanya_satu">
+                <div class="col-12 mt-12">
+                    <div class="form-group">
+                        <div>
+                            <h3>[SKM] SURVEI KEPUASAN MASYARAKAT</h3>
+                            <label for="example-text-input" class="col-form-label">
+                                <!-- <h5>1. BAGAIMANA PENDAPAT SAUDARA TENTANG KESESUAIAN PERSYARATAN PELAYANAN DENGAN JENIS PELAYANANNYA?</h5> -->
+                                <h5>1. BAGAIMANA PENDAPAT SAUDARA TENTANG KESESUAIAN PERSYARATAN PELAYANAN DENGAN JENIS PELAYANANNYA?</h5>
+                            </label>
+                        </div>
+                        <label class="alert alert-success col-5" for="t11">
+                            <input type="radio" id="t11" name="t1" value="1" onclick="cek_dua()">
+                            TIDAK SESUAI</label>
+                        <label class="alert alert-success col-5" for="t12">
+                            <input type="radio" id="t12" name="t1" value="2" onclick="cek_dua()">
+                            KURANG SESUAI</label>
+                        <label class="alert alert-success col-5" for="t13">
+                            <input type="radio" id="t13" name="t1" value="3" onclick="cek_dua()">
+                            SESUAI</label>
+                        <label class="alert alert-success col-5" for="t14">
+                            <input type="radio" id="t14" name="t1" value="4" onclick="cek_dua()">
+                            SANGAT SESUAI</label>
+
+                    </div>
+                    <button type="button" onclick="cek_datapribadi()" class="btn btn-success rounded-0"><i class="bi bi-arrow-left"></i> PERTANYAAN SEBELUMNYA</button>
+                </div>
+            </div>
+            <!-- TANYA SATU -->
+
+            <!-- TANYA DUA -->
+            <div class="row php-email-form" id="tanya_dua">
+                <div class="col-12 mt-12">
+                    <div class="form-group">
+                        <div>
+                            <h3>[SKM] SURVEI KEPUASAN MASYARAKAT</h3>
+                            <label for="example-text-input" class="col-form-label">
+                                <!-- <h5>2. BAGAIMANA PEMAHAMAN SAUDARA TENTANG KEMUDAHAN PROSEDUR PELAYANAN DI UNIT INI?</h5> -->
+                                <h5>2. BAGAIMANA PEMAHAMAN SAUDARA TENTANG PROSEDUR PELAYANAN PAJAK KENDARAAN BERMOTOR DI KANTOR SAMSAT?</h5>
+                            </label>
+                        </div>
+                        <label class="alert alert-success col-5" for="t21">
+                            <input type="radio" id="t21" name="t2" value="1" onclick="cek_tiga()">
+                            TIDAK MUDAH</label>
+                        <label class="alert alert-success col-5" for="t22">
+                            <input type="radio" id="t22" name="t2" value="2" onclick="cek_tiga()">
+                            KURANG MUDAH</label>
+                        <label class="alert alert-success col-5" for="t23">
+                            <input type="radio" id="t23" name="t2" value="3" onclick="cek_tiga()">
+                            MUDAH</label>
+                        <label class="alert alert-success col-5" for="t24">
+                            <input type="radio" id="t24" name="t2" value="4" onclick="cek_tiga()">
+                            SANGAT MUDAH</label>
+                    </div>
+                    <button type="button" onclick="cek_satu()" class="btn btn-success rounded-0"><i class="bi bi-arrow-left"></i> PERTANYAAN SEBELUMNYA</button>
+                </div>
+            </div>
+            <!-- TANYA DUA -->
+
+            <!-- TANYA TIGA -->
+            <div class="row php-email-form" id="tanya_tiga">
+                <div class="col-12 mt-12">
+                    <div class="form-group">
+                        <div>
+                            <h3>[SKM] SURVEI KEPUASAN MASYARAKAT</h3>
+                            <label for="example-text-input" class="col-form-label">
+                                <!-- <h5>3. BAGAIMANA PENDAPAT SAUDARA TENTANG KECEPATAN WAKTU DALAM MEMBERIKAN PELAYANAN?</h5> -->
+                                <h5>3. BAGAIMANA PENDAPAT SAUDARA TENTANG KECEPATAN WAKTU PETUGAS PELAYANAN DALAM MEMBERIKAN PELAYANAN?</h5>
+                            </label>
+                        </div>
+                        <label class="alert alert-success col-5" for="t31">
+                            <input type="radio" id="t31" name="t3" value="1" onclick="cek_empat()">
+                            TIDAK CEPAT</label>
+                        <label class="alert alert-success col-5" for="t32">
+                            <input type="radio" id="t32" name="t3" value="2" onclick="cek_empat()">
+                            KURANG CEPAT</label>
+                        <label class="alert alert-success col-5" for="t33">
+                            <input type="radio" id="t33" name="t3" value="3" onclick="cek_empat()">
+                            CEPAT</label>
+                        <label class="alert alert-success col-5" for="t34">
+                            <input type="radio" id="t34" name="t3" value="4" onclick="cek_empat()">
+                            SANGAT CEPAT</label>
+                    </div>
+                    <button type="button" onclick="cek_dua()" class="btn btn-success rounded-0"><i class="bi bi-arrow-left"></i> PERTANYAAN SEBELUMNYA</button>
+                </div>
+            </div>
+            <!-- TANYA TIGA -->
+
+            <!-- TANYA EMPAT -->
+            <div class="row php-email-form" id="tanya_empat">
+                <div class="col-12 mt-12">
+                    <div class="form-group">
+                        <div>
+                            <h3>[SKM] SURVEI KEPUASAN MASYARAKAT</h3>
+                            <label for="example-text-input" class="col-form-label">
+                                <!-- <h5>4. BAGAIMANA PENDAPAT SAUDARA TENTANG KEWAJARAN BIAYA/TARIF DALAM PELAYANAN?</h5> -->
+                                <!-- <h5>4. BAGAIMANA PENDAPAT SAUDARA TENTANG BESARNYA BIAYA/TARIF YANG DIKENAKAN SESUAI DENGAN TINGKAT PENGHASILAN YANG DIMILIKI WAJIB PAJAK?</h5> -->
+                                <h5>4. BAGAIMANA PENDAPAT SAUDARA KEWAJARAN BIAYA/TARIF UNTUK MENDAPATKAN PELAYANAN?</h5>
+                            </label>
+                        </div>
+                        <label class="alert alert-success col-5" for="t41">
+                            <input type="radio" id="t41" name="t4" value="1" onclick="cek_lima()">
+                            TIDAK WAJAR</label>
+                        <label class="alert alert-success col-5" for="t42">
+                            <input type="radio" id="t42" name="t4" value="2" onclick="cek_lima()">
+                            KURANG WAJAR</label>
+                        <label class="alert alert-success col-5" for="t43">
+                            <input type="radio" id="t43" name="t4" value="3" onclick="cek_lima()">
+                            WAJAR</label>
+                        <label class="alert alert-success col-5" for="t44">
+                            <input type="radio" id="t44" name="t4" value="4" onclick="cek_lima()">
+                            SANGAT WAJAR</label>
+                    </div>
+                    <button type="button" onclick="cek_tiga()" class="btn btn-success rounded-0"><i class="bi bi-arrow-left"></i> PERTANYAAN SEBELUMNYA</button>
+                </div>
+            </div>
+            <!-- TANYA EMPAT -->
+
+            <!-- TANYA LIMA -->
+            <div class="row php-email-form" id="tanya_lima">
+                <div class="col-12 mt-12">
+                    <div class="form-group">
+                        <div>
+                            <h3>[SKM] SURVEI KEPUASAN MASYARAKAT</h3>
+                            <label for="example-text-input" class="col-form-label">
+                                <!-- <h5>5. BAGAIMANA PENDAPAT SAUDARA TENTANG KESESUAIAN PRODUK LAYANAN DAN STANDAR PELAYANAN DENGAN HASIL YANG DIBERIKAN?</h5> -->
+                                <h5>5. BAGAIMANA PENDAPAT SAUDARA TENTANG KESESUAIAN PRODUK LAYANAN DAN STANDAR PELAYANAN DENGAN HASIL YANG DIBERIKAN?</h5>
+                            </label>
+                        </div>
+                        <label class="alert alert-success col-5" for="t51">
+                            <input type="radio" id="t51" name="t5" value="1" onclick="cek_enam()">
+                            TIDAK SESUAI</label>
+                        <label class="alert alert-success col-5" for="t52">
+                            <input type="radio" id="t52" name="t5" value="2" onclick="cek_enam()">
+                            KURANG SESUAI</label>
+                        <label class="alert alert-success col-5" for="t53">
+                            <input type="radio" id="t53" name="t5" value="3" onclick="cek_enam()">
+                            SESUAI</label>
+                        <label class="alert alert-success col-5" for="t54">
+                            <input type="radio" id="t54" name="t5" value="4" onclick="cek_enam()">
+                            SANGAT SESUAI</label>
+                    </div>
+                    <button type="button" onclick="cek_empat()" class="btn btn-success rounded-0"><i class="bi bi-arrow-left"></i> PERTANYAAN SEBELUMNYA</button>
+                </div>
+            </div>
+            <!-- TANYA LIMA -->
+
+            <!-- TANYA ENAM -->
+            <div class="row php-email-form" id="tanya_enam">
+                <div class="col-12 mt-12">
+                    <div class="form-group">
+                        <div>
+                            <h3>[SKM] SURVEI KEPUASAN MASYARAKAT</h3>
+                            <label for="example-text-input" class="col-form-label">
+                                <!-- <h5>6. BAGAIMANA PENDAPAT SAUDARA TENTANG KOMPETENSI /KEMAMPUAN PETUGAS DALAM PELAYANAN?</h5> -->
+                                <h5>6. BAGAIMANA PENDAPAT SAUDARA TENTANG KOMPETENSI /KEMAMPUAN PETUGAS PELAYANAN DALAM MEMBERIKAN INFORMASI YANG JELAS KEPADA WAJIB PAJAK?</h5>
+                            </label>
+                        </div>
+                        <label class="alert alert-success col-5" for="t61">
+                            <input type="radio" id="t61" name="t6" value="1" onclick="cek_tujuh()">
+                            TIDAK KOMPETEN</label>
+                        <label class="alert alert-success col-5" for="t62">
+                            <input type="radio" id="t62" name="t6" value="2" onclick="cek_tujuh()">
+                            KURANG KOMPETEN</label>
+                        <label class="alert alert-success col-5" for="t63">
+                            <input type="radio" id="t63" name="t6" value="3" onclick="cek_tujuh()">
+                            KOMPETEN</label>
+                        <label class="alert alert-success col-5" for="t64">
+                            <input type="radio" id="t64" name="t6" value="4" onclick="cek_tujuh()">
+                            SANGAT KOMPETEN</label>
+                    </div>
+                    <button type="button" onclick="cek_lima()" class="btn btn-success rounded-0"><i class="bi bi-arrow-left"></i> PERTANYAAN SEBELUMNYA</button>
+                </div>
+            </div>
+            <!-- TANYA ENAM -->
+
+            <!-- TANYA TUJUH -->
+            <div class="row php-email-form" id="tanya_tujuh">
+                <div class="col-12 mt-12">
+                    <div class="form-group">
+                        <div>
+                            <h3>[SKM] SURVEI KEPUASAN MASYARAKAT</h3>
+                            <label for="example-text-input" class="col-form-label">
+                                <!-- <h5>7. BAGAIMANA PENDAPAT SAUDARA TENTANG PERILAKU PETUGAS DALAM PELAYANAN TERKAIT KESOPANAN DAN KERAMAHAN?</h5> -->
+                                <h5>7. BAGAIMANA PENDAPAT SAUDARA TENTANG PERILAKU PETUGAS DALAM PELAYANAN TERKAIT KESOPANAN DAN KERAMAHAN?</h5>
+                            </label>
+                        </div>
+                        <label class="alert alert-success col-5" for="t71">
+                            <input type="radio" id="t71" name="t7" value="1" onclick="cek_delapan()">
+                            TIDAK SOPAN DAN RAMAH</label>
+                        <label class="alert alert-success col-5" for="t72">
+                            <input type="radio" id="t72" name="t7" value="2" onclick="cek_delapan()">
+                            KURANG SOPAN DAN RAMAH</label>
+                        <label class="alert alert-success col-5" for="t73">
+                            <input type="radio" id="t73" name="t7" value="3" onclick="cek_delapan()">
+                            SOPAN DAN RAMAH</label>
+                        <label class="alert alert-success col-5" for="t74">
+                            <input type="radio" id="t74" name="t7" value="4" onclick="cek_delapan()">
+                            SANGAT SOPAN DAN RAMAH</label>
+                    </div>
+                    <button type="button" onclick="cek_enam()" class="btn btn-success rounded-0"><i class="bi bi-arrow-left"></i> PERTANYAAN SEBELUMNYA</button>
+                </div>
+            </div>
+            <!-- TANYA TUJUH -->
+
+            <!-- TANYA DELAPAN -->
+            <div class="row php-email-form" id="tanya_delapan">
+                <div class="col-12 mt-12">
+                    <div class="form-group">
+                        <div>
+                            <h3>[SKM] SURVEI KEPUASAN MASYARAKAT</h3>
+                            <label for="example-text-input" class="col-form-label">
+                                <!-- <h5>8. BAGAIMANA PENDAPAT SAUDARA TENTANG KUALITAS SARANA DAN PRASARANA?</h5> -->
+                                <h5>8. BAGAIMANA PENDAPAT SAUDARA TENTANG KUALITAS SARANA DAN PRASARANA?</h5>
+                            </label>
+                        </div>
+                        <label class="alert alert-success col-5" for="t81">
+                            <input type="radio" id="t81" name="t8" value="1" onclick="cek_sembilan()">
+                            BURUK</label>
+                        <label class="alert alert-success col-5" for="t82">
+                            <input type="radio" id="t82" name="t8" value="2" onclick="cek_sembilan()">
+                            CUKUP</label>
+                        <label class="alert alert-success col-5" for="t83">
+                            <input type="radio" id="t83" name="t8" value="3" onclick="cek_sembilan()">
+                            BAIK</label>
+                        <label class="alert alert-success col-5" for="t84">
+                            <input type="radio" id="t84" name="t8" value="4" onclick="cek_sembilan()">
+                            SANGAT BAIK</label>
+                    </div>
+                    <button type="button" onclick="cek_tujuh()" class="btn btn-success rounded-0"><i class="bi bi-arrow-left"></i> PERTANYAAN SEBELUMNYA</button>
+                </div>
+            </div>
+            <!-- TANYA DELAPAN -->
+
+            <!-- TANYA SEMBILAN -->
+            <div class="row php-email-form" id="tanya_sembilan">
+                <div class="col-12 mt-12">
+                    <div class="form-group">
+                        <div>
+                            <h3>[SKM] SURVEI KEPUASAN MASYARAKAT</h3>
+                            <label for="example-text-input" class="col-form-label">
+                                <!-- <h5>9. BAGAIMANA PENDAPAT SAUDARA TENTANG PENANGANAN PENGADUAN PENGGUNA LAYANAN?</h5> -->
+                                <h5>9. BAGAIMANA PENDAPAT SAUDARA TENTANG KECEPATAN PENANGANAN PENGADUAN PELAYANAN PADA WAJIB PAJAK?</h5>
+                            </label>
+                        </div>
+                        <label class="alert alert-success col-5" for="t91">
+                            <input type="radio" id="t91" name="t9" value="1" onclick="cek_duasatu()">
+                            TIDAK CEPAT</label>
+                        <label class="alert alert-success col-5" for="t92">
+                            <input type="radio" id="t92" name="t9" value="2" onclick="cek_duasatu()">
+                            KURANG CEPAT</label>
+                        <label class="alert alert-success col-5" for="t93">
+                            <input type="radio" id="t93" name="t9" value="3" onclick="cek_duasatu()">
+                            CEPAT</label>
+                        <label class="alert alert-success col-5" for="t94">
+                            <input type="radio" id="t94" name="t9" value="4" onclick="cek_duasatu()">
+                            SANGAT CEPAT</label>
+                    </div>
+                    <button type="button" onclick="cek_delapan()" class="btn btn-success rounded-0"><i class="bi bi-arrow-left"></i> PERTANYAAN SEBELUMNYA</button>
+                </div>
+            </div>
+            <!-- TANYA SEMBILAN -->
+
+            <!-- TANYA DUASATU -->
+            <div class="row php-email-form" id="tanya_duasatu">
+                <div class="col-12 mt-12">
+                    <div class="form-group">
+                        <div>
+                            <h3>[SAK] SURVEI ANTI KORUPSI</h3>
+                            <label for="example-text-input" class="col-form-label">
+                                <!-- <h5>1. BAGAIMANA PENDAPAT SAUDARA BAHWA TIDAK ADA DISKRIMINASI PELAYANAN PADA UNIT KERJA INI</h5> -->
+                                <h5>1. BAGAIMANA PENDAPAT SAUDARA BAHWA TIDAK ADA DISKRIMINASI PELAYANAN PADA UNIT KERJA INI?</h5>
+                            </label>
+                        </div>
+                        <label class="alert alert-success col-5" for="t211">
+                            <input type="radio" id="t211" name="t21" value="1" onclick="cek_duadua()">
+                            SELALU</label>
+                        <label class="alert alert-success col-5" for="t212">
+                            <input type="radio" id="t212" name="t21" value="2" onclick="cek_duadua()">
+                            SERING</label>
+                        <label class="alert alert-success col-5" for="t213">
+                            <input type="radio" id="t213" name="t21" value="3" onclick="cek_duadua()">
+                            JARANG</label>
+                        <label class="alert alert-success col-5" for="t214">
+                            <input type="radio" id="t214" name="t21" value="4" onclick="cek_duadua()">
+                            TIDAK ADA</label>
+                    </div>
+                    <button type="button" onclick="cek_sembilan()" class="btn btn-success rounded-0"><i class="bi bi-arrow-left"></i> PERTANYAAN SEBELUMNYA</button>
+                </div>
+            </div>
+            <!-- TANYA DUASATU -->
+
+            <!-- TANYA DUADUA -->
+            <div class="row php-email-form" id="tanya_duadua">
+                <div class="col-12 mt-12">
+                    <div class="form-group">
+                        <div>
+                            <h3>[SAK] SURVEI ANTI KORUPSI</h3>
+                            <label for="example-text-input" class="col-form-label">
+                                <!-- <h5>2. BAGAIMANA PENDAPAT SAUDARA BAHWA TIDAK ADA PELAYANAN DILUAR PROSEDUR / KECURANGAN PELAYANAN PADA UNIT LAYANAN INI.</h5> -->
+                                <h5>2. BAGAIMANA PENDAPAT SAUDARA BAHWA TIDAK ADA PELAYANAN DILUAR PROSEDUR / KECURANGAN PELAYANAN PADA UNIT LAYANAN INI?</h5>
+                            </label>
+                        </div>
+                        <label class="alert alert-success col-5" for="t221">
+                            <input type="radio" id="t221" name="t22" value="1" onclick="cek_duatiga()">
+                            SELALU</label>
+                        <label class="alert alert-success col-5" for="t222">
+                            <input type="radio" id="t222" name="t22" value="2" onclick="cek_duatiga()">
+                            SERING</label>
+                        <label class="alert alert-success col-5" for="t223">
+                            <input type="radio" id="t223" name="t22" value="3" onclick="cek_duatiga()">
+                            JARANG</label>
+                        <label class="alert alert-success col-5" for="t224">
+                            <input type="radio" id="t224" name="t22" value="4" onclick="cek_duatiga()">
+                            TIDAK ADA</label>
+                    </div>
+                    <button type="button" onclick="cek_duasatu()" class="btn btn-success rounded-0"><i class="bi bi-arrow-left"></i> PERTANYAAN SEBELUMNYA</button>
+                </div>
+            </div>
+            <!-- TANYA DUADUA -->
+
+            <!-- TANYA DUATIGA -->
+            <div class="row php-email-form" id="tanya_duatiga">
+                <div class="col-12 mt-12">
+                    <div class="form-group">
+                        <div>
+                            <h3>[SAK] SURVEI ANTI KORUPSI</h3>
+                            <label for="example-text-input" class="col-form-label">
+                                <!-- <h5>3. BAGAIMANA PENDAPAT SAUDARA BAHWA TIDAK ADA PENERIMAAN IMBALAN UANG / BARANG / FASILITAS DILUAR KETENTUAN YANG BERLAKU PADA UNIT LAYANAN INI.</h5> -->
+                                <h5>3. BAGAIMANA PENDAPAT SAUDARA BAHWA TIDAK ADA PENERIMAAN IMBALAN UANG / BARANG / FASILITAS DILUAR KETENTUAN YANG BERLAKU PADA UNIT LAYANAN INI?</h5>
+                            </label>
+                        </div>
+                        <label class="alert alert-success col-5" for="t231">
+                            <input type="radio" id="t231" name="t23" value="1" onclick="cek_duaempat()">
+                            SELALU</label>
+                        <label class="alert alert-success col-5" for="t232">
+                            <input type="radio" id="t232" name="t23" value="2" onclick="cek_duaempat()">
+                            SERING</label>
+                        <label class="alert alert-success col-5" for="t233">
+                            <input type="radio" id="t233" name="t23" value="3" onclick="cek_duaempat()">
+                            JARANG</label>
+                        <label class="alert alert-success col-5" for="t234">
+                            <input type="radio" id="t234" name="t23" value="4" onclick="cek_duaempat()">
+                            TIDAK ADA</label>
+                    </div>
+                    <button type="button" onclick="cek_duadua()" class="btn btn-success rounded-0"><i class="bi bi-arrow-left"></i> PERTANYAAN SEBELUMNYA</button>
+                </div>
+            </div>
+            <!-- TANYA DUATIGA -->
+
+            <!-- TANYA DUAEMPAT -->
+            <div class="row php-email-form" id="tanya_duaempat">
+                <div class="col-12 mt-12">
+                    <div class="form-group">
+                        <div>
+                            <h3>[SAK] SURVEI ANTI KORUPSI</h3>
+                            <label for="example-text-input" class="col-form-label">
+                                <!-- <h5>4. BAGAIMANA PENDAPAT SAUDARA BAHWA TIDAK ADA PUNGUTAN LIAR (PUNGLI) PADA UNIT LAYANAN INI.</h5> -->
+                                <h5>4. BAGAIMANA PENDAPAT SAUDARA BAHWA TIDAK ADA PUNGUTAN LIAR (PUNGLI) PADA UNIT LAYANAN INI?</h5>
+                            </label>
+                        </div>
+                        <label class="alert alert-success col-5" for="t241">
+                            <input type="radio" id="t241" name="t24" value="1" onclick="cek_dualima()">
+                            SELALU</label>
+                        <label class="alert alert-success col-5" for="t242">
+                            <input type="radio" id="t242" name="t24" value="2" onclick="cek_dualima()">
+                            SERING</label>
+                        <label class="alert alert-success col-5" for="t243">
+                            <input type="radio" id="t243" name="t24" value="3" onclick="cek_dualima()">
+                            JARANG</label>
+                        <label class="alert alert-success col-5" for="t244">
+                            <input type="radio" id="t244" name="t24" value="4" onclick="cek_dualima()">
+                            TIDAK ADA</label>
+                    </div>
+                    <button type="button" onclick="cek_duatiga()" class="btn btn-success rounded-0"><i class="bi bi-arrow-left"></i> PERTANYAAN SEBELUMNYA</button>
+                </div>
+            </div>
+            <!-- TANYA DUAEMPAT -->
+
+            <!-- TANYA DUALIMA -->
+            <div class="row php-email-form" id="tanya_dualima">
+                <div class="col-12 mt-12">
+                    <div class="form-group">
+                        <div>
+                            <h3>[SAK] SURVEI ANTI KORUPSI</h3>
+                            <label for="example-text-input" class="col-form-label">
+                                <!-- <h5>5. BAGAIMANA PENDAPAT SAUDARA BAHWA TIDAK ADA PERCALOAN / PERANTARA TIDAK RESMI PADA UNIT LAYANAN INI.</h5> -->
+                                <h5>5. BAGAIMANA PENDAPAT SAUDARA BAHWA TIDAK ADA PERCALOAN / PERANTARA TIDAK RESMI PADA UNIT LAYANAN INI?</h5>
+                            </label>
+                        </div>
+                        <label class="alert alert-success col-5" for="t251">
+                            <input type="radio" id="t251" name="t25" value="1">
+                            SELALU</label>
+                        <label class="alert alert-success col-5" for="t252">
+                            <input type="radio" id="t252" name="t25" value="2">
+                            SERING</label>
+                        <label class="alert alert-success col-5" for="t253">
+                            <input type="radio" id="t253" name="t25" value="3">
+                            JARANG</label>
+                        <label class="alert alert-success col-5" for="t254">
+                            <input type="radio" id="t254" name="t25" value="4">
+                            TIDAK ADA</label>
+                    </div>
+                    <button type="button" onclick="cek_duaempat()" class="btn btn-success rounded-0"><i class="bi bi-arrow-left"></i> PERTANYAAN SEBELUMNYA</button>
+                    <button type="button" id="simpandatasurvei" class="btn btn-success rounded-0"><i class="bi bi-send"></i> SIMPAN DATA SURVEI</button>
+                </div>
+            </div>
+            <!-- TANYA DUALIMA -->
+
+        </div>
+    </section>
+
+</main>
+
+<footer id="footer" class="footer">
+	<div class="container">
+		<div class="copyright">
+			&copy; 2023 Copyright <strong><span>IT BAPENDA RIAU</span></strong>. All Rights Reserved
+		</div>
+		<div class="credits">
+			<!-- All the links in the footer should remain intact. -->
+			<!-- You can delete the links only if you purchased the pro version. -->
+			<!-- Licensing information: https://bootstrapmade.com/license/ -->
+			<!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/flexstart-bootstrap-startup-template/ -->
+			Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+		</div>
+	</div>
+</footer>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<script src="https://bapenda.riau.go.id/assets/flexstart/assets/vendor/purecounter/purecounter_vanilla.js"></script>
+<script src="https://bapenda.riau.go.id/assets/flexstart/assets/vendor/aos/aos.js"></script>
+<script src="https://bapenda.riau.go.id/assets/flexstart/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="https://bapenda.riau.go.id/assets/flexstart/assets/vendor/glightbox/js/glightbox.min.js"></script>
+<script src="https://bapenda.riau.go.id/assets/flexstart/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+<script src="https://bapenda.riau.go.id/assets/flexstart/assets/vendor/swiper/swiper-bundle.min.js"></script>
+<script src="https://bapenda.riau.go.id/assets/flexstart/assets/js/main.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://bapenda.riau.go.id/assets/flexstart/assets/js/sweetalert2.min.js"></script>
+
+
+<script>
+    $(document).ready(function() {
+        $('#data_pribadi').fadeIn("fast");
+        $('#tanya_satu').fadeOut("fast");
+        $('#tanya_dua').fadeOut("fast");
+        $('#tanya_tiga').fadeOut("fast");
+        $('#tanya_empat').fadeOut("fast");
+        $('#tanya_lima').fadeOut("fast");
+        $('#tanya_enam').fadeOut("fast");
+        $('#tanya_tujuh').fadeOut("fast");
+        $('#tanya_delapan').fadeOut("fast");
+        $('#tanya_sembilan').fadeOut("fast");
+        $('#tanya_duasatu').fadeOut("fast");
+        $('#tanya_duadua').fadeOut("fast");
+        $('#tanya_duatiga').fadeOut("fast");
+        $('#tanya_duaempat').fadeOut("fast");
+        $('#tanya_dualima').fadeOut("fast");
+        $('#tanya_bintang').fadeOut("fast");
+
+        $('#btnmulaisurvei').click(function() {
+            var usia = $('#usia').val();
+            if (usia == '') {
+                Swal.fire({
+                    title: 'Peringatan!',
+                    text: 'Isi Usia terlebih dahulu!',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#E74C3C',
+                });
+                $('#usia').focus();
+            } else {
+                if ($("input[name=jenis_kelamin]:checked").val() == undefined) {
+                    Swal.fire({
+                        title: 'Peringatan!',
+                        text: 'Pilih jenis kelamin terlebih dahulu!',
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#E74C3C',
+                    });
+                } else {
+                    if ($("input[name=pendidikan_terakhir]:checked").val() == undefined) {
+                        Swal.fire({
+                            title: 'Peringatan!',
+                            text: 'Pilih pendidikan terlebih dahulu!',
+                            icon: 'error',
+                            confirmButtonText: 'OK',
+                            confirmButtonColor: '#E74C3C',
+                        });
+                    } else {
+                        if ($("input[name=pekerjaan]:checked").val() == undefined) {
+                            Swal.fire({
+                                title: 'Peringatan!',
+                                text: 'Pilih pekerjaan terlebih dahulu!',
+                                icon: 'error',
+                                confirmButtonText: 'OK',
+                                confirmButtonColor: '#E74C3C',
+                            });
+                        } else {
+                            $('#data_pribadi').fadeOut("fast");
+                            $('#tanya_satu').fadeIn("fast");
+                            $('#tanya_dua').fadeOut("fast");
+                            $('#tanya_tiga').fadeOut("fast");
+                            $('#tanya_empat').fadeOut("fast");
+                            $('#tanya_lima').fadeOut("fast");
+                            $('#tanya_enam').fadeOut("fast");
+                            $('#tanya_tujuh').fadeOut("fast");
+                            $('#tanya_delapan').fadeOut("fast");
+                            $('#tanya_sembilan').fadeOut("fast");
+                            $('#tanya_duasatu').fadeOut("fast");
+                            $('#tanya_duadua').fadeOut("fast");
+                            $('#tanya_duatiga').fadeOut("fast");
+                            $('#tanya_duaempat').fadeOut("fast");
+                            $('#tanya_dualima').fadeOut("fast");
+                            $('#tanya_bintang').fadeOut("fast");
+                        }
+                    }
+                }
+            }
+        });
+
+        $('#simpandatasurvei').click(function() {
+            var uptup = $('#uptup').val();
+            var nama = $('#nama').val();
+            var nohp = $('#nohp').val();
+            var email = $('#email').val();
+            var usia = $('#usia').val();
+            var alamat = $('#alamat').val();
+            var val_jenis_kelamin = $("input[name=jenis_kelamin]:checked").val();
+            var val_pendidikan_terakhir = $("input[name=pendidikan_terakhir]:checked").val();
+            var val_pekerjaan = $("input[name=pekerjaan]:checked").val();
+
+            var val_t1 = $("input[name=t1]:checked").val();
+            var val_t2 = $("input[name=t2]:checked").val();
+            var val_t3 = $("input[name=t3]:checked").val();
+            var val_t4 = $("input[name=t4]:checked").val();
+            var val_t5 = $("input[name=t5]:checked").val();
+            var val_t6 = $("input[name=t6]:checked").val();
+            var val_t7 = $("input[name=t7]:checked").val();
+            var val_t8 = $("input[name=t8]:checked").val();
+            var val_t9 = $("input[name=t9]:checked").val();
+            var val_t21 = $("input[name=t21]:checked").val();
+            var val_t22 = $("input[name=t22]:checked").val();
+            var val_t23 = $("input[name=t23]:checked").val();
+            var val_t24 = $("input[name=t24]:checked").val();
+            var val_t25 = $("input[name=t25]:checked").val();
+
+
+            if ((usia == '') || (val_jenis_kelamin == undefined) || (val_pendidikan_terakhir == undefined) || (val_pekerjaan == undefined)) {
+                cek_datapribadi();
+            } else {
+                if (val_t1 == undefined) {
+                    cek_satu();
+                } else {
+                    if (val_t2 == undefined) {
+                        cek_dua();
+                    } else {
+                        if (val_t3 == undefined) {
+                            cek_tiga();
+                        } else {
+                            if (val_t4 == undefined) {
+                                cek_empat();
+                            } else {
+                                if (val_t5 == undefined) {
+                                    cek_lima();
+                                } else {
+                                    if (val_t6 == undefined) {
+                                        cek_enam();
+                                    } else {
+                                        if (val_t7 == undefined) {
+                                            cek_tujuh();
+                                        } else {
+                                            if (val_t8 == undefined) {
+                                                cek_delapan();
+                                            } else {
+                                                if (val_t9 == undefined) {
+                                                    cek_sembilan();
+                                                } else {
+                                                    if (val_t21 == undefined) {
+                                                        cek_duasatu();
+                                                    } else {
+                                                        if (val_t22 == undefined) {
+                                                            cek_duadua();
+                                                        } else {
+                                                            if (val_t23 == undefined) {
+                                                                cek_duatiga();
+                                                            } else {
+                                                                if (val_t24 == undefined) {
+                                                                    cek_duaempat();
+                                                                } else {
+                                                                    if (val_t25 == undefined) {
+                                                                        cek_dualima();
+                                                                    } else {
+                                                                        if (uptup != '') {
+                                                                            $.ajax({
+                                                                                url: "https://bapenda.riau.go.id/api/simpansurvei",
+                                                                                method: "POST",
+                                                                                data: {
+                                                                                    uptup: uptup,
+                                                                                    nama: nama,
+                                                                                    nohp: nohp,
+                                                                                    email: email,
+                                                                                    usia: usia,
+                                                                                    alamat: alamat,
+                                                                                    jenis_kelamin: val_jenis_kelamin,
+                                                                                    pendidikan: val_pendidikan_terakhir,
+                                                                                    pekerjaan: val_pekerjaan,
+                                                                                    tanya1: val_t1,
+                                                                                    tanya2: val_t2,
+                                                                                    tanya3: val_t3,
+                                                                                    tanya4: val_t4,
+                                                                                    tanya5: val_t5,
+                                                                                    tanya6: val_t6,
+                                                                                    tanya7: val_t7,
+                                                                                    tanya8: val_t8,
+                                                                                    tanya9: val_t9,
+                                                                                    tanya21: val_t21,
+                                                                                    tanya22: val_t22,
+                                                                                    tanya23: val_t23,
+                                                                                    tanya24: val_t24,
+                                                                                    tanya25: val_t25,
+                                                                                },
+                                                                                async: true,
+                                                                                dataType: 'JSON',
+                                                                                success: function(res) {
+                                                                                    // console.log(res);
+                                                                                    if (res.success == true) {
+                                                                                        Swal.fire({
+                                                                                            title: 'Sukses',
+                                                                                            text: res.message,
+                                                                                            icon: 'success',
+                                                                                            confirmButtonColor: '#468847',
+                                                                                            confirmButtonText: 'OK'
+                                                                                        }).then((result) => {
+                                                                                            if (result.isConfirmed) {
+                                                                                                window.location = "survei";
+                                                                                            }
+                                                                                        });
+                                                                                    } else {
+                                                                                        Swal.fire({
+                                                                                            title: 'Peringatan!',
+                                                                                            text: res.message,
+                                                                                            icon: 'error',
+                                                                                            confirmButtonText: 'OK',
+                                                                                            confirmButtonColor: '#E74C3C',
+                                                                                        });
+                                                                                    }
+                                                                                },
+                                                                                error: function(xhr, ajaxOptions, thrownError) {
+                                                                                    alert(xhr + ' | ' + thrownError);
+                                                                                }
+                                                                            });
+                                                                        } else {
+                                                                            console.log('TERJADI KESALAHAN!!!');
+                                                                        }
+
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        $('#jenis_kelamin').select2({
+            theme: 'bootstrap4',
+        });
+    });
+
+    function cek_datapribadi() {
+        $('#data_pribadi').fadeIn("fast");
+        $('#tanya_satu').fadeOut("fast");
+        $('#tanya_dua').fadeOut("fast");
+        $('#tanya_tiga').fadeOut("fast");
+        $('#tanya_empat').fadeOut("fast");
+        $('#tanya_lima').fadeOut("fast");
+        $('#tanya_enam').fadeOut("fast");
+        $('#tanya_tujuh').fadeOut("fast");
+        $('#tanya_delapan').fadeOut("fast");
+        $('#tanya_sembilan').fadeOut("fast");
+        $('#tanya_duasatu').fadeOut("fast");
+        $('#tanya_duadua').fadeOut("fast");
+        $('#tanya_duatiga').fadeOut("fast");
+        $('#tanya_duaempat').fadeOut("fast");
+        $('#tanya_dualima').fadeOut("fast");
+    }
+
+    function cek_satu() {
+        $('#data_pribadi').fadeOut("fast");
+        $('#tanya_satu').fadeIn("fast");
+        $('#tanya_dua').fadeOut("fast");
+        $('#tanya_tiga').fadeOut("fast");
+        $('#tanya_empat').fadeOut("fast");
+        $('#tanya_lima').fadeOut("fast");
+        $('#tanya_enam').fadeOut("fast");
+        $('#tanya_tujuh').fadeOut("fast");
+        $('#tanya_delapan').fadeOut("fast");
+        $('#tanya_sembilan').fadeOut("fast");
+        $('#tanya_duasatu').fadeOut("fast");
+        $('#tanya_duadua').fadeOut("fast");
+        $('#tanya_duatiga').fadeOut("fast");
+        $('#tanya_duaempat').fadeOut("fast");
+        $('#tanya_dualima').fadeOut("fast");
+    }
+
+    function cek_dua() {
+        $('#data_pribadi').fadeOut("fast");
+        $('#tanya_satu').fadeOut("fast");
+        $('#tanya_dua').fadeIn("fast");
+        $('#tanya_tiga').fadeOut("fast");
+        $('#tanya_empat').fadeOut("fast");
+        $('#tanya_lima').fadeOut("fast");
+        $('#tanya_enam').fadeOut("fast");
+        $('#tanya_tujuh').fadeOut("fast");
+        $('#tanya_delapan').fadeOut("fast");
+        $('#tanya_sembilan').fadeOut("fast");
+        $('#tanya_duasatu').fadeOut("fast");
+        $('#tanya_duadua').fadeOut("fast");
+        $('#tanya_duatiga').fadeOut("fast");
+        $('#tanya_duaempat').fadeOut("fast");
+        $('#tanya_dualima').fadeOut("fast");
+    }
+
+    function cek_tiga() {
+        $('#data_pribadi').fadeOut("fast");
+        $('#tanya_satu').fadeOut("fast");
+        $('#tanya_dua').fadeOut("fast");
+        $('#tanya_tiga').fadeIn("fast");
+        $('#tanya_empat').fadeOut("fast");
+        $('#tanya_lima').fadeOut("fast");
+        $('#tanya_enam').fadeOut("fast");
+        $('#tanya_tujuh').fadeOut("fast");
+        $('#tanya_delapan').fadeOut("fast");
+        $('#tanya_sembilan').fadeOut("fast");
+        $('#tanya_duasatu').fadeOut("fast");
+        $('#tanya_duadua').fadeOut("fast");
+        $('#tanya_duatiga').fadeOut("fast");
+        $('#tanya_duaempat').fadeOut("fast");
+        $('#tanya_dualima').fadeOut("fast");
+    }
+
+    function cek_empat() {
+        $('#data_pribadi').fadeOut("fast");
+        $('#tanya_satu').fadeOut("fast");
+        $('#tanya_dua').fadeOut("fast");
+        $('#tanya_tiga').fadeOut("fast");
+        $('#tanya_empat').fadeIn("fast");
+        $('#tanya_lima').fadeOut("fast");
+        $('#tanya_enam').fadeOut("fast");
+        $('#tanya_tujuh').fadeOut("fast");
+        $('#tanya_delapan').fadeOut("fast");
+        $('#tanya_sembilan').fadeOut("fast");
+        $('#tanya_duasatu').fadeOut("fast");
+        $('#tanya_duadua').fadeOut("fast");
+        $('#tanya_duatiga').fadeOut("fast");
+        $('#tanya_duaempat').fadeOut("fast");
+        $('#tanya_dualima').fadeOut("fast");
+
+    }
+
+    function cek_lima() {
+        $('#data_pribadi').fadeOut("fast");
+        $('#tanya_satu').fadeOut("fast");
+        $('#tanya_dua').fadeOut("fast");
+        $('#tanya_tiga').fadeOut("fast");
+        $('#tanya_empat').fadeOut("fast");
+        $('#tanya_lima').fadeIn("fast");
+        $('#tanya_enam').fadeOut("fast");
+        $('#tanya_tujuh').fadeOut("fast");
+        $('#tanya_delapan').fadeOut("fast");
+        $('#tanya_sembilan').fadeOut("fast");
+        $('#tanya_duasatu').fadeOut("fast");
+        $('#tanya_duadua').fadeOut("fast");
+        $('#tanya_duatiga').fadeOut("fast");
+        $('#tanya_duaempat').fadeOut("fast");
+        $('#tanya_dualima').fadeOut("fast");
+
+    }
+
+    function cek_enam() {
+        $('#data_pribadi').fadeOut("fast");
+        $('#tanya_satu').fadeOut("fast");
+        $('#tanya_dua').fadeOut("fast");
+        $('#tanya_tiga').fadeOut("fast");
+        $('#tanya_empat').fadeOut("fast");
+        $('#tanya_lima').fadeOut("fast");
+        $('#tanya_enam').fadeIn("fast");
+        $('#tanya_tujuh').fadeOut("fast");
+        $('#tanya_delapan').fadeOut("fast");
+        $('#tanya_sembilan').fadeOut("fast");
+        $('#tanya_duasatu').fadeOut("fast");
+        $('#tanya_duadua').fadeOut("fast");
+        $('#tanya_duatiga').fadeOut("fast");
+        $('#tanya_duaempat').fadeOut("fast");
+        $('#tanya_dualima').fadeOut("fast");
+
+    }
+
+    function cek_tujuh() {
+        $('#data_pribadi').fadeOut("fast");
+        $('#tanya_satu').fadeOut("fast");
+        $('#tanya_dua').fadeOut("fast");
+        $('#tanya_tiga').fadeOut("fast");
+        $('#tanya_empat').fadeOut("fast");
+        $('#tanya_lima').fadeOut("fast");
+        $('#tanya_enam').fadeOut("fast");
+        $('#tanya_tujuh').fadeIn("fast");
+        $('#tanya_delapan').fadeOut("fast");
+        $('#tanya_sembilan').fadeOut("fast");
+        $('#tanya_duasatu').fadeOut("fast");
+        $('#tanya_duadua').fadeOut("fast");
+        $('#tanya_duatiga').fadeOut("fast");
+        $('#tanya_duaempat').fadeOut("fast");
+        $('#tanya_dualima').fadeOut("fast");
+
+    }
+
+    function cek_delapan() {
+        $('#data_pribadi').fadeOut("fast");
+        $('#tanya_satu').fadeOut("fast");
+        $('#tanya_dua').fadeOut("fast");
+        $('#tanya_tiga').fadeOut("fast");
+        $('#tanya_empat').fadeOut("fast");
+        $('#tanya_lima').fadeOut("fast");
+        $('#tanya_enam').fadeOut("fast");
+        $('#tanya_tujuh').fadeOut("fast");
+        $('#tanya_delapan').fadeIn("fast");
+        $('#tanya_sembilan').fadeOut("fast");
+        $('#tanya_duasatu').fadeOut("fast");
+        $('#tanya_duadua').fadeOut("fast");
+        $('#tanya_duatiga').fadeOut("fast");
+        $('#tanya_duaempat').fadeOut("fast");
+        $('#tanya_dualima').fadeOut("fast");
+    }
+
+    function cek_sembilan() {
+        $('#data_pribadi').fadeOut("fast");
+        $('#tanya_satu').fadeOut("fast");
+        $('#tanya_dua').fadeOut("fast");
+        $('#tanya_tiga').fadeOut("fast");
+        $('#tanya_empat').fadeOut("fast");
+        $('#tanya_lima').fadeOut("fast");
+        $('#tanya_enam').fadeOut("fast");
+        $('#tanya_tujuh').fadeOut("fast");
+        $('#tanya_delapan').fadeOut("fast");
+        $('#tanya_sembilan').fadeIn("fast");
+        $('#tanya_duasatu').fadeOut("fast");
+        $('#tanya_duadua').fadeOut("fast");
+        $('#tanya_duatiga').fadeOut("fast");
+        $('#tanya_duaempat').fadeOut("fast");
+        $('#tanya_dualima').fadeOut("fast");
+    }
+
+    function cek_duasatu() {
+        $('#data_pribadi').fadeOut("fast");
+        $('#tanya_satu').fadeOut("fast");
+        $('#tanya_dua').fadeOut("fast");
+        $('#tanya_tiga').fadeOut("fast");
+        $('#tanya_empat').fadeOut("fast");
+        $('#tanya_lima').fadeOut("fast");
+        $('#tanya_enam').fadeOut("fast");
+        $('#tanya_tujuh').fadeOut("fast");
+        $('#tanya_delapan').fadeOut("fast");
+        $('#tanya_sembilan').fadeOut("fast");
+        $('#tanya_duasatu').fadeIn("fast");
+        $('#tanya_duadua').fadeOut("fast");
+        $('#tanya_duatiga').fadeOut("fast");
+        $('#tanya_duaempat').fadeOut("fast");
+        $('#tanya_dualima').fadeOut("fast");
+    }
+
+    function cek_duadua() {
+        $('#data_pribadi').fadeOut("fast");
+        $('#tanya_satu').fadeOut("fast");
+        $('#tanya_dua').fadeOut("fast");
+        $('#tanya_tiga').fadeOut("fast");
+        $('#tanya_empat').fadeOut("fast");
+        $('#tanya_lima').fadeOut("fast");
+        $('#tanya_enam').fadeOut("fast");
+        $('#tanya_tujuh').fadeOut("fast");
+        $('#tanya_delapan').fadeOut("fast");
+        $('#tanya_sembilan').fadeOut("fast");
+        $('#tanya_duasatu').fadeOut("fast");
+        $('#tanya_duadua').fadeIn("fast");
+        $('#tanya_duatiga').fadeOut("fast");
+        $('#tanya_duaempat').fadeOut("fast");
+        $('#tanya_dualima').fadeOut("fast");
+    }
+
+    function cek_duatiga() {
+        $('#data_pribadi').fadeOut("fast");
+        $('#tanya_satu').fadeOut("fast");
+        $('#tanya_dua').fadeOut("fast");
+        $('#tanya_tiga').fadeOut("fast");
+        $('#tanya_empat').fadeOut("fast");
+        $('#tanya_lima').fadeOut("fast");
+        $('#tanya_enam').fadeOut("fast");
+        $('#tanya_tujuh').fadeOut("fast");
+        $('#tanya_delapan').fadeOut("fast");
+        $('#tanya_sembilan').fadeOut("fast");
+        $('#tanya_duasatu').fadeOut("fast");
+        $('#tanya_duadua').fadeOut("fast");
+        $('#tanya_duatiga').fadeIn("fast");
+        $('#tanya_duaempat').fadeOut("fast");
+        $('#tanya_dualima').fadeOut("fast");
+    }
+
+    function cek_duaempat() {
+        $('#data_pribadi').fadeOut("fast");
+        $('#tanya_satu').fadeOut("fast");
+        $('#tanya_dua').fadeOut("fast");
+        $('#tanya_tiga').fadeOut("fast");
+        $('#tanya_empat').fadeOut("fast");
+        $('#tanya_lima').fadeOut("fast");
+        $('#tanya_enam').fadeOut("fast");
+        $('#tanya_tujuh').fadeOut("fast");
+        $('#tanya_delapan').fadeOut("fast");
+        $('#tanya_sembilan').fadeOut("fast");
+        $('#tanya_duasatu').fadeOut("fast");
+        $('#tanya_duadua').fadeOut("fast");
+        $('#tanya_duatiga').fadeOut("fast");
+        $('#tanya_duaempat').fadeIn("fast");
+        $('#tanya_dualima').fadeOut("fast");
+    }
+
+    function cek_dualima() {
+        $('#data_pribadi').fadeOut("fast");
+        $('#tanya_satu').fadeOut("fast");
+        $('#tanya_dua').fadeOut("fast");
+        $('#tanya_tiga').fadeOut("fast");
+        $('#tanya_empat').fadeOut("fast");
+        $('#tanya_lima').fadeOut("fast");
+        $('#tanya_enam').fadeOut("fast");
+        $('#tanya_tujuh').fadeOut("fast");
+        $('#tanya_delapan').fadeOut("fast");
+        $('#tanya_sembilan').fadeOut("fast");
+        $('#tanya_duasatu').fadeOut("fast");
+        $('#tanya_duadua').fadeOut("fast");
+        $('#tanya_duatiga').fadeOut("fast");
+        $('#tanya_duaempat').fadeOut("fast");
+        $('#tanya_dualima').fadeIn("fast");
+    }
+</script>
+
+</body>
+
+</html>

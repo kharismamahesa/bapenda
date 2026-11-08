@@ -16,6 +16,29 @@
     --border-color: #e5e7eb;
 }
 
+.table-action-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    white-space: nowrap;
+}
+
+.btn-icon-action {
+    display: inline-flex;
+    width: 34px;
+    height: 34px;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border-radius: 0.5rem !important;
+}
+
+.btn-icon-action i {
+    font-size: 0.95rem;
+    line-height: 1;
+}
+
 /* Base */
 body {
     font-family: 'Poppins', sans-serif;
@@ -77,14 +100,29 @@ button:active,
 .sidebar-header .brand-icon {
     width: 38px;
     height: 38px;
-    background-color: var(--primary-green);
-    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #fff;
-    font-size: 1.25rem;
     flex-shrink: 0;
+}
+
+.sidebar-header .brand-icon img {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+}
+
+.sidebar-user-identity {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-width: 0;
+}
+
+.sidebar-user-identity .user-avatar-circle {
+    width: 30px;
+    height: 30px;
+    font-size: 0.75rem;
 }
 
 /* Sidebar Navigation Pills */
@@ -131,7 +169,7 @@ button:active,
 }
 
 .sidebar-footer {
-    padding: 1.25rem;
+    padding: 1rem 1.25rem;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
     background: rgba(255, 255, 255, 0.02);
 }
@@ -509,4 +547,3 @@ button:active,
         font-size: 0.85rem;
     }
 }
-

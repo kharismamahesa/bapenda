@@ -27,10 +27,10 @@
                 <tr>
                     <th class="text-center" style="width: 50px;">No</th>
                     <th>Nama & Akun</th>
-                    <th>Email</th>
+                    <th>Username</th>
                     <th class="text-center">Peran (Role)</th>
                     <th class="text-center">Terdaftar Sejak</th>
-                    <th class="text-end pe-3" style="width: 100px;">Aksi</th>
+                    <th class="text-center" style="width: 110px;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -62,13 +62,13 @@
                         <div class="invalid-feedback d-block" id="err-name"></div>
                     </div>
 
-                    <!-- Email -->
+                    <!-- Username -->
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small text-muted" for="email">
-                            Alamat Email <span class="text-danger">*</span>
+                        <label class="form-label fw-semibold small text-muted" for="username">
+                            Username <span class="text-danger">*</span>
                         </label>
-                        <input type="email" id="email" name="email" class="form-control" placeholder="Contoh: admin@bapenda.go.id" required>
-                        <div class="invalid-feedback d-block" id="err-email"></div>
+                        <input type="text" id="username" name="username" class="form-control" placeholder="Contoh: admin_bapenda" required>
+                        <div class="invalid-feedback d-block" id="err-username"></div>
                     </div>
 
                     <!-- Role / Hak Akses -->
@@ -79,8 +79,25 @@
                         <select id="role" name="role" class="form-select">
                             <option value="admin">Admin (Pengelola Konten & Layanan)</option>
                             <option value="superadmin">Superadmin (Akses Penuh Sistem)</option>
+                            <option value="uptup">UPTUP (Khusus Pengaduan Kantor)</option>
                         </select>
                         <div class="invalid-feedback d-block" id="err-role"></div>
+                    </div>
+
+                    <div class="mb-3 d-none" id="uptup-office-group">
+                        <label class="form-label fw-semibold small text-muted" for="id_uptup">
+                            Kantor Pelayanan <span class="text-danger">*</span>
+                        </label>
+                        <select id="id_uptup" name="id_uptup" class="form-select">
+                            <option value="">Pilih kantor pelayanan</option>
+                            @foreach ($kantorPelayanan as $kantor)
+                                @php
+                                    $label = trim((string) $kantor->Status) . ' ' . trim((string) $kantor->NamaUPTUP);
+                                @endphp
+                                <option value="{{ $kantor->KodeWilayah }}">{{ $label }}</option>
+                            @endforeach
+                        </select>
+                        <div class="invalid-feedback d-block" id="err-id_uptup"></div>
                     </div>
 
                     <!-- Password -->
@@ -126,6 +143,14 @@ $(document).ready(function () {
 
     const userModal = new bootstrap.Modal(document.getElementById('modal-user'));
 
+    function toggleUptupOffice() {
+        const isUptup = $('#role').val() === 'uptup';
+        $('#uptup-office-group').toggleClass('d-none', !isUptup);
+        $('#id_uptup').prop('required', isUptup);
+    }
+
+    $('#role').on('change', toggleUptupOffice);
+
     // Inisialisasi DataTables Kinerja Styling
     const table = $('#table-users').DataTable({
         processing: true,
@@ -138,14 +163,14 @@ $(document).ready(function () {
         columns: [
             { data: 'no', name: 'no', orderable: false, searchable: false, className: 'text-center' },
             { data: 'name', name: 'name' },
-            { data: 'email', name: 'email' },
+            { data: 'username', name: 'username' },
             { data: 'role', name: 'role', className: 'text-center' },
             { data: 'created_at', name: 'created_at', className: 'text-center text-muted small' },
-            { data: 'aksi', name: 'aksi', orderable: false, searchable: false, className: 'text-end pe-3' },
+            { data: 'aksi', name: 'aksi', orderable: false, searchable: false, className: 'text-center' },
         ],
         language: {
             search: "Cari Pengguna:",
-            searchPlaceholder: "Ketik nama atau email...",
+            searchPlaceholder: "Ketik nama atau username...",
             lengthMenu: "Tampilkan _MENU_ data",
             info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
             infoEmpty: "Tidak ada data pengguna",
@@ -168,6 +193,7 @@ $(document).ready(function () {
         $('.invalid-feedback').text('');
         $('input, select').removeClass('is-invalid');
         $('#form-user')[0].reset();
+        toggleUptupOffice();
         
         if (isEdit) {
             $('#modalUserTitle').text('Edit Data Pengguna');
@@ -205,8 +231,10 @@ $(document).ready(function () {
                 if (res.success) {
                     $('#user-id').val(res.data.id);
                     $('#name').val(res.data.name);
-                    $('#email').val(res.data.email);
+                    $('#username').val(res.data.username);
                     $('#role').val(res.data.role);
+                    $('#id_uptup').val(res.data.id_uptup || '');
+                    toggleUptupOffice();
                 }
             },
             error: function () {

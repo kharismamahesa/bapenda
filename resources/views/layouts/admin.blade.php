@@ -50,6 +50,74 @@
     <!-- Core Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        window.sanitizeSummernoteHtml = function (html) {
+            const template = document.createElement('template');
+            template.innerHTML = html;
+
+            const allowedTags = new Set([
+                'A', 'B', 'BLOCKQUOTE', 'BR', 'CODE', 'DEL', 'DIV', 'EM', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6',
+                'HR', 'I', 'LI', 'OL', 'P', 'PRE', 'S', 'SPAN', 'STRONG', 'SUB', 'SUP', 'TABLE', 'TBODY', 'TD',
+                'TFOOT', 'TH', 'THEAD', 'TR', 'U', 'UL'
+            ]);
+            const removedTags = new Set(['EMBED', 'IFRAME', 'MATH', 'OBJECT', 'SCRIPT', 'STYLE', 'SVG']);
+
+            function clean(parent) {
+                Array.from(parent.childNodes).forEach(node => {
+                    if (node.nodeType === Node.TEXT_NODE) return;
+                    if (node.nodeType !== Node.ELEMENT_NODE || removedTags.has(node.tagName)) {
+                        node.remove();
+                        return;
+                    }
+
+                    clean(node);
+                    if (!allowedTags.has(node.tagName)) {
+                        node.replaceWith(...node.childNodes);
+                        return;
+                    }
+
+                    const href = node.tagName === 'A' ? node.getAttribute('href') : null;
+                    const title = node.getAttribute('title');
+                    Array.from(node.attributes).forEach(attribute => node.removeAttribute(attribute.name));
+
+                    if (href && node.tagName === 'A') {
+                        const scheme = href.match(/^([a-z][a-z0-9+.-]*):/i);
+                        if ((!scheme || ['http', 'https', 'mailto'].includes(scheme[1].toLowerCase())) &&
+                            !/^(?:\/\/|\\\\)/.test(href)) {
+                            node.setAttribute('href', href);
+                        }
+                    }
+                    if (title) node.setAttribute('title', title);
+                });
+            }
+
+            clean(template.content);
+            return template.innerHTML;
+        };
+
+        window.handleSummernotePaste = function (event) {
+            const clipboard = (event.originalEvent || event).clipboardData;
+            if (!clipboard) return;
+
+            const html = clipboard.getData('text/html');
+            const text = clipboard.getData('text/plain');
+            if (!html && !text) return;
+
+            event.preventDefault();
+            const pastedMarkup = html || (/<\/?[a-z][\s\S]*>/i.test(text) ? text : null);
+            const content = pastedMarkup
+                ? window.sanitizeSummernoteHtml(pastedMarkup)
+                : text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\r\n|\r|\n/g, '<br>');
+
+            document.execCommand('insertHTML', false, content);
+        };
+    </script>
+    <script>
+        new bootstrap.Tooltip(document.body, {
+            selector: '[data-bs-toggle="tooltip"]',
+            container: 'body'
+        });
+    </script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Berita;
 use App\Models\KategoriBerita;
+use App\Support\HtmlContentSanitizer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
@@ -121,14 +122,14 @@ class BeritaController extends Controller
                 'views' => '<span class="fw-semibold text-dark small">'.number_format($item->counter ?? 0).'</span>',
                 'status' => $statusBadge,
                 'aksi' => '
-                    <div class="btn-group btn-group-sm">
-                        <button type="button" class="btn btn-light border text-muted btn-view" data-id="'.$item->id_berita.'" title="Lihat Detail">
+                    <div class="table-action-buttons">
+                        <button type="button" class="btn btn-info btn-icon-action btn-view" data-id="'.$item->id_berita.'" data-bs-toggle="tooltip" data-bs-placement="top" title="Lihat detail" aria-label="Lihat detail">
                             <i class="bi bi-eye"></i>
                         </button>
-                        <button type="button" class="btn btn-light border text-muted btn-edit" data-id="'.$item->id_berita.'" title="Edit">
+                        <button type="button" class="btn btn-primary btn-icon-action btn-edit" data-id="'.$item->id_berita.'" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit berita" aria-label="Edit berita">
                             <i class="bi bi-pencil"></i>
                         </button>
-                        <button type="button" class="btn btn-light border text-danger btn-delete" data-id="'.$item->id_berita.'" title="Hapus">
+                        <button type="button" class="btn btn-danger btn-icon-action btn-delete" data-id="'.$item->id_berita.'" data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus berita" aria-label="Hapus berita">
                             <i class="bi bi-trash3"></i>
                         </button>
                     </div>
@@ -149,6 +150,10 @@ class BeritaController extends Controller
      */
     public function store(Request $request)
     {
+        if (is_string($request->input('isi'))) {
+            $request->merge(['isi' => HtmlContentSanitizer::sanitize($request->input('isi'))]);
+        }
+
         $validator = Validator::make($request->all(), [
             'judul' => 'required|string|max:250',
             'id_berita_kategori' => 'required|exists:berita_kategori,id_berita_kategori',
@@ -198,7 +203,7 @@ class BeritaController extends Controller
             File::copy($destination.'/'.$gambarName, $destination.'/'.$thumbnailName);
         }
 
-        $slug = Str::slug($request->judul);
+        $slug = Str::lower(Str::slug($request->judul));
         // Pastikan slug unik
         $originalSlug = $slug;
         $count = 1;
@@ -278,6 +283,10 @@ class BeritaController extends Controller
             ], 404);
         }
 
+        if (is_string($request->input('isi'))) {
+            $request->merge(['isi' => HtmlContentSanitizer::sanitize($request->input('isi'))]);
+        }
+
         $validator = Validator::make($request->all(), [
             'judul' => 'required|string|max:250',
             'id_berita_kategori' => 'required|exists:berita_kategori,id_berita_kategori',
@@ -335,9 +344,9 @@ class BeritaController extends Controller
         }
 
         // Generate slug baru jika judul berubah
-        $slug = $berita->url;
+        $slug = $berita->url === null ? null : Str::lower($berita->url);
         if ($request->judul !== $berita->judul) {
-            $newSlug = Str::slug($request->judul);
+            $newSlug = Str::lower(Str::slug($request->judul));
             $originalSlug = $newSlug;
             $count = 1;
             while (Berita::where('url', $newSlug)->where('id_berita', '!=', $id)->exists()) {

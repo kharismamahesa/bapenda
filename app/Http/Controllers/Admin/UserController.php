@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,7 +17,12 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('admin.user.index');
+        $kantorPelayanan = DB::table('wilayah_samsat')
+            ->select('KodeWilayah', 'NamaUPTUP', 'Status')
+            ->orderBy('NamaWilayah')
+            ->get();
+
+        return view('admin.user.index', compact('kantorPelayanan'));
     }
 
     /**
@@ -32,11 +38,11 @@ class UserController extends Controller
         $query = User::query();
         $recordsTotal = User::count();
 
-        if (!empty($search)) {
+        if (! empty($search)) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('role', 'like', "%{$search}%");
+                    ->orWhere('username', 'like', "%{$search}%")
+                    ->orWhere('role', 'like', "%{$search}%");
             });
         }
 
@@ -46,7 +52,7 @@ class UserController extends Controller
         $columns = [
             0 => 'id',
             1 => 'name',
-            2 => 'email',
+            2 => 'username',
             3 => 'role',
             4 => 'created_at',
         ];
@@ -77,48 +83,50 @@ class UserController extends Controller
             $initial = strtoupper(substr($item->name, 0, 1));
             $isSelf = ($item->id === $currentUserId);
 
-            $roleBadge = $item->role === 'superadmin'
-                ? '<span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-2.5 py-1">Superadmin</span>'
-                : '<span class="badge bg-success-subtle text-success-emphasis border border-success-subtle px-2.5 py-1">Admin</span>';
+            $roleBadge = match ($item->role) {
+                'superadmin' => '<span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-2.5 py-1">Superadmin</span>',
+                'uptup' => '<span class="badge bg-info-subtle text-info-emphasis border border-info-subtle px-2.5 py-1">UPTUP</span>',
+                default => '<span class="badge bg-success-subtle text-success-emphasis border border-success-subtle px-2.5 py-1">Admin</span>',
+            };
 
             $userDisplay = '
                 <div class="d-flex align-items-center gap-3">
                     <div class="user-avatar-circle" style="width: 36px; height: 36px; font-size: 0.9rem;">
-                        ' . $initial . '
+                        '.$initial.'
                     </div>
                     <div>
                         <div class="fw-semibold text-dark d-flex align-items-center gap-2">
-                            ' . e($item->name) . '
-                            ' . ($isSelf ? '<span class="badge bg-secondary-subtle text-secondary small">(Anda)</span>' : '') . '
+                            '.e($item->name).'
+                            '.($isSelf ? '<span class="badge bg-secondary-subtle text-secondary small">(Anda)</span>' : '').'
                         </div>
-                        <div class="text-muted small">' . e($item->email) . '</div>
+                        <div class="text-muted small">'.e($item->username).'</div>
                     </div>
                 </div>
             ';
 
-            $deleteButton = !$isSelf ? '
-                <button type="button" class="btn btn-sm btn-light border text-danger btn-delete" data-id="' . $item->id . '" title="Hapus User">
+            $deleteButton = ! $isSelf ? '
+                <button type="button" class="btn btn-danger btn-icon-action btn-delete" data-id="'.$item->id.'" data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus pengguna" aria-label="Hapus pengguna">
                     <i class="bi bi-trash3"></i>
                 </button>
             ' : '
-                <button type="button" class="btn btn-sm btn-light border text-muted" title="Tidak dapat menghapus akun sendiri" disabled>
+                <button type="button" class="btn btn-danger btn-icon-action" data-bs-toggle="tooltip" data-bs-placement="top" title="Tidak dapat menghapus akun sendiri" aria-label="Tidak dapat menghapus akun sendiri" disabled>
                     <i class="bi bi-trash3"></i>
                 </button>
             ';
 
             $actions = '
-                <div class="btn-group btn-group-sm">
-                    <button type="button" class="btn btn-light border text-muted btn-edit" data-id="' . $item->id . '" title="Edit User">
+                <div class="table-action-buttons">
+                    <button type="button" class="btn btn-primary btn-icon-action btn-edit" data-id="'.$item->id.'" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit pengguna" aria-label="Edit pengguna">
                         <i class="bi bi-pencil"></i>
                     </button>
-                    ' . $deleteButton . '
+                    '.$deleteButton.'
                 </div>
             ';
 
             $data[] = [
                 'no' => $no++,
                 'name' => $userDisplay,
-                'email' => e($item->email),
+                'username' => e($item->username),
                 'role' => $roleBadge,
                 'created_at' => $item->created_at ? $item->created_at->format('d M Y, H:i') : '-',
                 'aksi' => $actions,
@@ -140,16 +148,19 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email',
-            'role' => 'required|in:superadmin,admin',
+            'username' => 'required|string|max:255|alpha_dash|unique:users,username',
+            'role' => 'required|in:superadmin,admin,uptup',
+            'id_uptup' => 'required_if:role,uptup|nullable|integer|exists:wilayah_samsat,KodeWilayah',
             'password' => 'required|string|min:8|confirmed',
         ], [
             'name.required' => 'Nama lengkap pengguna wajib diisi.',
-            'email.required' => 'Email pengguna wajib diisi.',
-            'email.email' => 'Format email tidak valid.',
-            'email.unique' => 'Email ini sudah terdaftar dalam sistem.',
+            'username.required' => 'Username pengguna wajib diisi.',
+            'username.alpha_dash' => 'Username hanya boleh berisi huruf, angka, tanda hubung, dan garis bawah.',
+            'username.unique' => 'Username ini sudah terdaftar dalam sistem.',
             'role.required' => 'Pilih role pengguna.',
             'role.in' => 'Role tidak valid.',
+            'id_uptup.required_if' => 'Pilih kantor pelayanan untuk akun UPTUP.',
+            'id_uptup.exists' => 'Kantor pelayanan tidak ditemukan.',
             'password.required' => 'Password wajib diisi.',
             'password.min' => 'Password minimal harus 8 karakter.',
             'password.confirmed' => 'Konfirmasi password tidak cocok.',
@@ -164,8 +175,9 @@ class UserController extends Controller
 
         User::create([
             'name' => $request->input('name'),
-            'email' => $request->input('email'),
+            'username' => $request->input('username'),
             'role' => $request->input('role'),
+            'id_uptup' => $request->input('role') === 'uptup' ? $request->input('id_uptup') : null,
             'password' => Hash::make($request->input('password')),
         ]);
 
@@ -187,8 +199,9 @@ class UserController extends Controller
             'data' => [
                 'id' => $user->id,
                 'name' => $user->name,
-                'email' => $user->email,
+                'username' => $user->username,
                 'role' => $user->role,
+                'id_uptup' => $user->id_uptup,
             ],
         ]);
     }
@@ -202,16 +215,19 @@ class UserController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
-            'role' => 'required|in:superadmin,admin',
+            'username' => 'required|string|max:255|alpha_dash|unique:users,username,'.$id,
+            'role' => 'required|in:superadmin,admin,uptup',
+            'id_uptup' => 'required_if:role,uptup|nullable|integer|exists:wilayah_samsat,KodeWilayah',
             'password' => 'nullable|string|min:8|confirmed',
         ], [
             'name.required' => 'Nama lengkap pengguna wajib diisi.',
-            'email.required' => 'Email pengguna wajib diisi.',
-            'email.email' => 'Format email tidak valid.',
-            'email.unique' => 'Email ini sudah digunakan oleh pengguna lain.',
+            'username.required' => 'Username pengguna wajib diisi.',
+            'username.alpha_dash' => 'Username hanya boleh berisi huruf, angka, tanda hubung, dan garis bawah.',
+            'username.unique' => 'Username ini sudah digunakan oleh pengguna lain.',
             'role.required' => 'Pilih role pengguna.',
             'role.in' => 'Role tidak valid.',
+            'id_uptup.required_if' => 'Pilih kantor pelayanan untuk akun UPTUP.',
+            'id_uptup.exists' => 'Kantor pelayanan tidak ditemukan.',
             'password.min' => 'Password baru minimal harus 8 karakter.',
             'password.confirmed' => 'Konfirmasi password baru tidak cocok.',
         ]);
@@ -224,8 +240,9 @@ class UserController extends Controller
         }
 
         $user->name = $request->input('name');
-        $user->email = $request->input('email');
+        $user->username = $request->input('username');
         $user->role = $request->input('role');
+        $user->id_uptup = $request->input('role') === 'uptup' ? $request->input('id_uptup') : null;
 
         if ($request->filled('password')) {
             $user->password = Hash::make($request->input('password'));
@@ -260,4 +277,3 @@ class UserController extends Controller
         ]);
     }
 }
-

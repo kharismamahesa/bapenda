@@ -110,14 +110,14 @@ class RegulasiController extends Controller
                 'file' => $fileBadge,
                 'tanggal' => '<span class="text-muted small">'.$tgl.'</span>',
                 'aksi' => '
-                    <div class="btn-group btn-group-sm">
-                        <button type="button" class="btn btn-light border text-muted btn-view" data-id="'.$item->id_regulasi.'" title="Lihat Detail">
+                    <div class="table-action-buttons">
+                        <button type="button" class="btn btn-info btn-icon-action btn-view" data-id="'.$item->id_regulasi.'" data-bs-toggle="tooltip" data-bs-placement="top" title="Lihat detail" aria-label="Lihat detail">
                             <i class="bi bi-eye"></i>
                         </button>
-                        <button type="button" class="btn btn-light border text-muted btn-edit" data-id="'.$item->id_regulasi.'" title="Edit">
+                        <button type="button" class="btn btn-primary btn-icon-action btn-edit" data-id="'.$item->id_regulasi.'" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit regulasi" aria-label="Edit regulasi">
                             <i class="bi bi-pencil"></i>
                         </button>
-                        <button type="button" class="btn btn-light border text-danger btn-delete" data-id="'.$item->id_regulasi.'" title="Hapus">
+                        <button type="button" class="btn btn-danger btn-icon-action btn-delete" data-id="'.$item->id_regulasi.'" data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus regulasi" aria-label="Hapus regulasi">
                             <i class="bi bi-trash3"></i>
                         </button>
                     </div>

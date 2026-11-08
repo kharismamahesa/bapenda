@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\HalamanKonten;
+use App\Support\HtmlContentSanitizer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
@@ -46,8 +47,9 @@ class HalamanKontenController extends Controller
         $columns = [
             0 => 'id',
             1 => 'judul',
-            2 => 'slug',
-            3 => 'updated_at',
+            2 => 'menu_parent',
+            3 => 'urutan',
+            5 => 'updated_at',
         ];
 
         if ($request->filled('order.0.column')) {
@@ -103,17 +105,21 @@ class HalamanKontenController extends Controller
                         </div>
                     </div>
                 ',
+                'menu' => $item->menu_parent
+                    ? '<span class="badge bg-primary-subtle text-primary-emphasis">'.e(ucfirst($item->menu_parent)).'</span>'
+                    : '<span class="badge bg-secondary-subtle text-secondary-emphasis">Tidak ditampilkan</span>',
+                'urutan' => '<span class="text-muted small">'.(int) $item->urutan.'</span>',
                 'tipe' => $tipeBadge,
                 'updated' => '<span class="text-muted small">'.$tgl.'</span>',
                 'aksi' => '
-                    <div class="btn-group btn-group-sm">
-                        <button type="button" class="btn btn-light border text-muted btn-view" data-id="'.$item->id.'" title="Lihat Detail">
+                    <div class="table-action-buttons">
+                        <button type="button" class="btn btn-info btn-icon-action btn-view" data-id="'.$item->id.'" data-bs-toggle="tooltip" data-bs-placement="top" title="Lihat detail" aria-label="Lihat detail">
                             <i class="bi bi-eye"></i>
                         </button>
-                        <button type="button" class="btn btn-light border text-muted btn-edit" data-id="'.$item->id.'" title="Edit">
+                        <button type="button" class="btn btn-primary btn-icon-action btn-edit" data-id="'.$item->id.'" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit halaman" aria-label="Edit halaman">
                             <i class="bi bi-pencil"></i>
                         </button>
-                        <button type="button" class="btn btn-light border text-danger btn-delete" data-id="'.$item->id.'" title="Hapus">
+                        <button type="button" class="btn btn-danger btn-icon-action btn-delete" data-id="'.$item->id.'" data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus halaman" aria-label="Hapus halaman">
                             <i class="bi bi-trash3"></i>
                         </button>
                     </div>
@@ -134,9 +140,15 @@ class HalamanKontenController extends Controller
      */
     public function store(Request $request)
     {
+        if (is_string($request->input('isi'))) {
+            $request->merge(['isi' => HtmlContentSanitizer::sanitize($request->input('isi'))]);
+        }
+
         $validator = Validator::make($request->all(), [
             'judul' => 'required|string|max:255',
             'isi' => 'nullable|string',
+            'menu_parent' => 'nullable|in:profil,layanan',
+            'urutan' => 'nullable|integer|min:0|max:4294967295',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:5120',
         ], [
             'judul.required' => 'Judul halaman wajib diisi.',
@@ -187,6 +199,8 @@ class HalamanKontenController extends Controller
             'slug' => $slug,
             'isi' => $request->isi,
             'gambar' => $gambarName,
+            'menu_parent' => $request->input('menu_parent') ?: null,
+            'urutan' => (int) $request->input('urutan', 0),
         ]);
 
         return response()->json([
@@ -216,6 +230,8 @@ class HalamanKontenController extends Controller
                 'id' => $halaman->id,
                 'judul' => $halaman->judul,
                 'slug' => $halaman->slug,
+                'menu_parent' => $halaman->menu_parent,
+                'urutan' => $halaman->urutan,
                 'isi' => $halaman->isi,
                 'gambar' => $halaman->gambar,
                 'gambar_url' => $halaman->gambar ? '/uploads/halaman/'.$halaman->gambar : null,
@@ -238,9 +254,15 @@ class HalamanKontenController extends Controller
             ], 404);
         }
 
+        if (is_string($request->input('isi'))) {
+            $request->merge(['isi' => HtmlContentSanitizer::sanitize($request->input('isi'))]);
+        }
+
         $validator = Validator::make($request->all(), [
             'judul' => 'required|string|max:255',
             'isi' => 'nullable|string',
+            'menu_parent' => 'nullable|in:profil,layanan',
+            'urutan' => 'nullable|integer|min:0|max:4294967295',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:5120',
         ], [
             'judul.required' => 'Judul halaman wajib diisi.',
@@ -311,6 +333,8 @@ class HalamanKontenController extends Controller
             'slug' => $slug,
             'isi' => $request->isi,
             'gambar' => $gambarName,
+            'menu_parent' => $request->input('menu_parent') ?: null,
+            'urutan' => (int) $request->input('urutan', 0),
         ]);
 
         return response()->json([
@@ -348,4 +372,3 @@ class HalamanKontenController extends Controller
         ]);
     }
 }
-

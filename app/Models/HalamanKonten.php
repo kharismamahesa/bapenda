@@ -17,6 +17,12 @@ class HalamanKonten extends Model
         'slug',
         'isi',
         'gambar',
+        'menu_parent',
+        'urutan',
+    ];
+
+    protected $casts = [
+        'urutan' => 'integer',
     ];
 
     /**
@@ -44,4 +50,3 @@ class HalamanKonten extends Model
         return $slug;
     }
 }
-

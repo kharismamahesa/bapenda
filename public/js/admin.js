@@ -55,6 +55,10 @@ function initMobileSidebar() {
     const sidebarLinks = document.querySelectorAll('#sidebar .nav-link');
     sidebarLinks.forEach(function (link) {
         link.addEventListener('click', function () {
+            if (link.matches('[data-bs-toggle="collapse"]')) {
+                return;
+            }
+
             if (window.innerWidth < 992) {
                 closeSidebar();
             }

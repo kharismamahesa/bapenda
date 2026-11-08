@@ -38,7 +38,7 @@
                         <div class="sidebar-nav">
                             <h5 class="sidebar-nav-title">Halaman Lainnya</h5>
                             @foreach($halamanList as $page)
-                                <a href="{{ route('halaman.show', $page->slug) }}" class="{{ $page->id === $halaman->id ? 'active' : '' }}">
+                                <a href="{{ route($page->menu_parent === 'profil' ? 'profil.show' : 'halaman.show', $page->slug) }}" class="{{ $page->id === $halaman->id ? 'active' : '' }}">
                                     <i class="bi bi-file-earmark-text"></i>
                                     {{ $page->judul }}
                                 </a>

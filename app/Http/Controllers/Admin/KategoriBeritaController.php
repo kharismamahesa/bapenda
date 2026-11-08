@@ -71,11 +71,11 @@ class KategoriBeritaController extends Controller
                 'berita_kategori' => '<span class="fw-semibold text-dark">' . e($item->berita_kategori) . '</span>',
                 'total_berita' => '<span class="badge bg-success-subtle text-success-emphasis border border-success-subtle px-2.5 py-1">' . $item->berita_count . ' Berita</span>',
                 'aksi' => '
-                    <div class="btn-group btn-group-sm">
-                        <button type="button" class="btn btn-light border text-muted btn-edit" data-id="' . $item->id_berita_kategori . '" title="Edit Kategori">
+                    <div class="table-action-buttons">
+                        <button type="button" class="btn btn-primary btn-icon-action btn-edit" data-id="' . $item->id_berita_kategori . '" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit kategori" aria-label="Edit kategori">
                             <i class="bi bi-pencil"></i>
                         </button>
-                        <button type="button" class="btn btn-light border text-danger btn-delete" data-id="' . $item->id_berita_kategori . '" title="Hapus Kategori">
+                        <button type="button" class="btn btn-danger btn-icon-action btn-delete" data-id="' . $item->id_berita_kategori . '" data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus kategori" aria-label="Hapus kategori">
                             <i class="bi bi-trash3"></i>
                         </button>
                     </div>
@@ -214,4 +214,3 @@ class KategoriBeritaController extends Controller
         ]);
     }
 }
-

@@ -1,15 +1,20 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\BeritaController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\HalamanKontenController;
+use App\Http\Controllers\Admin\KategoriBeritaController;
+use App\Http\Controllers\Admin\KategoriRegulasiController;
+use App\Http\Controllers\Admin\PengaduanController;
+use App\Http\Controllers\Admin\RegulasiController;
+use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\SurveiController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\VideoController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PublicController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\BeritaController;
-use App\Http\Controllers\Admin\KategoriBeritaController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\HalamanKontenController;
-use App\Http\Controllers\Admin\RegulasiController;
-use App\Http\Controllers\Admin\KategoriRegulasiController;
+use App\Http\Controllers\SurveiApiController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +28,12 @@ Route::get('/profil/{slug}', [PublicController::class, 'halaman'])->name('profil
 Route::get('/layanan/{slug}', [PublicController::class, 'halaman'])->name('halaman.show');
 Route::get('/berita', [PublicController::class, 'beritaIndex'])->name('berita.index');
 Route::get('/berita/{slug}', [PublicController::class, 'beritaShow'])->name('berita.show');
+Route::get('/video', [PublicController::class, 'videoIndex'])->name('video.index');
+Route::get('/survei', [PublicController::class, 'survei'])->name('survei.index');
+Route::post('/survei', [PublicController::class, 'storeSurvei'])->middleware('throttle:5,1')->name('survei.store');
+Route::get('/api/survei/nilai', [SurveiApiController::class, 'scores'])->middleware('throttle:30,1')->name('survei.scores.api');
 Route::get('/pengaduan', [PublicController::class, 'pengaduan'])->name('pengaduan.index');
+Route::post('/pengaduan', [PublicController::class, 'submitPengaduan'])->middleware('throttle:5,1')->name('pengaduan.store');
 Route::get('/regulasi', [PublicController::class, 'regulasiIndex'])->name('regulasi.index');
 Route::get('/regulasi/{id}/download', [PublicController::class, 'regulasiDownload'])->name('regulasi.download');
 Route::get('/informasi-pajak-kendaraan', [PublicController::class, 'pajakKendaraan'])->name('pajak-kendaraan.index');
@@ -39,12 +49,22 @@ Route::get('/admin', function () {
     if (auth()->check()) {
         return redirect()->route('admin.dashboard');
     }
+
     return redirect()->route('login');
 })->name('admin');
 
-// Admin Group Routes (Protected dengan middleware auth)
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'role:admin,superadmin,uptup'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/pengaduan', [PengaduanController::class, 'index'])->name('pengaduan.index');
+    Route::get('/pengaduan/{id}', [PengaduanController::class, 'show'])->name('pengaduan.show');
+    Route::post('/pengaduan/{id}/balas', [PengaduanController::class, 'reply'])->name('pengaduan.reply');
+});
+
+Route::middleware(['auth', 'role:admin,superadmin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::delete('/pengaduan/{id}', [PengaduanController::class, 'destroy'])->name('pengaduan.destroy');
+    Route::get('/survei', [SurveiController::class, 'index'])->name('survei.index');
+    Route::get('/survei/download', [SurveiController::class, 'download'])->name('survei.download');
+    Route::get('/api/pengaduan/bulanan', [DashboardController::class, 'monthlyComplaints'])->name('api.pengaduan.monthly');
 
     // CRUD Kategori Berita
     Route::get('/kategori-berita/data', [KategoriBeritaController::class, 'data'])->name('kategori-berita.data');
@@ -69,4 +89,16 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // CRUD Regulasi
     Route::get('/regulasi/data', [RegulasiController::class, 'data'])->name('regulasi.data');
     Route::resource('/regulasi', RegulasiController::class)->except(['create', 'edit']);
+
+    // CRUD Slider Hero
+    Route::resource('/slider', SliderController::class)->except(['show']);
+
+    // CRUD Video
+    Route::resource('/video', VideoController::class)->except(['show']);
+});
+
+Route::middleware(['auth', 'role:superadmin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/survei/review', [SurveiController::class, 'review'])->name('survei.review');
+    Route::post('/survei/review/{id}/restore', [SurveiController::class, 'restore'])->name('survei.review.restore');
+    Route::delete('/survei/review/{id}', [SurveiController::class, 'destroyFlagged'])->name('survei.review.destroy');
 });

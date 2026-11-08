@@ -6,41 +6,88 @@
 
     <!-- HERO -->
     <section class="hero" id="beranda">
-
-        <!-- HERO CONTENT -->
-        <div class="hero-content">
-            <div class="inner">
-
-                <div class="hero-label">
-                    <span></span>
-                    BADAN PENDAPATAN DAERAH PROVINSI RIAU
+        @if ($sliders->isNotEmpty())
+            <div id="heroSlider" class="carousel slide hero-slider"
+                @if ($sliders->count() > 1) data-bs-ride="carousel" data-bs-interval="6000" @endif>
+                <div class="carousel-inner h-100">
+                    @foreach ($sliders as $slider)
+                        <div class="carousel-item h-100 {{ $loop->first ? 'active' : '' }}"
+                            style="background-image: linear-gradient(90deg, rgba(3, 35, 22, .85), rgba(3, 35, 22, .45), rgba(3, 35, 22, .2)), linear-gradient(0deg, rgba(0, 0, 0, .35), transparent 50%), url('{{ asset('uploads/slider/'.$slider->gambar) }}')">
+                            <div class="hero-content">
+                                <div class="inner">
+                                    <div class="hero-label">
+                                        <span></span>
+                                        BADAN PENDAPATAN DAERAH PROVINSI RIAU
+                                    </div>
+                                    <h1>
+                                        {{ $slider->judul_putih }}
+                                        <span>{{ $slider->judul_kuning }}</span>
+                                    </h1>
+                                    <p class="hero-description">{{ $slider->subjudul }}</p>
+                                    <div class="hero-buttons">
+                                        <a href="#layanan" class="btn-cta">
+                                            Jelajahi Layanan
+                                            <i class="bi bi-arrow-right"></i>
+                                        </a>
+                                        <a href="#profil" class="btn-outline-light-custom">
+                                            Tentang Bapenda
+                                            <i class="bi bi-arrow-up-right ms-2"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
 
-                <h1>
-                    Bersama Membangun
-                    <span>Riau Lebih Maju</span>
-                </h1>
-
-                <p class="hero-description">
-                    Mewujudkan tata kelola pendapatan daerah yang optimal,
-                    transparan, dan akuntabel untuk mendukung pembangunan
-                    serta kesejahteraan masyarakat Provinsi Riau.
-                </p>
-
-                <div class="hero-buttons">
-                    <a href="#layanan" class="btn-cta">
-                        Jelajahi Layanan
-                        <i class="bi bi-arrow-right"></i>
-                    </a>
-
-                    <a href="#profil" class="btn-outline-light-custom">
-                        Tentang Bapenda
-                        <i class="bi bi-arrow-up-right ms-2"></i>
-                    </a>
-                </div>
-
+                @if ($sliders->count() > 1)
+                    <div class="carousel-indicators">
+                        @foreach ($sliders as $slider)
+                            <button type="button" data-bs-target="#heroSlider" data-bs-slide-to="{{ $loop->index }}"
+                                class="{{ $loop->first ? 'active' : '' }}"
+                                @if ($loop->first) aria-current="true" @endif
+                                aria-label="Slide {{ $loop->iteration }}"></button>
+                        @endforeach
+                    </div>
+                    <button class="carousel-control-prev hero-slider-control" type="button"
+                        data-bs-target="#heroSlider" data-bs-slide="prev" aria-label="Slide sebelumnya">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    </button>
+                    <button class="carousel-control-next hero-slider-control" type="button"
+                        data-bs-target="#heroSlider" data-bs-slide="next" aria-label="Slide berikutnya">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    </button>
+                @endif
             </div>
-        </div>
+        @else
+            <div class="hero-content">
+                <div class="inner">
+                    <div class="hero-label">
+                        <span></span>
+                        BADAN PENDAPATAN DAERAH PROVINSI RIAU
+                    </div>
+                    <h1>
+                        Bersama Membangun
+                        <span>Riau Lebih Maju</span>
+                    </h1>
+                    <p class="hero-description">
+                        Mewujudkan tata kelola pendapatan daerah yang optimal,
+                        transparan, dan akuntabel untuk mendukung pembangunan
+                        serta kesejahteraan masyarakat Provinsi Riau.
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="#layanan" class="btn-cta">
+                            Jelajahi Layanan
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                        <a href="#profil" class="btn-outline-light-custom">
+                            Tentang Bapenda
+                            <i class="bi bi-arrow-up-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        @endif
 
         <!-- HERO BOTTOM -->
         <div class="hero-bottom">
@@ -371,6 +418,55 @@
                     </div>
                 @endforelse
 
+            </div>
+        </div>
+    </section>
+
+    <!-- VIDEO -->
+    <section class="section bg-light" id="video">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-end mb-5 flex-wrap gap-3">
+                <div>
+                    <div class="section-label">VIDEO INFORMASI</div>
+                    <h2 class="section-title mb-0">Video Terbaru</h2>
+                    <p class="section-description mt-2 mb-0">
+                        Informasi dan kegiatan Bapenda Provinsi Riau dalam video.
+                    </p>
+                </div>
+                <a href="{{ route('video.index') }}" class="service-link">
+                    Lihat Semua Video <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="row g-4">
+                @forelse ($videos as $video)
+                    <div class="col-md-6 col-lg-4">
+                        <article class="card h-100 border-0 shadow-sm video-card">
+                            <div class="ratio ratio-16x9">
+                                <iframe src="{{ $video->embed_url }}" title="{{ $video->judul }}"
+                                    loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
+                                    sandbox="allow-scripts allow-same-origin allow-presentation"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen></iframe>
+                            </div>
+                            <div class="card-body">
+                                <h3 class="h5 card-title">{{ $video->judul }}</h3>
+                                @if ($video->keterangan)
+                                    <p class="card-text text-muted mb-0">
+                                        {{ \Illuminate\Support\Str::limit($video->keterangan, 180) }}
+                                    </p>
+                                @endif
+                            </div>
+                        </article>
+                    </div>
+                @empty
+                    <div class="col-12">
+                        <div class="text-center py-5 text-muted">
+                            <i class="bi bi-play-btn fs-1 d-block mb-2"></i>
+                            Belum ada video yang tersedia.
+                        </div>
+                    </div>
+                @endforelse
             </div>
         </div>
     </section>

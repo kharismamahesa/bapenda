@@ -27,7 +27,7 @@
                     <th class="text-center" style="width: 60px;">No</th>
                     <th>Nama Kategori</th>
                     <th class="text-center" style="width: 180px;">Jumlah Regulasi</th>
-                    <th class="text-end pe-3" style="width: 100px;">Aksi</th>
+                    <th class="text-center" style="width: 110px;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -104,7 +104,7 @@ $(document).ready(function () {
             { data: 'no', name: 'no', orderable: false, searchable: false, className: 'text-center' },
             { data: 'regulasi_kategori', name: 'regulasi_kategori' },
             { data: 'total_regulasi', name: 'total_regulasi', className: 'text-center' },
-            { data: 'aksi', name: 'aksi', orderable: false, searchable: false, className: 'text-end pe-3' }
+            { data: 'aksi', name: 'aksi', orderable: false, searchable: false, className: 'text-center' }
         ],
         language: {
             search: "Cari Kategori:",

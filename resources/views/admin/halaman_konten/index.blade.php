@@ -27,9 +27,11 @@
                 <tr>
                     <th class="text-center" style="width: 50px;">No</th>
                     <th>Halaman</th>
+                    <th>Menu Parent</th>
+                    <th class="text-center">Urutan</th>
                     <th>Tipe Konten</th>
                     <th>Terakhir Diubah</th>
-                    <th class="text-end pe-3" style="width: 120px;">Aksi</th>
+                    <th class="text-center" style="width: 140px;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -61,6 +63,23 @@
                         <div class="invalid-feedback d-block" id="err-judul"></div>
                     </div>
 
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-8">
+                            <label class="form-label fw-semibold small text-muted" for="menu_parent">Menu Parent</label>
+                            <select id="menu_parent" name="menu_parent" class="form-select">
+                                <option value="">Tidak ditampilkan di menu</option>
+                                <option value="profil">Profil</option>
+                                <option value="layanan">Layanan Samsat</option>
+                            </select>
+                            <div class="invalid-feedback d-block" id="err-menu_parent"></div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold small text-muted" for="urutan">Urutan Menu</label>
+                            <input type="number" id="urutan" name="urutan" class="form-control" min="0" value="0">
+                            <div class="invalid-feedback d-block" id="err-urutan"></div>
+                        </div>
+                    </div>
+
                     <!-- Gambar -->
                     <div class="mb-3">
                         <label class="form-label fw-semibold small text-muted" for="gambar">
@@ -76,7 +95,9 @@
                                 <span class="fw-semibold text-dark d-block">Preview Gambar</span>
                                 <span id="preview-info">Gambar yang dipilih</span>
                             </div>
-                            <button type="button" id="btn-hapus-gambar" class="btn btn-sm btn-outline-danger" title="Hapus gambar">
+                            <button type="button" id="btn-hapus-gambar" class="btn btn-outline-danger btn-icon-action"
+                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                title="Hapus gambar" aria-label="Hapus gambar">
                                 <i class="bi bi-x-lg"></i>
                             </button>
                         </div>
@@ -89,7 +110,7 @@
                             <label class="form-label fw-semibold small text-muted mb-0" for="isi">
                                 Isi Konten <small class="text-muted fw-normal">(opsional jika ada gambar)</small>
                             </label>
-                            <small class="text-muted" style="font-size: 0.75rem;">Editor Ringan (Format Dasar & Link)</small>
+                            <small class="text-muted" style="font-size: 0.75rem;">Format teks, heading, daftar, dan tautan. Gunakan tombol <> untuk kode HTML.</small>
                         </div>
                         <textarea id="isi" name="isi"></textarea>
                         <div class="invalid-feedback d-block" id="err-isi"></div>
@@ -168,31 +189,15 @@ $(document).ready(function () {
         placeholder: 'Tuliskan isi konten halaman di sini (opsional jika menggunakan gambar)...',
         height: 220,
         toolbar: [
-            ['style', ['bold', 'italic', 'underline', 'clear']],
-            ['font', ['strikethrough']],
+            ['style', ['style']],
+            ['font', ['bold', 'italic', 'underline', 'strikethrough', 'clear']],
             ['para', ['ul', 'ol', 'paragraph']],
             ['insert', ['link']],
             ['view', ['undo', 'redo', 'codeview']]
         ],
         callbacks: {
             onInit: function(layoutInfo) {
-                layoutInfo.editable.on('paste', function(e) {
-                    const clipboard = (e.originalEvent || e).clipboardData;
-                    if (!clipboard) return;
-
-                    const text = clipboard.getData('text/plain');
-                    if (!text) return;
-
-                    e.preventDefault();
-
-                    const safeText = text
-                        .replace(/&/g, '&amp;')
-                        .replace(/</g, '&lt;')
-                        .replace(/>/g, '&gt;')
-                        .replace(/\r\n|\r|\n/g, '<br>');
-
-                    document.execCommand('insertHTML', false, safeText);
-                });
+                layoutInfo.editable.on('paste', window.handleSummernotePaste);
             },
             onChange: function(contents, $editable) {
                 if ($('#isi').summernote('isEmpty') === false) {
@@ -221,13 +226,15 @@ $(document).ready(function () {
                 });
             }
         },
-        order: [[3, 'desc']],
+        order: [[5, 'desc']],
         columns: [
             { data: 'no', name: 'no', orderable: false, searchable: false, className: 'text-center' },
             { data: 'judul', name: 'judul' },
+            { data: 'menu', name: 'menu_parent', orderable: true, searchable: false, className: 'text-center' },
+            { data: 'urutan', name: 'urutan', orderable: true, searchable: false, className: 'text-center' },
             { data: 'tipe', name: 'tipe', orderable: false, className: 'text-center' },
             { data: 'updated', name: 'updated_at' },
-            { data: 'aksi', name: 'aksi', orderable: false, searchable: false, className: 'text-end pe-3' }
+            { data: 'aksi', name: 'aksi', orderable: false, searchable: false, className: 'text-center' }
         ],
         language: {
             search: "Cari Halaman:",
@@ -378,6 +385,8 @@ $(document).ready(function () {
                     const data = res.data;
                     $('#halaman-id').val(data.id);
                     $('#judul').val(data.judul);
+                    $('#menu_parent').val(data.menu_parent || '');
+                    $('#urutan').val(data.urutan ?? 0);
 
                     $('#isi').summernote('code', data.isi || '');
 
@@ -489,4 +498,3 @@ $(document).ready(function () {
 });
 </script>
 @endpush
-

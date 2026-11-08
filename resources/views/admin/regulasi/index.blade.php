@@ -37,7 +37,7 @@
                     <th style="width: 200px;">Kategori</th>
                     <th class="text-center" style="width: 140px;">File</th>
                     <th style="width: 160px;">Tanggal</th>
-                    <th class="text-end pe-3" style="width: 120px;">Aksi</th>
+                    <th class="text-center" style="width: 140px;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -181,7 +181,7 @@ $(document).ready(function () {
             { data: 'kategori', name: 'kategori', orderable: false },
             { data: 'file', name: 'file', orderable: false, searchable: false, className: 'text-center' },
             { data: 'tanggal', name: 'tanggal', orderable: false },
-            { data: 'aksi', name: 'aksi', orderable: false, searchable: false, className: 'text-end pe-3' }
+            { data: 'aksi', name: 'aksi', orderable: false, searchable: false, className: 'text-center' }
         ],
         language: {
             search: "Cari Regulasi:",

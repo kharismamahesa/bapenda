@@ -60,7 +60,7 @@
                     <th>Tanggal</th>
                     <th class="text-center">Dibaca</th>
                     <th class="text-center">Status</th>
-                    <th class="text-end pe-3" style="width: 120px;">Aksi</th>
+                    <th class="text-center" style="width: 140px;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -151,7 +151,7 @@
                             <label class="form-label fw-semibold small text-muted mb-0" for="isi">
                                 Isi Berita Lengkap <span class="text-danger">*</span>
                             </label>
-                            <small class="text-muted" style="font-size: 0.75rem;">Editor Ringan (Format Dasar & Link)</small>
+                            <small class="text-muted" style="font-size: 0.75rem;">Format teks, heading, daftar, dan tautan. Gunakan tombol <> untuk kode HTML.</small>
                         </div>
                         <textarea id="isi" name="isi"></textarea>
                         <div class="invalid-feedback d-block" id="err-isi"></div>
@@ -220,30 +220,15 @@ $(document).ready(function () {
         placeholder: 'Tuliskan isi berita di sini...',
         height: 200,
         toolbar: [
-            ['style', ['bold', 'italic', 'underline', 'clear']],
-            ['para', ['paragraph']],
+            ['style', ['style']],
+            ['font', ['bold', 'italic', 'underline', 'clear']],
+            ['para', ['ul', 'ol', 'paragraph']],
             ['insert', ['link']],
-            ['view', ['undo', 'redo']]
+            ['view', ['undo', 'redo', 'codeview']]
         ],
         callbacks: {
             onInit: function(layoutInfo) {
-                layoutInfo.editable.on('paste', function(e) {
-                    const clipboard = (e.originalEvent || e).clipboardData;
-                    if (!clipboard) return;
-
-                    const text = clipboard.getData('text/plain');
-                    if (!text) return;
-
-                    e.preventDefault();
-
-                    const safeText = text
-                        .replace(/&/g, '&amp;')
-                        .replace(/</g, '&lt;')
-                        .replace(/>/g, '&gt;')
-                        .replace(/\r\n|\r|\n/g, '<br>');
-
-                    document.execCommand('insertHTML', false, safeText);
-                });
+                layoutInfo.editable.on('paste', window.handleSummernotePaste);
             },
             onChange: function(contents, $editable) {
                 if ($('#isi').summernote('isEmpty') === false) {
@@ -284,7 +269,7 @@ $(document).ready(function () {
             { data: 'tanggal', name: 'tanggal_berita' },
             { data: 'views', name: 'counter', className: 'text-center' },
             { data: 'status', name: 'status', className: 'text-center' },
-            { data: 'aksi', name: 'aksi', orderable: false, searchable: false, className: 'text-end pe-3' }
+            { data: 'aksi', name: 'aksi', orderable: false, searchable: false, className: 'text-center' }
         ],
         language: {
             search: "Cari Berita:",

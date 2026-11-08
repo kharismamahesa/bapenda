@@ -80,9 +80,9 @@
                 <form action="{{ route('login.post') }}" method="POST" id="loginForm">
                     @csrf
 
-                    <!-- Username / Email -->
+                    <!-- Username -->
                     <div class="mb-3">
-                        <label class="form-label" for="username">Username atau Email</label>
+                        <label class="form-label" for="username">Username</label>
                         <div class="input-group-custom">
                             <i class="bi bi-person input-icon"></i>
                             <input type="text"
@@ -90,7 +90,7 @@
                                    name="username"
                                    value="{{ old('username') }}"
                                    class="form-control-custom"
-                                   placeholder="Masukkan username atau email"
+                                   placeholder="Masukkan username"
                                    required
                                    autofocus
                                    autocomplete="username">
