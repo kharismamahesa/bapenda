@@ -23,19 +23,44 @@ class SurveiController extends Controller
         $startDate = $filters['start_date'] ?? today()->startOfYear()->toDateString();
         $endDate = $filters['end_date'] ?? today()->toDateString();
         $selectedOffice = $filters['id_uptup'] ?? '';
-        $canReviewSpam = auth()->user()->role === 'superadmin';
+        $offices = DB::table('wilayah_samsat')
+            ->where('KodeWilayah', '<>', '10000')
+            ->select('KodeWilayah', 'NamaUPTUP')
+            ->orderBy('NamaUPTUP')
+            ->get();
+
+        return view('admin.survei.index', [
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+            'selectedOffice' => $selectedOffice,
+            'offices' => $offices,
+            'dashboardDataUrl' => route('admin.api.survei.dashboard'),
+            'canReviewSpam' => auth()->user()->role === 'superadmin',
+        ]);
+    }
+
+    public function dashboardData(Request $request)
+    {
+        $filters = $this->validatedFilters($request);
+        $startDate = $filters['start_date'] ?? today()->startOfYear()->toDateString();
+        $endDate = $filters['end_date'] ?? today()->toDateString();
+        $selectedOffice = $filters['id_uptup'] ?? '';
+        $endExclusive = Carbon::parse($endDate)->addDay()->toDateString();
 
         $filteredSurvei = fn () => DB::table('survei')
-            ->whereDate('created_date', '>=', $startDate)
-            ->whereDate('created_date', '<=', $endDate)
+            ->where('created_date', '>=', $startDate)
+            ->where('created_date', '<', $endExclusive)
             ->whereNull('spam_flagged_at')
             ->when($selectedOffice !== '', fn ($query) => $query->where('id_uptup', $selectedOffice));
         $totalSurvei = $filteredSurvei()->count();
-        $surveiHariIni = $filteredSurvei()->whereDate('created_date', today())->count();
-        $suspectedSpam = $canReviewSpam
+        $surveiHariIni = $filteredSurvei()
+            ->where('created_date', '>=', today()->toDateString())
+            ->where('created_date', '<', today()->addDay()->toDateString())
+            ->count();
+        $suspectedSpam = auth()->user()->role === 'superadmin'
             ? DB::table('survei')
-                ->whereDate('created_date', '>=', $startDate)
-                ->whereDate('created_date', '<=', $endDate)
+                ->where('created_date', '>=', $startDate)
+                ->where('created_date', '<', $endExclusive)
                 ->whereNotNull('spam_flagged_at')
                 ->when($selectedOffice !== '', fn ($query) => $query->where('id_uptup', $selectedOffice))
                 ->count()
@@ -44,12 +69,13 @@ class SurveiController extends Controller
         $averageExpressions = collect(self::QUESTION_FIELDS)
             ->map(fn (string $field) => "AVG(`{$field}`) AS `{$field}`")
             ->implode(', ');
-        $averageQuery = DB::table('survei')
-            ->whereDate('created_date', '>=', $startDate)
-            ->whereDate('created_date', '<=', $endDate)
+        $averageRow = DB::table('survei')
+            ->where('created_date', '>=', $startDate)
+            ->where('created_date', '<', $endExclusive)
             ->whereNull('spam_flagged_at')
-            ->when($selectedOffice !== '', fn ($query) => $query->where('id_uptup', $selectedOffice));
-        $averageRow = $averageQuery->selectRaw($averageExpressions)->first();
+            ->when($selectedOffice !== '', fn ($query) => $query->where('id_uptup', $selectedOffice))
+            ->selectRaw($averageExpressions)
+            ->first();
         $rawQuestionAverages = collect(self::QUESTION_FIELDS)
             ->map(fn (string $field) => $averageRow->{$field} !== null ? (float) $averageRow->{$field} : null)
             ->all();
@@ -60,14 +86,13 @@ class SurveiController extends Controller
         $periodStart = today()->subDays(29);
         $periodEnd = today();
         $dailyCounts = DB::table('survei')
-            ->whereDate('created_date', '>=', $periodStart)
-            ->whereDate('created_date', '<=', $periodEnd)
+            ->where('created_date', '>=', $periodStart->toDateString())
+            ->where('created_date', '<', $periodEnd->copy()->addDay()->toDateString())
             ->whereNull('spam_flagged_at')
             ->selectRaw('DATE(created_date) AS tanggal, COUNT(*) AS jumlah')
             ->groupByRaw('DATE(created_date)')
             ->orderBy('tanggal')
             ->pluck('jumlah', 'tanggal');
-
         $dailyLabels = [];
         $dailyValues = [];
         foreach (CarbonPeriod::create($periodStart, $periodEnd) as $date) {
@@ -90,9 +115,6 @@ class SurveiController extends Controller
             ->groupBy('kategori_pendidikan')
             ->orderByDesc('jumlah')
             ->get();
-        $educationLabels = $educationCounts->pluck('kategori_pendidikan')->all();
-        $educationValues = $educationCounts->pluck('jumlah')->map(fn ($count) => (int) $count)->all();
-
         $ageCounts = $filteredSurvei()
             ->whereNotNull('usia')
             ->selectRaw("CASE WHEN usia <= 19 THEN '0-19' WHEN usia <= 59 THEN '20-59' ELSE '60-seterusnya' END AS rentang_usia")
@@ -100,8 +122,6 @@ class SurveiController extends Controller
             ->groupBy('rentang_usia')
             ->pluck('jumlah', 'rentang_usia');
         $ageLabels = ['0-19', '20-59', '60-seterusnya'];
-        $ageValues = array_map(fn (string $range) => (int) ($ageCounts[$range] ?? 0), $ageLabels);
-
         $occupationCounts = $filteredSurvei()
             ->selectRaw("COALESCE(NULLIF(TRIM(TRAILING CHAR(39) FROM TRIM(pekerjaan)), ''), 'Tidak diisi') AS kategori_pekerjaan")
             ->selectRaw('COUNT(*) AS jumlah')
@@ -109,51 +129,38 @@ class SurveiController extends Controller
             ->orderByDesc('jumlah')
             ->limit(10)
             ->get();
-        $occupationLabels = $occupationCounts->pluck('kategori_pekerjaan')->all();
-        $occupationValues = $occupationCounts->pluck('jumlah')->map(fn ($count) => (int) $count)->all();
 
         $skmScore = collect($rawQuestionAverages)->take(9)->filter(fn ($average) => $average !== null)->avg();
         $sakScore = collect($rawQuestionAverages)->slice(9)->filter(fn ($average) => $average !== null)->avg();
         $averageSkm = $skmScore !== null ? round($skmScore, 2) : null;
         $averageSak = $sakScore !== null ? round($sakScore * 25, 2) : null;
         $ikmValue = $skmScore !== null ? round($skmScore * 25, 2) : null;
-        $ikmQuality = $this->qualityFor($ikmValue);
-        $sakQuality = $this->qualityFor($averageSak);
-        $skmQuestionAverages = array_slice($questionAverages, 0, 9);
-        $sakQuestionAverages = array_slice($questionAverages, 9);
 
-        $offices = DB::table('wilayah_samsat')
-            ->where('KodeWilayah', '<>', '10000')
-            ->select('KodeWilayah', 'NamaUPTUP')
-            ->orderBy('NamaUPTUP')
-            ->get();
-
-        return view('admin.survei.index', compact(
-            'totalSurvei',
-            'surveiHariIni',
-            'suspectedSpam',
-            'startDate',
-            'endDate',
-            'selectedOffice',
-            'offices',
-            'averageSkm',
-            'averageSak',
-            'ikmValue',
-            'ikmQuality',
-            'sakQuality',
-            'skmQuestionAverages',
-            'sakQuestionAverages',
-            'dailyLabels',
-            'dailyValues',
-            'genderLabels',
-            'genderValues',
-            'educationLabels',
-            'educationValues',
-            'ageLabels',
-            'ageValues',
-            'occupationLabels',
-            'occupationValues',
-        ));
+        return response()->json([
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+            'selectedOffice' => $selectedOffice,
+            'totalSurvei' => $totalSurvei,
+            'surveiHariIni' => $surveiHariIni,
+            'suspectedSpam' => $suspectedSpam,
+            'averageSkm' => $averageSkm,
+            'averageSak' => $averageSak,
+            'ikmValue' => $ikmValue,
+            'ikmQuality' => $this->qualityFor($ikmValue),
+            'sakQuality' => $this->qualityFor($averageSak),
+            'skmQuestionAverages' => array_slice($questionAverages, 0, 9),
+            'sakQuestionAverages' => array_slice($questionAverages, 9),
+            'dailyLabels' => $dailyLabels,
+            'dailyValues' => $dailyValues,
+            'genderLabels' => $genderLabels,
+            'genderValues' => $genderValues,
+            'educationLabels' => $educationCounts->pluck('kategori_pendidikan')->all(),
+            'educationValues' => $educationCounts->pluck('jumlah')->map(fn ($count) => (int) $count)->all(),
+            'ageLabels' => $ageLabels,
+            'ageValues' => array_map(fn (string $range) => (int) ($ageCounts[$range] ?? 0), $ageLabels),
+            'occupationLabels' => $occupationCounts->pluck('kategori_pekerjaan')->all(),
+            'occupationValues' => $occupationCounts->pluck('jumlah')->map(fn ($count) => (int) $count)->all(),
+        ]);
     }
 
     public function download(Request $request): StreamedResponse

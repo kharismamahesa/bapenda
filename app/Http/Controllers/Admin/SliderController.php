@@ -14,9 +14,63 @@ class SliderController extends Controller
 
     public function index()
     {
-        $sliders = Slider::orderBy('urutan')->orderBy('id')->paginate(15);
+        return view('admin.slider.index', [
+            'dataUrl' => route('admin.slider.data'),
+        ]);
+    }
 
-        return view('admin.slider.index', compact('sliders'));
+    public function data(Request $request)
+    {
+        $start = max(0, (int) $request->input('start', 0));
+        $requestedLength = (int) $request->input('length', 10);
+        $length = $requestedLength < 0 ? 100 : min(100, max(1, $requestedLength));
+        $searchValue = $request->input('search.value', '');
+        $search = is_string($searchValue) ? mb_substr(trim($searchValue), 0, 100) : '';
+        $query = Slider::query();
+        $recordsTotal = (clone $query)->count();
+
+        if ($search !== '') {
+            $query->where(function ($builder) use ($search) {
+                $builder->where('judul_putih', 'like', "%{$search}%")
+                    ->orWhere('judul_kuning', 'like', "%{$search}%")
+                    ->orWhere('subjudul', 'like', "%{$search}%");
+            });
+        }
+
+        $recordsFiltered = (clone $query)->count();
+        $orderColumns = [0 => 'urutan', 2 => 'judul_putih', 3 => 'status'];
+        $orderIndex = (int) $request->input('order.0.column', 0);
+        $orderDirection = $request->input('order.0.dir') === 'desc' ? 'desc' : 'asc';
+        $items = $query->orderBy($orderColumns[$orderIndex] ?? 'urutan', $orderDirection)
+            ->orderBy('id')
+            ->skip($start)
+            ->take($length)
+            ->get();
+
+        $data = $items->map(function (Slider $slider) {
+            $title = trim($slider->judul_putih.' '.$slider->judul_kuning);
+            $image = '<img src="'.e(asset('uploads/slider/'.$slider->gambar)).'" alt="'.e($title).'" class="rounded-2 border" style="width: 120px; height: 68px; object-fit: cover;">';
+            $status = $slider->status
+                ? '<span class="badge bg-success-subtle text-success-emphasis border border-success-subtle">Aktif</span>'
+                : '<span class="badge bg-secondary-subtle text-secondary-emphasis border">Nonaktif</span>';
+            $actions = '<div class="table-action-buttons"><a href="'.route('admin.slider.edit', $slider).'" class="btn btn-primary btn-icon-action" title="Edit slider" aria-label="Edit slider"><i class="bi bi-pencil"></i></a>'
+                .'<form method="POST" action="'.route('admin.slider.destroy', $slider).'" onsubmit="return confirm(\'Hapus slider ini?\')"><input type="hidden" name="_token" value="'.e(csrf_token()).'"><input type="hidden" name="_method" value="DELETE"><button type="submit" class="btn btn-danger btn-icon-action" title="Hapus slider" aria-label="Hapus slider"><i class="bi bi-trash3"></i></button></form></div>';
+
+            return [
+                'urutan' => '<span class="badge bg-light text-dark border">'.(int) $slider->urutan.'</span>',
+                'gambar' => $image,
+                'judul' => '<div class="fw-semibold text-dark">'.e($title).'</div><small class="text-muted">'.e(\Illuminate\Support\Str::limit($slider->subjudul, 100)).'</small>',
+                'status' => $status,
+                'aksi' => $actions,
+            ];
+        });
+
+        return response()->json([
+            'draw' => (int) $request->input('draw', 1),
+            'recordsTotal' => $recordsTotal,
+            'recordsFiltered' => $recordsFiltered,
+            'data' => $data,
+        ]);
     }
 
     public function create()

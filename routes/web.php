@@ -56,6 +56,8 @@ Route::get('/admin', function () {
 Route::middleware(['auth', 'role:admin,superadmin,uptup'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/pengaduan', [PengaduanController::class, 'index'])->name('pengaduan.index');
+    Route::get('/pengaduan/data', [PengaduanController::class, 'data'])->name('pengaduan.data');
+    Route::get('/pengaduan/stats', [PengaduanController::class, 'stats'])->name('pengaduan.stats');
     Route::get('/pengaduan/{id}', [PengaduanController::class, 'show'])->name('pengaduan.show');
     Route::post('/pengaduan/{id}/balas', [PengaduanController::class, 'reply'])->name('pengaduan.reply');
 });
@@ -64,7 +66,9 @@ Route::middleware(['auth', 'role:admin,superadmin'])->prefix('admin')->name('adm
     Route::delete('/pengaduan/{id}', [PengaduanController::class, 'destroy'])->name('pengaduan.destroy');
     Route::get('/survei', [SurveiController::class, 'index'])->name('survei.index');
     Route::get('/survei/download', [SurveiController::class, 'download'])->name('survei.download');
+    Route::get('/api/dashboard/summary', [DashboardController::class, 'summary'])->name('api.dashboard.summary');
     Route::get('/api/pengaduan/bulanan', [DashboardController::class, 'monthlyComplaints'])->name('api.pengaduan.monthly');
+    Route::get('/api/survei/dashboard', [SurveiController::class, 'dashboardData'])->name('api.survei.dashboard');
 
     // CRUD Kategori Berita
     Route::get('/kategori-berita/data', [KategoriBeritaController::class, 'data'])->name('kategori-berita.data');
@@ -91,9 +95,11 @@ Route::middleware(['auth', 'role:admin,superadmin'])->prefix('admin')->name('adm
     Route::resource('/regulasi', RegulasiController::class)->except(['create', 'edit']);
 
     // CRUD Slider Hero
+    Route::get('/slider/data', [SliderController::class, 'data'])->name('slider.data');
     Route::resource('/slider', SliderController::class)->except(['show']);
 
     // CRUD Video
+    Route::get('/video/data', [VideoController::class, 'data'])->name('video.data');
     Route::resource('/video', VideoController::class)->except(['show']);
 });
 

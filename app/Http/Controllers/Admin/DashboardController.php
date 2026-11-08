@@ -15,11 +15,21 @@ class DashboardController extends Controller
             return redirect()->route('admin.pengaduan.index');
         }
 
-        $startDate = today()->startOfYear()->toDateString();
-        $endDate = today()->toDateString();
+        return view('admin.dashboard', [
+            'year' => today()->year,
+            'summaryApiUrl' => route('admin.api.dashboard.summary'),
+            'complaintApiUrl' => route('admin.api.pengaduan.monthly'),
+        ]);
+    }
+
+    public function summary()
+    {
+        $today = today();
+        $visitorToday = Carbon::today('Asia/Jakarta');
+        $startDate = $today->copy()->startOfYear()->toDateString();
         $surveyQuery = DB::table('survei')
-            ->whereDate('created_date', '>=', $startDate)
-            ->whereDate('created_date', '<=', $endDate)
+            ->where('created_date', '>=', $startDate)
+            ->where('created_date', '<', $today->copy()->addDay()->toDateString())
             ->whereNull('spam_flagged_at');
         $averageExpressions = collect([
             'tanya1', 'tanya2', 'tanya3', 'tanya4', 'tanya5', 'tanya6', 'tanya7', 'tanya8', 'tanya9',
@@ -40,11 +50,11 @@ class DashboardController extends Controller
                 'SUM(CASE WHEN visited_date >= ? AND visited_date <= ? THEN 1 ELSE 0 END) AS month_total, '.
                 'SUM(CASE WHEN visited_date >= ? AND visited_date <= ? THEN 1 ELSE 0 END) AS year_total',
                 [
-                    Carbon::today('Asia/Jakarta')->toDateString(),
-                    Carbon::today('Asia/Jakarta')->startOfMonth()->toDateString(),
-                    Carbon::today('Asia/Jakarta')->toDateString(),
-                    Carbon::today('Asia/Jakarta')->startOfYear()->toDateString(),
-                    Carbon::today('Asia/Jakarta')->toDateString(),
+                    $visitorToday->toDateString(),
+                    $visitorToday->copy()->startOfMonth()->toDateString(),
+                    $visitorToday->toDateString(),
+                    $visitorToday->copy()->startOfYear()->toDateString(),
+                    $visitorToday->toDateString(),
                 ]
             )
             ->first();
@@ -66,8 +76,7 @@ class DashboardController extends Controller
                 'total' => (int) $visitor->total,
             ]);
 
-        return view('admin.dashboard', [
-            'year' => today()->year,
+        return response()->json([
             'totalSurvei' => (clone $surveyQuery)->count(),
             'totalBerita' => DB::table('berita')->count(),
             'totalVideo' => DB::table('video')->count(),
@@ -75,7 +84,6 @@ class DashboardController extends Controller
             'ikmQuality' => $this->qualityFor($ikmValue),
             'sakValue' => $sakValue,
             'sakQuality' => $this->qualityFor($sakValue),
-            'complaintApiUrl' => route('admin.api.pengaduan.monthly'),
             'visitorToday' => (int) ($visitorStats->today_total ?? 0),
             'visitorMonth' => (int) ($visitorStats->month_total ?? 0),
             'visitorYear' => (int) ($visitorStats->year_total ?? 0),
@@ -88,7 +96,8 @@ class DashboardController extends Controller
         $year = today()->year;
         $monthlyCounts = DB::table('pengaduan')
             ->whereNotNull('created_datetime')
-            ->whereYear('created_datetime', $year)
+            ->where('created_datetime', '>=', Carbon::create($year, 1, 1)->toDateString())
+            ->where('created_datetime', '<', Carbon::create($year + 1, 1, 1)->toDateString())
             ->selectRaw('MONTH(created_datetime) AS bulan, COUNT(*) AS jumlah')
             ->groupByRaw('MONTH(created_datetime)')
             ->pluck('jumlah', 'bulan');

@@ -31,8 +31,9 @@ class UserController extends Controller
     public function data(Request $request)
     {
         $draw = (int) $request->input('draw', 1);
-        $start = (int) $request->input('start', 0);
-        $length = (int) $request->input('length', 10);
+        $start = max(0, (int) $request->input('start', 0));
+        $requestedLength = (int) $request->input('length', 10);
+        $length = $requestedLength < 0 ? 100 : min(100, max(1, $requestedLength));
         $search = $request->input('search.value');
 
         $query = User::query();

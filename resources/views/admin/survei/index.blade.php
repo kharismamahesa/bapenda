@@ -48,54 +48,31 @@
         <div class="text-danger small mt-2" id="survey-filter-error" role="alert" aria-live="polite"></div>
     </form>
 
-    <div id="survey-dashboard-results">
-        <script type="application/json" id="survey-dashboard-data">{!! json_encode([
-            'totalSurvei' => $totalSurvei,
-            'surveiHariIni' => $surveiHariIni,
-            'suspectedSpam' => $suspectedSpam,
-            'averageSkm' => $averageSkm,
-            'averageSak' => $averageSak,
-            'ikmValue' => $ikmValue,
-            'ikmQuality' => $ikmQuality,
-            'sakQuality' => $sakQuality,
-            'skmQuestionAverages' => $skmQuestionAverages,
-            'sakQuestionAverages' => $sakQuestionAverages,
-            'dailyLabels' => $dailyLabels,
-            'dailyValues' => $dailyValues,
-            'genderLabels' => $genderLabels,
-            'genderValues' => $genderValues,
-            'educationLabels' => $educationLabels,
-            'educationValues' => $educationValues,
-            'ageLabels' => $ageLabels,
-            'ageValues' => $ageValues,
-            'occupationLabels' => $occupationLabels,
-            'occupationValues' => $occupationValues,
-            'startDate' => $startDate,
-            'endDate' => $endDate,
-        ], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) !!}</script>
+    <div id="survey-dashboard-results" data-api-url="{{ $dashboardDataUrl }}" aria-busy="true">
         <div class="row g-3 mb-4">
             <div class="col-12 col-sm-6 {{ auth()->user()->role === 'superadmin' ? 'col-xl-4' : 'col-xl-6' }}">
                 <div class="card card-custom p-4 h-100">
                     <div class="stat-title">Total Responden</div>
-                    <div class="stat-value">{{ number_format($totalSurvei) }}</div>
+                    <div class="stat-value" id="survey-total-count"><span class="spinner-border spinner-border-sm text-success" aria-label="Memuat"></span></div>
                     <div class="text-muted small mt-1">Sesuai filter tanggal dan kantor</div>
                 </div>
             </div>
             <div class="col-12 col-sm-6 {{ auth()->user()->role === 'superadmin' ? 'col-xl-4' : 'col-xl-6' }}">
                 <div class="card card-custom p-4 h-100">
                     <div class="stat-title">Responden Hari Ini</div>
-                    <div class="stat-value">{{ number_format($surveiHariIni) }}</div>
+                    <div class="stat-value" id="survey-today-count"><span class="spinner-border spinner-border-sm text-success" aria-label="Memuat"></span></div>
                     <div class="text-muted small mt-1">Berdasarkan tanggal pengisian</div>
                 </div>
             </div>
-            @if (auth()->user()->role === 'superadmin')
+            @if ($canReviewSpam)
                 <div class="col-12 col-sm-6 col-xl-4">
                     <div class="card card-custom p-4 h-100">
                         <div class="stat-title">Perlu Ditinjau</div>
-                        <div class="stat-value">{{ number_format($suspectedSpam) }}</div>
+                        <div class="stat-value" id="survey-review-count"><span class="spinner-border spinner-border-sm text-warning" aria-label="Memuat"></span></div>
                         <div class="text-muted small mt-1 mb-3">Dugaan duplikat, tidak masuk perhitungan sampai ditinjau.
                         </div>
                         <a href="{{ route('admin.survei.review', ['start_date' => $startDate, 'end_date' => $endDate, 'id_uptup' => $selectedOffice]) }}"
+                            id="survey-review-link"
                             class="btn btn-sm btn-outline-warning mt-auto align-self-start">
                             <i class="bi bi-search me-1"></i> Tinjau Data
                         </a>
@@ -109,35 +86,20 @@
                 <div class="card card-custom p-4 h-100">
                     <div class="stat-title fs-6">Nilai IKM (SKM)</div>
                     <div class="stat-value mt-2" style="font-size: clamp(2.75rem, 5vw, 3.75rem); line-height: 1.1;">
-                        {{ $ikmValue !== null ? number_format($ikmValue, 2) : '-' }}
+                        <span id="survey-ikm-value">-</span>
                         <span class="fs-5 fw-normal text-muted">/ 100</span>
                     </div>
-                    <div class="text-muted small mt-1">
-                        @if ($ikmQuality)
-                            Konversi SKM {{ number_format($averageSkm, 2) }}/4 × 25 · Mutu {{ $ikmQuality['mutu'] }} —
-                            {{ $ikmQuality['kinerja'] }}
-                        @else
-                            Belum ada jawaban SKM
-                        @endif
-                    </div>
+                    <div class="text-muted small mt-1" id="survey-ikm-quality">Memuat nilai SKM...</div>
                 </div>
             </div>
             <div class="col-12 col-md-6">
                 <div class="card card-custom p-4 h-100">
                     <div class="stat-title fs-6">Nilai SAK (konversi)</div>
                     <div class="stat-value mt-2" style="font-size: clamp(2.75rem, 5vw, 3.75rem); line-height: 1.1;">
-                        {{ $averageSak !== null ? number_format($averageSak, 2) : '-' }}
+                        <span id="survey-sak-value">-</span>
                         <span class="fs-5 fw-normal text-muted">/ 100</span>
                     </div>
-                    <div class="text-muted small mt-1">
-                        @if ($averageSak !== null)
-                            Konversi SAK {{ number_format($averageSak / 25, 2) }}/4 × 25 · Mutu {{ $sakQuality['mutu'] }}
-                            —
-                            {{ $sakQuality['kinerja'] }}
-                        @else
-                            Belum ada jawaban SAK
-                        @endif
-                    </div>
+                    <div class="text-muted small mt-1" id="survey-sak-quality">Memuat nilai SAK...</div>
                 </div>
             </div>
         </div>
@@ -237,12 +199,8 @@
         const surveyFilterForm = document.getElementById('survey-filter-form');
         const surveyFilterError = document.getElementById('survey-filter-error');
 
-        function readSurveyDashboardData(container = document) {
-            return JSON.parse(container.querySelector('#survey-dashboard-data').textContent);
-        }
-
-        function renderSurveyCharts(container = document) {
-            const data = readSurveyDashboardData(container);
+        function renderSurveyCharts(data) {
+            const container = document;
             const surveyQuestionChartOptions = {
                 indexAxis: 'y',
                 maintainAspectRatio: false,
@@ -510,51 +468,64 @@
             const submitButton = surveyFilterForm.querySelector('button[type="submit"]');
             submitButton.disabled = true;
             surveyFilterForm.setAttribute('aria-busy', 'true');
+            document.getElementById('survey-dashboard-results').setAttribute('aria-busy', 'true');
 
             try {
-                const response = await fetch(url, {
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Accept': 'application/json, text/html'
-                    }
-                });
+                const pageUrl = new URL(url, window.location.origin);
+                const apiUrl = new URL(document.getElementById('survey-dashboard-results').dataset.apiUrl, window.location.origin);
+                pageUrl.searchParams.forEach((value, key) => apiUrl.searchParams.set(key, value));
+                const response = await fetch(apiUrl, { headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' } });
                 if (!response.ok) {
-                    const error = response.headers.get('content-type')?.includes('application/json') ?
-                        await response.json() :
-                        null;
-                    throw new Error(Object.values(error?.errors || {}).flat().join(' ') || error?.message ||
-                        `Filter survei gagal diterapkan (${response.status}).`);
+                    const error = await response.json().catch(() => null);
+                    throw new Error(Object.values(error?.errors || {}).flat().join(' ') || error?.message || `Data survei gagal dimuat (${response.status}).`);
                 }
 
-                const html = await response.text();
-                const nextDocument = new DOMParser().parseFromString(html, 'text/html');
-                const nextResults = nextDocument.querySelector('#survey-dashboard-results');
-                if (!nextResults) throw new Error('Data hasil filter tidak dapat ditampilkan.');
-
-                const nextForm = nextDocument.querySelector('#survey-filter-form');
-                ['start_date', 'end_date', 'id_uptup'].forEach(name => {
-                    surveyFilterForm.elements[name].value = nextForm.elements[name].value;
-                });
+                const data = await response.json();
                 ['surveySkmChart', 'surveySakChart', 'surveyGenderChart', 'surveyEducationChart', 'surveyAgeChart',
                     'surveyOccupationChart', 'surveyDailyChart'
                 ].forEach(id => {
                     const current = Chart.getChart(document.getElementById(id));
                     if (current) current.destroy();
                 });
-                document.querySelector('#survey-dashboard-results').replaceWith(nextResults);
-                renderSurveyCharts(nextResults);
+                const number = value => Number(value).toLocaleString('id-ID');
+                const score = value => value === null ? '-' : Number(value).toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                surveyFilterForm.elements.start_date.value = data.startDate;
+                surveyFilterForm.elements.end_date.value = data.endDate;
+                surveyFilterForm.elements.id_uptup.value = data.selectedOffice;
+                document.getElementById('survey-total-count').textContent = number(data.totalSurvei);
+                document.getElementById('survey-today-count').textContent = number(data.surveiHariIni);
+                document.getElementById('survey-ikm-value').textContent = score(data.ikmValue);
+                document.getElementById('survey-sak-value').textContent = score(data.averageSak);
+                document.getElementById('survey-ikm-quality').textContent = data.ikmQuality
+                    ? `Konversi SKM ${score(data.averageSkm)}/4 × 25 · Mutu ${data.ikmQuality.mutu} — ${data.ikmQuality.kinerja}`
+                    : 'Belum ada jawaban SKM';
+                document.getElementById('survey-sak-quality').textContent = data.sakQuality
+                    ? `Konversi SAK ${score(data.averageSak / 25)}/4 × 25 · Mutu ${data.sakQuality.mutu} — ${data.sakQuality.kinerja}`
+                    : 'Belum ada jawaban SAK';
+                const reviewCount = document.getElementById('survey-review-count');
+                if (reviewCount) {
+                    reviewCount.textContent = number(data.suspectedSpam);
+                    const reviewUrl = new URL(@json(route('admin.survei.review')), window.location.origin);
+                    reviewUrl.searchParams.set('start_date', data.startDate);
+                    reviewUrl.searchParams.set('end_date', data.endDate);
+                    if (data.selectedOffice) reviewUrl.searchParams.set('id_uptup', data.selectedOffice);
+                    document.getElementById('survey-review-link').href = reviewUrl.toString();
+                }
+                renderSurveyCharts(data);
                 updateDownloadUrl();
 
-                if (updateHistory) history.pushState({}, '', url);
+                if (updateHistory) history.pushState({}, '', pageUrl);
             } catch (error) {
                 surveyFilterError.textContent = error.message;
+                console.error('Gagal memuat ringkasan survei:', error);
             } finally {
                 submitButton.disabled = false;
                 surveyFilterForm.removeAttribute('aria-busy');
+                document.getElementById('survey-dashboard-results').removeAttribute('aria-busy');
             }
         }
 
-        renderSurveyCharts();
+        loadSurveyResults(window.location.href, false);
 
         function updateDownloadUrl() {
             const url = new URL(@json(route('admin.survei.download')), window.location.origin);

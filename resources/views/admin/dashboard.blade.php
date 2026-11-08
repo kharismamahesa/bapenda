@@ -19,55 +19,44 @@
         </a>
     </div>
 
-    <div class="row g-3 g-lg-4 mb-4">
+    <div class="row g-3 g-lg-4 mb-4" id="dashboard-summary" data-api-url="{{ $summaryApiUrl }}" aria-busy="true">
         <div class="col-12 col-sm-6 col-xl">
             <div class="card card-custom p-4 h-100">
                 <div class="stat-title">Total Responden</div>
-                <div class="stat-value">{{ number_format($totalSurvei) }}</div>
+                <div class="stat-value" id="dashboard-total-survei"><span class="spinner-border spinner-border-sm text-success" aria-label="Memuat"></span></div>
                 <div class="text-muted small mt-1">Sejak awal tahun {{ $year }}</div>
             </div>
         </div>
         <div class="col-12 col-sm-6 col-xl">
             <div class="card card-custom p-4 h-100">
                 <div class="stat-title">Nilai IKM (SKM)</div>
-                <div class="stat-value">{{ $ikmValue !== null ? number_format($ikmValue, 2) : '-' }} <span class="fs-6 fw-normal text-muted">/ 100</span></div>
-                <div class="text-muted small mt-1">
-                    @if ($ikmQuality)
-                        Mutu {{ $ikmQuality['mutu'] }} — {{ $ikmQuality['kinerja'] }}
-                    @else
-                        Belum ada jawaban SKM
-                    @endif
-                </div>
+                <div class="stat-value"><span id="dashboard-ikm-value"><span class="spinner-border spinner-border-sm text-success" aria-label="Memuat"></span></span> <span class="fs-6 fw-normal text-muted">/ 100</span></div>
+                <div class="text-muted small mt-1" id="dashboard-ikm-quality">Memuat nilai SKM...</div>
             </div>
         </div>
         <div class="col-12 col-sm-6 col-xl">
             <div class="card card-custom p-4 h-100">
                 <div class="stat-title">Nilai SAK</div>
-                <div class="stat-value">{{ $sakValue !== null ? number_format($sakValue, 2) : '-' }} <span class="fs-6 fw-normal text-muted">/ 100</span></div>
-                <div class="text-muted small mt-1">
-                    @if ($sakQuality)
-                        Mutu {{ $sakQuality['mutu'] }} — {{ $sakQuality['kinerja'] }}
-                    @else
-                        Belum ada jawaban SAK
-                    @endif
-                </div>
+                <div class="stat-value"><span id="dashboard-sak-value"><span class="spinner-border spinner-border-sm text-success" aria-label="Memuat"></span></span> <span class="fs-6 fw-normal text-muted">/ 100</span></div>
+                <div class="text-muted small mt-1" id="dashboard-sak-quality">Memuat nilai SAK...</div>
             </div>
         </div>
         <div class="col-12 col-sm-6 col-xl">
             <div class="card card-custom p-4 h-100">
                 <div class="stat-title">Berita & Informasi</div>
-                <div class="stat-value">{{ number_format($totalBerita) }}</div>
+                <div class="stat-value" id="dashboard-total-berita"><span class="spinner-border spinner-border-sm text-success" aria-label="Memuat"></span></div>
                 <div class="text-muted small mt-1">Total berita terkelola</div>
             </div>
         </div>
         <div class="col-12 col-sm-6 col-xl">
             <div class="card card-custom p-4 h-100">
                 <div class="stat-title">Video</div>
-                <div class="stat-value">{{ number_format($totalVideo) }}</div>
+                <div class="stat-value" id="dashboard-total-video"><span class="spinner-border spinner-border-sm text-success" aria-label="Memuat"></span></div>
                 <div class="text-muted small mt-1">Total video terkelola</div>
             </div>
         </div>
     </div>
+    <div class="text-danger small mb-3" id="dashboard-summary-status" role="status" aria-live="polite"></div>
 
     <div class="card card-custom p-4 mb-4">
         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -86,21 +75,21 @@
             <div class="col-12 col-sm-4">
                 <div class="card card-custom p-4 h-100">
                     <div class="stat-title">Hari Ini</div>
-                    <div class="stat-value">{{ number_format($visitorToday) }}</div>
+                    <div class="stat-value" id="visitor-today"><span class="spinner-border spinner-border-sm text-success" aria-label="Memuat"></span></div>
                     <div class="text-muted small mt-1">Pengunjung unik per IP dan browser</div>
                 </div>
             </div>
             <div class="col-12 col-sm-4">
                 <div class="card card-custom p-4 h-100">
                     <div class="stat-title">Bulan Ini</div>
-                    <div class="stat-value">{{ number_format($visitorMonth) }}</div>
+                    <div class="stat-value" id="visitor-month"><span class="spinner-border spinner-border-sm text-success" aria-label="Memuat"></span></div>
                     <div class="text-muted small mt-1">Akumulasi catatan harian bulan ini</div>
                 </div>
             </div>
             <div class="col-12 col-sm-4">
                 <div class="card card-custom p-4 h-100">
                     <div class="stat-title">Tahun Ini</div>
-                    <div class="stat-value">{{ number_format($visitorYear) }}</div>
+                    <div class="stat-value" id="visitor-year"><span class="spinner-border spinner-border-sm text-success" aria-label="Memuat"></span></div>
                     <div class="text-muted small mt-1">Akumulasi catatan harian tahun ini</div>
                 </div>
             </div>
@@ -112,11 +101,9 @@
                 <p class="text-muted small mb-0">Lokasi berupa perkiraan. Titik hanya muncul untuk catatan yang memiliki koordinat.</p>
             </div>
             <div id="visitorMap" role="application" aria-label="Peta sebaran lokasi pengunjung website"></div>
-            @if ($visitorMapMarkers->isEmpty())
-                <div class="p-3 text-muted small" id="visitorMapEmpty">
-                    Belum ada koordinat lokasi pada data pengunjung. IP tetap tercatat, tetapi koordinat memerlukan sumber GeoIP lokal.
-                </div>
-            @endif
+            <div class="p-3 text-muted small" id="visitorMapStatus" role="status" aria-live="polite">
+                Memuat data lokasi pengunjung...
+            </div>
         </div>
     </section>
 @endsection
@@ -127,6 +114,7 @@
         const dashboardText = '#64748b';
         const dashboardGrid = 'rgba(148, 163, 184, .18)';
         const dashboardComplaintApi = @json($complaintApiUrl);
+        const dashboardSummary = document.getElementById('dashboard-summary');
 
         async function loadMonthlyComplaints() {
             const status = document.getElementById('dashboardComplaintsStatus');
@@ -161,8 +149,13 @@
         loadMonthlyComplaints();
 
         const visitorMapElement = document.getElementById('visitorMap');
-        if (visitorMapElement && window.L) {
-            const visitorMarkers = @json($visitorMapMarkers);
+        function renderVisitorMap(visitorMarkers) {
+            const mapStatus = document.getElementById('visitorMapStatus');
+            if (!visitorMapElement || !window.L) {
+                mapStatus.textContent = 'Peta tidak dapat dimuat. Muat ulang halaman untuk mencoba kembali.';
+                return;
+            }
+
             const map = L.map(visitorMapElement).setView([0.5, 101.4], 6);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
@@ -190,8 +183,54 @@
                 bounds.push([latitude, longitude]);
             });
 
-            if (bounds.length > 0) map.fitBounds(bounds, { padding: [24, 24] });
+            if (bounds.length > 0) {
+                map.fitBounds(bounds, { padding: [24, 24] });
+                mapStatus.remove();
+            } else {
+                mapStatus.textContent = 'Belum ada koordinat lokasi pada data pengunjung. IP tetap tercatat, tetapi koordinat memerlukan sumber GeoIP lokal.';
+            }
             setTimeout(() => map.invalidateSize(), 0);
         }
+
+        async function loadDashboardSummary() {
+            const status = document.getElementById('dashboard-summary-status');
+            try {
+                const response = await fetch(dashboardSummary.dataset.apiUrl, { headers: { Accept: 'application/json' } });
+                if (!response.ok) throw new Error(`Ringkasan dashboard gagal dimuat (${response.status}).`);
+                const result = await response.json();
+
+                const formatNumber = value => Number(value).toLocaleString('id-ID');
+                const formatScore = value => value === null ? '-' : Number(value).toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                document.getElementById('dashboard-total-survei').textContent = formatNumber(result.totalSurvei);
+                document.getElementById('dashboard-total-berita').textContent = formatNumber(result.totalBerita);
+                document.getElementById('dashboard-total-video').textContent = formatNumber(result.totalVideo);
+                document.getElementById('dashboard-ikm-value').textContent = formatScore(result.ikmValue);
+                document.getElementById('dashboard-sak-value').textContent = formatScore(result.sakValue);
+                document.getElementById('dashboard-ikm-quality').textContent = result.ikmQuality
+                    ? `Mutu ${result.ikmQuality.mutu} — ${result.ikmQuality.kinerja}`
+                    : 'Belum ada jawaban SKM';
+                document.getElementById('dashboard-sak-quality').textContent = result.sakQuality
+                    ? `Mutu ${result.sakQuality.mutu} — ${result.sakQuality.kinerja}`
+                    : 'Belum ada jawaban SAK';
+                document.getElementById('visitor-today').textContent = formatNumber(result.visitorToday);
+                document.getElementById('visitor-month').textContent = formatNumber(result.visitorMonth);
+                document.getElementById('visitor-year').textContent = formatNumber(result.visitorYear);
+                renderVisitorMap(result.visitorMapMarkers);
+            } catch (error) {
+                status.textContent = 'Data ringkasan dashboard dan pengunjung gagal dimuat. Muat ulang halaman untuk mencoba kembali.';
+                [
+                    'dashboard-total-survei', 'dashboard-total-berita', 'dashboard-total-video',
+                    'dashboard-ikm-value', 'dashboard-sak-value', 'visitor-today', 'visitor-month', 'visitor-year'
+                ].forEach(id => { document.getElementById(id).textContent = '—'; });
+                document.getElementById('dashboard-ikm-quality').textContent = 'Nilai SKM tidak tersedia.';
+                document.getElementById('dashboard-sak-quality').textContent = 'Nilai SAK tidak tersedia.';
+                document.getElementById('visitorMapStatus').textContent = 'Lokasi pengunjung tidak dapat dimuat.';
+                console.error('Gagal memuat ringkasan dashboard:', error);
+            } finally {
+                dashboardSummary.removeAttribute('aria-busy');
+            }
+        }
+
+        loadDashboardSummary();
     </script>
 @endpush

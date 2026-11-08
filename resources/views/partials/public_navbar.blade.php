@@ -50,11 +50,6 @@
                     </li>
                 @endif
 
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('regulasi.*') ? 'active' : '' }}"
-                        href="{{ route('regulasi.index') }}">Regulasi</a>
-                </li>
-
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle {{ request()->routeIs('berita.*', 'video.*') ? 'active' : '' }}"
                         href="#" role="button" data-bs-toggle="dropdown">
@@ -88,6 +83,11 @@
                         </ul>
                     </li>
                 @endif
+
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('regulasi.*') ? 'active' : '' }}"
+                        href="{{ route('regulasi.index') }}">Regulasi</a>
+                </li>
 
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('survei.*') ? 'active' : '' }}"

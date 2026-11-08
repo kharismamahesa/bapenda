@@ -15,9 +15,10 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
+    <div class="text-danger small mb-2" id="video-table-error" role="status" aria-live="polite"></div>
     <div class="table-custom mb-4">
         <div class="table-responsive p-3">
-            <table class="table table-hover align-middle mb-0">
+            <table class="table table-hover align-middle mb-0 w-100" id="table-video">
                 <thead>
                     <tr>
                         <th style="width: 70px;">ID</th>
@@ -27,48 +28,47 @@
                         <th class="text-center" style="width: 110px;">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @forelse ($videos as $video)
-                        <tr>
-                            <td>{{ $video->id }}</td>
-                            <td class="fw-semibold">{{ $video->judul }}</td>
-                            <td>
-                                @if ($embedUrl = \App\Models\Video::normalizeYoutubeUrl((string) $video->video))
-                                    <a href="{{ $embedUrl }}" target="_blank" rel="noopener noreferrer">{{ $embedUrl }}</a>
-                                @else
-                                    <span class="badge bg-warning-subtle text-warning-emphasis">Link tidak valid</span>
-                                @endif
-                            </td>
-                            <td>{{ \Illuminate\Support\Str::limit($video->keterangan, 100) }}</td>
-                            <td class="text-center">
-                                <div class="table-action-buttons">
-                                    <a href="{{ route('admin.video.edit', $video) }}"
-                                        class="btn btn-primary btn-icon-action"
-                                        data-bs-toggle="tooltip" data-bs-placement="top"
-                                        title="Edit video" aria-label="Edit video">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                    <form method="POST" action="{{ route('admin.video.destroy', $video) }}"
-                                        onsubmit="return confirm('Hapus video ini?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-icon-action"
-                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                            title="Hapus video" aria-label="Hapus video">
-                                            <i class="bi bi-trash3"></i>
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="text-center text-muted py-4">Belum ada video.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
+                <tbody></tbody>
             </table>
         </div>
-        <div class="p-3 border-top">{{ $videos->links() }}</div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        const videoTableError = document.getElementById('video-table-error');
+        $('#table-video').DataTable({
+            processing: true,
+            serverSide: true,
+            deferRender: true,
+            pageLength: 10,
+            lengthMenu: [10, 25, 50],
+            order: [[0, 'desc']],
+            ajax: {
+                url: @json($dataUrl),
+                error: xhr => {
+                    videoTableError.textContent = `Daftar video gagal dimuat (${xhr.status}). Silakan muat ulang tabel.`;
+                }
+            },
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'judul', name: 'judul' },
+                { data: 'video', name: 'video' },
+                { data: 'keterangan', name: 'keterangan' },
+                { data: 'aksi', name: 'aksi', orderable: false, searchable: false }
+            ],
+            language: {
+                processing: 'Memuat data...',
+                search: 'Cari:',
+                lengthMenu: 'Tampilkan _MENU_ data',
+                info: 'Menampilkan _START_–_END_ dari _TOTAL_ video',
+                infoEmpty: 'Belum ada video',
+                infoFiltered: '(difilter dari _MAX_ video)',
+                zeroRecords: 'Video tidak ditemukan',
+                emptyTable: 'Belum ada video',
+                paginate: { first: 'Pertama', last: 'Terakhir', next: 'Berikutnya', previous: 'Sebelumnya' }
+            },
+            drawCallback: () => { videoTableError.textContent = ''; }
+        });
+    </script>
+@endpush
